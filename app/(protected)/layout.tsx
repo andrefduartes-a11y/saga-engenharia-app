@@ -18,9 +18,10 @@ export default async function ProtectedLayout({
     }
 
     return (
-        <div className="flex flex-col min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+        <div className="flex flex-col min-h-screen relative" style={{ background: 'var(--bg-primary)' }}>
+            <div className="watermark-bg" />
             <TopBar user={user} />
-            <main className="flex-1 pb-24 pt-2">
+            <main className="flex-1 pb-24 pt-2 relative z-10 w-full">
                 {children}
             </main>
             <BottomNav />

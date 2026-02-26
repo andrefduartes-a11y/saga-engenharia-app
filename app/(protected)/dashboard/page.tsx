@@ -9,6 +9,10 @@ import {
     AlertTriangle,
     ChevronRight,
     TrendingUp,
+    FolderGit2,
+    CheckSquare,
+    BookOpen,
+    Map
 } from 'lucide-react'
 
 export default async function DashboardPage() {
@@ -131,10 +135,14 @@ export default async function DashboardPage() {
 
             {/* Atalhos rápidos */}
             <div>
-                <h2 className="section-title mb-3">Acesso rápido</h2>
-                <div className="grid grid-cols-3 gap-2">
+                <h2 className="section-title mb-3">Acesso Rápido</h2>
+                <div className="grid grid-cols-4 gap-2">
                     {[
-                        { href: '/equipamentos', icon: Truck, label: 'Equipamentos' },
+                        { href: '/projetos', icon: FolderGit2, label: 'Projetos' },
+                        { href: '/equipamentos', icon: Truck, label: 'Máquinas' },
+                        { href: '/caminhoes', icon: Map, label: 'Caminhões' },
+                        { href: '/inspecoes', icon: CheckSquare, label: 'FVS' },
+                        { href: '/instrucoes-trabalho', icon: BookOpen, label: 'ITs' },
                         { href: '/documentos', icon: ClipboardList, label: 'Documentos' },
                         { href: '/apoio-tecnico', icon: TrendingUp, label: 'Apoio IA' },
                     ].map(({ href, icon: Icon, label }) => (

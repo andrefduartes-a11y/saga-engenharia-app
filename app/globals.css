@@ -90,15 +90,15 @@ h4 {
 /* ===================== CARDS ========================= */
 .card {
   background: var(--bg-card);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 12px 14px;
   border: 1px solid var(--border-color);
 }
 
 .card-elevated {
   background: var(--bg-elevated);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 12px 14px;
   border: 1px solid var(--border-color);
 }
 
@@ -106,8 +106,8 @@ h4 {
 .card-hover {
   display: block;
   background: var(--bg-card);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 12px 14px;
   border: 1px solid var(--border-color);
   text-decoration: none;
   transition: all 0.15s ease;
@@ -388,6 +388,22 @@ select.input {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ===================== WATERMARK ==================== */
+.watermark-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/S-construtora-cinza-linhas.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ===================== SCROLLBAR ==================== */

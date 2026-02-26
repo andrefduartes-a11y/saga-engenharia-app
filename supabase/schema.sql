@@ -158,3 +158,91 @@ create policy "UsuÃ¡rios autenticados podem fazer upload"
 create policy "UsuÃ¡rios autenticados podem ver arquivos"
   on storage.objects for select to authenticated
   using (bucket_id = 'saga-engenharia');
+
+-- =====================================================
+-- NOVOS MÓDULOS (APLICATIVO SAGA ENGENHARIA 2.0)
+-- =====================================================
+
+-- Projetos (Plantas, Desenhos e Projetos Executivos)
+create table if not exists projetos (
+  id uuid default gen_random_uuid() primary key,
+  obra_id uuid references obras(id) on delete cascade,
+  nome text not null,
+  disciplina text,
+  revisao text default 'R00',
+  url_arquivo text,
+  data_upload date default CURRENT_DATE,
+  created_by uuid references auth.users(id),
+  created_at timestamptz default now()
+);
+
+-- Instruções de Trabalho (ITs Genéricas)
+create table if not exists instrucoes_trabalho (
+  id uuid default gen_random_uuid() primary key,
+  titulo text not null,
+  descricao text,
+  url_arquivo text,
+  created_at timestamptz default now()
+);
+
+-- Inspeções de Serviço (FVS)
+create table if not exists fvs (
+  id uuid default gen_random_uuid() primary key,
+  obra_id uuid references obras(id) on delete cascade,
+  data date not null,
+  servico_inspecionado text not null,
+  local_trecho text,
+  verificacoes jsonb default '[]'::jsonb,
+  status text default 'em_andamento' check (status in ('em_andamento', 'aprovado', 'reprovado')),
+  observacoes text,
+  created_by uuid references auth.users(id),
+  created_at timestamptz default now()
+);
+
+-- Apontamento de Horas de Equipamentos
+create table if not exists apontamento_equipamentos (
+  id uuid default gen_random_uuid() primary key,
+  obra_id uuid references obras(id) on delete cascade,
+  data date not null,
+  equipamento text not null,
+  horas_trabalhadas numeric not null,
+  atividade_realizada text,
+  observacao text,
+  created_by uuid references auth.users(id),
+  created_at timestamptz default now()
+);
+
+-- Controle de Viagens de Caminhão (Terraplanagem)
+create table if not exists viagens_caminhao (
+  id uuid default gen_random_uuid() primary key,
+  obra_id uuid references obras(id) on delete cascade,
+  data date not null,
+  tipo_caminhao text not null,
+  placa text,
+  qtd_viagens int not null default 1,
+  material_transportado text,
+  origem text,
+  destino text,
+  created_by uuid references auth.users(id),
+  created_at timestamptz default now()
+);
+
+-- Habilitar RLS nas novas tabelas
+alter table projetos enable row level security;
+alter table instrucoes_trabalho enable row level security;
+alter table fvs enable row level security;
+alter table apontamento_equipamentos enable row level security;
+alter table viagens_caminhao enable row level security;
+
+-- Políticas de RLS
+create policy "Autenticados veem projetos" on projetos for select to authenticated using (true);
+create policy "Autenticados inserem projetos" on projetos for insert to authenticated with check (true);
+create policy "Autenticados veem ITs" on instrucoes_trabalho for select to authenticated using (true);
+create policy "Autenticados inserem ITs" on instrucoes_trabalho for insert to authenticated with check (true);
+create policy "Autenticados veem FVS" on fvs for select to authenticated using (true);
+create policy "Autenticados inserem FVS" on fvs for insert to authenticated with check (true);
+create policy "Autenticados atualizam FVS" on fvs for update to authenticated using (auth.uid() = created_by);
+create policy "Autenticados veem apontamento equipamentos" on apontamento_equipamentos for select to authenticated using (true);
+create policy "Autenticados inserem apontamento equipamentos" on apontamento_equipamentos for insert to authenticated with check (true);
+create policy "Autenticados veem viagens de caminhao" on viagens_caminhao for select to authenticated using (true);
+create policy "Autenticados inserem viagens de caminhao" on viagens_caminhao for insert to authenticated with check (true);

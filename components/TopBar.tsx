@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { LogOut } from 'lucide-react'
 
@@ -20,44 +21,45 @@ export default function TopBar({ user }: { user: { email?: string } | null }) {
 
     return (
         <header className="topbar">
-            {/* Logo — usando filtro CSS para deixar branca no fundo escuro */}
+            {/* Logo */}
             <div className="flex items-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                    src="/logo.png"
-                    alt="SAGA Construtora"
-                    style={{
-                        height: '28px',
-                        width: 'auto',
-                        objectFit: 'contain',
-                        filter: 'brightness(0) invert(1)',  /* inverte para branco */
-                    }}
-                    onError={(e) => {
-                        const el = e.currentTarget as HTMLImageElement
-                        el.style.display = 'none'
-                        const fallback = el.nextElementSibling as HTMLElement | null
-                        if (fallback) fallback.style.display = 'flex'
-                    }}
-                />
-                {/* Fallback texto */}
-                <div
-                    className="items-center gap-2"
-                    style={{ display: 'none' }}
-                >
-                    <span style={{
-                        fontWeight: 700,
-                        fontSize: '15px',
-                        letterSpacing: '0.15em',
-                        color: 'var(--text-primary)',
-                    }}>SAGA</span>
-                    <span style={{
-                        fontWeight: 300,
-                        fontSize: '10px',
-                        letterSpacing: '0.25em',
-                        color: 'var(--text-secondary)',
-                        textTransform: 'uppercase',
-                    }}>Construtora</span>
-                </div>
+                <Link href="/dashboard" className="flex items-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="/ico-branco.png"
+                        alt="SAGA Construtora"
+                        style={{
+                            height: '38px',
+                            width: 'auto',
+                            objectFit: 'contain',
+                        }}
+                        onError={(e) => {
+                            const el = e.currentTarget as HTMLImageElement
+                            el.style.display = 'none'
+                            const fallback = el.nextElementSibling as HTMLElement | null
+                            if (fallback) fallback.style.display = 'flex'
+                        }}
+                    />
+                    {/* Fallback texto */}
+                    <div
+                        className="items-center gap-2"
+                        style={{ display: 'none' }}
+                    >
+                        <span style={{
+                            fontWeight: 700,
+                            fontSize: '15px',
+                            letterSpacing: '0.15em',
+                            color: 'var(--text-primary)',
+                        }}>SAGA</span>
+                        <span style={{
+                            fontWeight: 300,
+                            fontSize: '10px',
+                            letterSpacing: '0.25em',
+                            color: 'var(--text-secondary)',
+                            textTransform: 'uppercase',
+                        }}>Construtora</span>
+                    </div>
+                </Link>
             </div>
 
             {/* Ações */}
