@@ -5,17 +5,13 @@ import { usePathname } from 'next/navigation'
 import {
     LayoutDashboard,
     Building2,
-    ClipboardList,
-    MessageSquare,
-    HardHat,
+    User,
 } from 'lucide-react'
 
 const navItems = [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Início' },
     { href: '/obras', icon: Building2, label: 'Obras' },
-    { href: '/rdo', icon: ClipboardList, label: 'RDO' },
-    { href: '/concreto', icon: HardHat, label: 'Concreto' },
-    { href: '/apoio-tecnico', icon: MessageSquare, label: 'Apoio IA' },
+    { href: '/perfil', icon: User, label: 'Perfil' },
 ]
 
 export default function BottomNav() {

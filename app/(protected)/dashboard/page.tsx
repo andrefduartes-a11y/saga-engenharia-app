@@ -3,28 +3,50 @@
 import Link from 'next/link'
 import { useObra } from '@/lib/obra-context'
 import {
-    HardHat, Layers, Mountain, Clipboard,
-    FolderOpen, ShoppingCart, Bot, GraduationCap,
+    HardHat, Mountain, ClipboardList, CheckSquare, BookOpen,
+    FolderOpen, FileText, ShoppingCart, Bot, GraduationCap,
     HelpCircle, Building2, ChevronRight, MapPin
 } from 'lucide-react'
 
-const MODULES = [
-    { href: '/concreto', icon: HardHat, label: 'Concretagem', desc: 'Lançamentos e rompimentos', color: '#7FA653' },
-    { href: '/tracos', icon: Layers, label: 'Banco de Traços', desc: 'Proporcionamento automático', color: '#4A90D9' },
-    { href: '/terraplanagem', icon: Mountain, label: 'Terraplanagem', desc: 'Etapas e registros diários', color: '#D4A843' },
-    { href: '/inspecoes', icon: Clipboard, label: 'FVS', desc: 'Fichas de verificação', color: '#E85D75' },
-    { href: '/projetos', icon: FolderOpen, label: 'Projetos', desc: '13 disciplinas técnicas', color: '#9B59B6' },
-    { href: '/suprimentos', icon: ShoppingCart, label: 'Suprimentos', desc: 'Solicitação por voz', color: '#E67E22' },
-    { href: '/assistente', icon: Bot, label: 'Assistente IA', desc: 'Chat de engenharia', color: '#1ABC9C' },
-    { href: '/ead', icon: GraduationCap, label: 'EAD', desc: 'Treinamentos e vídeos', color: '#3498DB' },
-    { href: '/faq', icon: HelpCircle, label: 'FAQ / DRH', desc: 'Dúvidas frequentes', color: '#7F8C8D' },
+const SECTIONS = [
+    {
+        title: '🏗️ Engenharia Operacional',
+        modules: [
+            { href: '/concreto', icon: HardHat, label: 'Concretagem', desc: 'Lançamentos e traços', color: '#7FA653' },
+            { href: '/terraplanagem', icon: Mountain, label: 'Terraplanagem', desc: 'Etapas e diários', color: '#D4A843' },
+        ]
+    },
+    {
+        title: '📊 Controle e Qualidade',
+        modules: [
+            { href: '/rdo', icon: ClipboardList, label: 'RDO', desc: 'Diário de obras', color: '#E67E22' },
+            { href: '/inspecoes', icon: CheckSquare, label: 'FVS', desc: 'Fichas de verificação', color: '#E85D75' },
+            { href: '/instrucoes-trabalho', icon: BookOpen, label: 'IT', desc: 'Instruções técnicas', color: '#C9902A' },
+        ]
+    },
+    {
+        title: '📁 Documentação',
+        modules: [
+            { href: '/projetos', icon: FolderOpen, label: 'Projetos', desc: '13 disciplinas', color: '#9B59B6' },
+            { href: '/documentos', icon: FileText, label: 'Documentos', desc: 'Repositório geral', color: '#4A90D9' },
+        ]
+    },
+    {
+        title: '⚙️ Gestão e Suporte',
+        modules: [
+            { href: '/suprimentos', icon: ShoppingCart, label: 'Suprimentos', desc: 'Solicitação por voz', color: '#E67E22' },
+            { href: '/assistente', icon: Bot, label: 'Assistente IA', desc: 'Chat de engenharia', color: '#1ABC9C' },
+            { href: '/ead', icon: GraduationCap, label: 'EAD', desc: 'Treinamentos', color: '#3498DB' },
+            { href: '/faq', icon: HelpCircle, label: 'FAQ / DRH', desc: 'Dúvidas frequentes', color: '#7F8C8D' },
+        ]
+    }
 ]
 
 export default function DashboardPage() {
     const { obra } = useObra()
 
     return (
-        <div className="px-4 py-4 space-y-4 animate-fade-up">
+        <div className="px-4 py-4 space-y-6 animate-fade-up">
             {/* Cabeçalho da obra */}
             {obra ? (
                 <div className="card" style={{ padding: '14px 16px' }}>
@@ -67,33 +89,43 @@ export default function DashboardPage() {
                 </Link>
             )}
 
-            {/* Grade de módulos */}
-            <div>
-                <h2 className="section-title mb-3">Módulos</h2>
-                <div className="grid grid-cols-3 gap-3">
-                    {MODULES.map(({ href, icon: Icon, label, desc, color }) => (
-                        <Link
-                            key={href}
-                            href={href}
-                            className="card-hover flex flex-col items-center text-center gap-2 py-4 px-2"
-                        >
-                            <div
-                                className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                                style={{ background: `${color}20` }}
-                            >
-                                <Icon size={22} style={{ color }} />
-                            </div>
-                            <div>
-                                <p className="text-xs font-semibold leading-tight" style={{ color: 'var(--text-primary)' }}>
-                                    {label}
-                                </p>
-                                <p className="text-xs leading-tight mt-0.5" style={{ color: 'var(--text-muted)', fontSize: '10px' }}>
-                                    {desc}
-                                </p>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
+            {/* Grid de Seções e Módulos */}
+            <div className="space-y-6">
+                {SECTIONS.map((section, idx) => (
+                    <div key={idx}>
+                        <div className="flex items-center gap-2 mb-3">
+                            <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                                {section.title}
+                            </h2>
+                            <div className="h-px flex-1" style={{ background: 'var(--border-subtle)' }} />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            {section.modules.map(({ href, icon: Icon, label, desc, color }) => (
+                                <Link
+                                    key={href}
+                                    href={href}
+                                    className="card-hover flex flex-col items-start gap-2 py-4 px-3"
+                                >
+                                    <div
+                                        className="w-10 h-10 rounded-xl flex items-center justify-center"
+                                        style={{ background: `${color}20` }}
+                                    >
+                                        <Icon size={20} style={{ color }} />
+                                    </div>
+                                    <div className="mt-1">
+                                        <p className="text-sm font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
+                                            {label}
+                                        </p>
+                                        <p className="text-xs leading-tight mt-1" style={{ color: 'var(--text-muted)' }}>
+                                            {desc}
+                                        </p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     )

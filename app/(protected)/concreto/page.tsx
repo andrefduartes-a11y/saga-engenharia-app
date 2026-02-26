@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useObra } from '@/lib/obra-context'
 import Link from 'next/link'
-import { HardHat, Plus, ChevronRight, Printer, Circle } from 'lucide-react'
+import { HardHat, Plus, ChevronRight, Layers } from 'lucide-react'
 
 interface Concretagem {
     id: string
@@ -43,6 +43,20 @@ export default function ConcretoPage() {
                     <Plus size={16} /> Nova
                 </Link>
             </div>
+
+            {/* Submenu: Banco de Traços */}
+            <Link href="/tracos" className="card-hover flex items-center justify-between" style={{ padding: '12px 16px', background: 'rgba(74, 144, 217, 0.05)', border: '1px solid rgba(74, 144, 217, 0.2)' }}>
+                <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(74, 144, 217, 0.15)' }}>
+                        <Layers size={16} style={{ color: '#4A90D9' }} />
+                    </div>
+                    <div>
+                        <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>Banco de Traços</p>
+                        <p className="text-xs" style={{ color: '#4A90D9' }}>Calculadora e traços cadastrados</p>
+                    </div>
+                </div>
+                <ChevronRight size={16} style={{ color: '#4A90D9' }} />
+            </Link>
 
             {!obra && (
                 <div className="card text-center py-8">
