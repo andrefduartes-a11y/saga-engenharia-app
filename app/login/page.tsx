@@ -47,38 +47,14 @@ export default function LoginPage() {
             <div style={{ marginBottom: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                    src="/logo-full.png"
+                    src="/logo-preferencial-branco.png"
                     alt="SAGA Construtora"
                     style={{
-                        height: '56px',
+                        height: '72px',
                         width: 'auto',
                         objectFit: 'contain',
-                        filter: 'brightness(0) invert(1)',
-                    }}
-                    onError={(e) => {
-                        const el = e.currentTarget as HTMLImageElement
-                        el.style.display = 'none'
-                        const fallback = document.getElementById('login-logo-fallback')
-                        if (fallback) fallback.style.display = 'block'
                     }}
                 />
-                {/* Fallback texto */}
-                <div id="login-logo-fallback" style={{ display: 'none', textAlign: 'center' }}>
-                    <div style={{
-                        fontSize: '36px',
-                        fontWeight: 700,
-                        letterSpacing: '0.18em',
-                        color: 'var(--text-primary)',
-                    }}>SAGA</div>
-                    <div style={{
-                        fontSize: '11px',
-                        fontWeight: 300,
-                        letterSpacing: '0.3em',
-                        color: 'var(--text-secondary)',
-                        textTransform: 'uppercase',
-                        marginTop: '2px',
-                    }}>CONSTRUTORA</div>
-                </div>
             </div>
 
             {/* Card de login */}
@@ -171,7 +147,7 @@ export default function LoginPage() {
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
             }}>
-                SAGA Construtora · Uso interno
+                SAGA Engenharia · Uso interno
             </p>
         </div>
     )
