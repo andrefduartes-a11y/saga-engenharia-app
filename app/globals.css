@@ -1,0 +1,405 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  /* === PALETA SAGA CONSTRUTORA === */
+  --saga-gray: #525F6B;
+  /* cor primária da logo */
+  --saga-gray-dark: #3A444E;
+  /* variação escura */
+  --saga-gray-light: #7A8A96;
+  /* variação clara */
+
+  /* Fundos */
+  --bg-primary: #1A1F24;
+  /* fundo principal — escuro premium */
+  --bg-card: #22292F;
+  /* fundo dos cards */
+  --bg-elevated: #2B3640;
+  /* fundo elevado / sidebar */
+  --bg-input: #1E252B;
+  /* fundo dos inputs */
+
+  /* Texto */
+  --text-primary: #F0F2F4;
+  --text-secondary: #9AABB5;
+  --text-muted: #5E6E7A;
+
+  /* Acento (cor de ação) — usa o cinza da SAGA como primário */
+  --accent: #525F6B;
+  --accent-hover: #3A444E;
+  --accent-light: rgba(82, 95, 107, 0.15);
+
+  /* Bordas */
+  --border-color: rgba(255, 255, 255, 0.07);
+  --border-focus: rgba(82, 95, 107, 0.6);
+
+  /* Status */
+  --green-ok: #52A87B;
+  --red-error: #D95252;
+  --yellow-warn: #C9902A;
+  --info: #5B9BD5;
+
+  /* Legacy — mantido para compatibilidade com páginas existentes */
+  --green-primary: #52A87B;
+  --bg-surface: #22292F;
+  --danger: #D95252;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  overscroll-behavior: none;
+}
+
+/* ===================== TIPOGRAFIA ===================== */
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* ===================== LAYOUT ======================== */
+.page-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* ===================== CARDS ========================= */
+.card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.card-elevated {
+  background: var(--bg-elevated);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+}
+
+/* Card clicável */
+.card-hover {
+  display: block;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  border-color: rgba(82, 95, 107, 0.4);
+  background: var(--bg-elevated);
+  transform: translateY(-1px);
+}
+
+/* Título de seção */
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ===================== BOTÕES ======================== */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 14px 24px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+  background: var(--saga-gray);
+  color: #FFFFFF;
+  width: 100%;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--saga-gray-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-elevated);
+}
+
+.btn-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* ===================== INPUTS ======================== */
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+  -webkit-appearance: none;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  border-color: var(--saga-gray);
+  box-shadow: 0 0 0 3px rgba(82, 95, 107, 0.2);
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 96px;
+}
+
+select.input {
+  cursor: pointer;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* ===================== BADGES ======================= */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.badge-green {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(82, 168, 123, 0.15);
+  color: #52A87B;
+}
+
+.badge-gray {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(82, 95, 107, 0.15);
+  color: #8AA0B0;
+}
+
+.badge-yellow {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(201, 144, 42, 0.15);
+  color: #C9902A;
+}
+
+.badge-red {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(217, 82, 82, 0.15);
+  color: #D95252;
+}
+
+/* ===================== NAVEGAÇÃO ==================== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 68px;
+  display: flex;
+  align-items: stretch;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  background: rgba(26, 31, 36, 0.95);
+  border-top: 1px solid var(--border-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 50;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition: color 0.15s ease;
+  padding: 8px 4px;
+}
+
+.nav-item.active {
+  color: #F0F2F4;
+}
+
+.nav-item.active svg {
+  color: var(--saga-gray-light);
+}
+
+/* ===================== TOPBAR ======================= */
+.topbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: rgba(26, 31, 36, 0.95);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+/* ===================== UTILS ======================== */
+.divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 12px 0;
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.25s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================== SCROLLBAR ==================== */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}

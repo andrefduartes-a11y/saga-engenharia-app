@@ -1,0 +1,13 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "@saga-supabase-url",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@saga-supabase-anon-key",
+    "SUPABASE_SERVICE_ROLE_KEY": "@saga-supabase-service-role",
+    "ANTHROPIC_API_KEY": "@saga-anthropic-key",
+    "NEXT_PUBLIC_APP_URL": "@saga-app-url"
+  }
+}
