@@ -3,11 +3,13 @@
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { LogOut } from 'lucide-react'
+import { LogOut, ChevronDown, MapPin } from 'lucide-react'
+import { useObra } from '@/lib/obra-context'
 
 export default function TopBar({ user }: { user: { email?: string } | null }) {
     const router = useRouter()
     const supabase = createClient()
+    const { obra } = useObra()
 
     async function handleLogout() {
         await supabase.auth.signOut()
@@ -51,16 +53,47 @@ export default function TopBar({ user }: { user: { email?: string } | null }) {
                             letterSpacing: '0.15em',
                             color: 'var(--text-primary)',
                         }}>SAGA</span>
-                        <span style={{
-                            fontWeight: 300,
-                            fontSize: '10px',
-                            letterSpacing: '0.25em',
-                            color: 'var(--text-secondary)',
-                            textTransform: 'uppercase',
-                        }}>Construtora</span>
                     </div>
                 </Link>
             </div>
+
+            {/* Obra selecionada — centro */}
+            {obra && (
+                <Link
+                    href="/selecionar-obra"
+                    className="flex items-center gap-1 px-3 py-1 rounded-full transition-colors"
+                    style={{
+                        background: 'rgba(127,166,83,0.15)',
+                        border: '1px solid rgba(127,166,83,0.3)',
+                        maxWidth: '160px',
+                    }}
+                    title="Trocar obra"
+                >
+                    <MapPin size={11} style={{ color: 'var(--green-primary)', flexShrink: 0 }} />
+                    <span
+                        className="text-xs font-semibold truncate"
+                        style={{ color: 'var(--green-primary)' }}
+                    >
+                        {obra.nome}
+                    </span>
+                    <ChevronDown size={11} style={{ color: 'var(--green-primary)', flexShrink: 0 }} />
+                </Link>
+            )}
+
+            {!obra && (
+                <Link
+                    href="/selecionar-obra"
+                    className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold transition-colors"
+                    style={{
+                        background: 'rgba(239,68,68,0.12)',
+                        border: '1px solid rgba(239,68,68,0.25)',
+                        color: '#EF4444',
+                    }}
+                >
+                    <MapPin size={11} />
+                    Selecionar obra
+                </Link>
+            )}
 
             {/* Ações */}
             <div className="flex items-center gap-2">

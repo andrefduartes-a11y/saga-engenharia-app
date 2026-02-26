@@ -1,142 +1,181 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, HardHat, Loader2, Camera, X } from 'lucide-react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useObra } from '@/lib/obra-context'
+import { ArrowLeft } from 'lucide-react'
 
-export default function NovaConcretagemPage() {
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
-    const [obras, setObras] = useState<any[]>([])
-    const [fotos, setFotos] = useState<File[]>([])
+const ELEMENTOS = [
+    'Sapata', 'Bloco', 'Pilar', 'Viga', 'Laje', 'Escada', 'Muro de Contenção',
+    'Radier', 'Fundação', 'Parede Estrutural', 'Reservatório', 'Piso'
+]
+
+const CORES = [
+    '#7FA653', '#4A90D9', '#E85D75', '#D4A843', '#9B59B6',
+    '#E67E22', '#1ABC9C', '#E74C3C', '#3498DB', '#525F6B'
+]
+
+export default function ConcretoNovoPage() {
     const router = useRouter()
-    const searchParams = useSearchParams()
-    const obraPreSelecionada = searchParams.get('obra') || ''
+    const { obra } = useObra()
     const supabase = createClient()
+    const [form, setForm] = useState({
+        data_concretagem: new Date().toISOString().split('T')[0],
+        fck: 25,
+        volume_m3: '',
+        elementos_concretados: [] as string[],
+        fornecedor: '',
+        caminhao: '',
+        nota_fiscal: '',
+        responsavel: '',
+        cor_hex: '#7FA653',
+    })
+    const [salvando, setSalvando] = useState(false)
 
-    useEffect(() => {
-        supabase.from('obras').select('id, nome').eq('status', 'ativa').then(({ data }) => setObras(data || []))
-    }, [])
+    const toggleElemento = (el: string) => {
+        setForm(p => ({
+            ...p,
+            elementos_concretados: p.elementos_concretados.includes(el)
+                ? p.elementos_concretados.filter(e => e !== el)
+                : [...p.elementos_concretados, el]
+        }))
+    }
 
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
-        setLoading(true)
-        setError('')
-        const form = e.currentTarget
-        const formData = new FormData(form)
-        const obraId = formData.get('obra_id') as string
-
-        const fotosUrls: string[] = []
-        for (const foto of fotos) {
-            const path = `${obraId}/concreto/${Date.now()}-${foto.name}`
-            const { data } = await supabase.storage.from('saga-engenharia').upload(path, foto)
-            if (data) {
-                const { data: { publicUrl } } = supabase.storage.from('saga-engenharia').getPublicUrl(path)
-                fotosUrls.push(publicUrl)
-            }
-        }
-
-        const { error: dbError } = await supabase.from('concretagens').insert({
-            obra_id: obraId,
-            data: formData.get('data'),
-            fornecedor: formData.get('fornecedor') || null,
-            fck: formData.get('fck') ? Number(formData.get('fck')) : null,
-            volume: formData.get('volume') ? Number(formData.get('volume')) : null,
-            elemento: formData.get('elemento') || null,
-            custo_real: formData.get('custo_real') ? Number(formData.get('custo_real')) : null,
-            fotos_url: fotosUrls,
+        if (!obra) return alert('Selecione uma obra primeiro')
+        setSalvando(true)
+        const { error } = await supabase.from('concretagens').insert({
+            obra_id: obra.id,
+            data_concretagem: form.data_concretagem,
+            fck: Number(form.fck),
+            volume_m3: Number(form.volume_m3),
+            elementos_concretados: form.elementos_concretados,
+            fornecedor: form.fornecedor || null,
+            caminhao: form.caminhao || null,
+            nota_fiscal: form.nota_fiscal || null,
+            responsavel: form.responsavel || null,
+            cor_hex: form.cor_hex,
         })
-
-        if (dbError) {
-            setError('Erro ao salvar concretagem.')
-            setLoading(false)
-            return
-        }
-
-        router.push('/concreto')
-        router.refresh()
+        if (!error) router.push('/concreto')
+        else { alert('Erro ao salvar'); setSalvando(false) }
     }
 
     return (
-        <div className="px-4 py-4 animate-fade-up">
-            <div className="flex items-center gap-3 mb-6">
-                <Link href="/concreto" className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                    <ArrowLeft size={18} style={{ color: 'var(--text-primary)' }} />
-                </Link>
+        <div className="px-4 py-4 space-y-5 animate-fade-up">
+            <div className="flex items-center gap-3">
+                <button onClick={() => router.back()} style={{ color: 'var(--text-muted)' }}>
+                    <ArrowLeft size={20} />
+                </button>
                 <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Nova Concretagem</h1>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="card space-y-4">
-                    <h2 className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>DADOS DA CONCRETAGEM</h2>
-                    <div>
-                        <label className="label">Obra *</label>
-                        <select name="obra_id" className="input" required defaultValue={obraPreSelecionada}>
-                            <option value="">Selecione a obra</option>
-                            {obras.map(o => <option key={o.id} value={o.id}>{o.nome}</option>)}
-                        </select>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                        <div>
-                            <label className="label">Data *</label>
-                            <input name="data" type="date" className="input" defaultValue={new Date().toISOString().split('T')[0]} required />
-                        </div>
-                        <div>
-                            <label className="label">FCK (MPa) *</label>
-                            <input name="fck" type="number" min="0" className="input" placeholder="Ex: 25" required />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                        <div>
-                            <label className="label">Volume (m³) *</label>
-                            <input name="volume" type="number" step="0.1" min="0" className="input" placeholder="Ex: 18.5" required />
-                        </div>
-                        <div>
-                            <label className="label">Custo real (R$)</label>
-                            <input name="custo_real" type="number" step="0.01" min="0" className="input" placeholder="0,00" />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="label">Elemento estrutural</label>
-                        <input name="elemento" type="text" className="input" placeholder="Ex: Laje do 3º Pavimento" />
-                    </div>
-                    <div>
-                        <label className="label">Fornecedor</label>
-                        <input name="fornecedor" type="text" className="input" placeholder="Ex: Concrebras" />
-                    </div>
+            {!obra && (
+                <div className="card text-center py-6">
+                    <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Selecione uma obra primeiro</p>
                 </div>
+            )}
 
-                <div className="card">
-                    <label className="label">Fotos</label>
-                    <label className="flex items-center justify-center gap-2 cursor-pointer rounded-xl border-2 border-dashed py-6 transition-colors" style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}>
-                        <Camera size={22} />
-                        <span className="text-sm">Adicionar fotos</span>
-                        <input type="file" accept="image/*" multiple className="hidden"
-                            onChange={e => setFotos(prev => [...prev, ...Array.from(e.target.files || [])].slice(0, 10))} />
-                    </label>
-                    {fotos.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-3">
-                            {fotos.map((f, i) => (
-                                <div key={i} className="relative">
-                                    <img src={URL.createObjectURL(f)} alt="" className="w-16 h-16 rounded-lg object-cover" />
-                                    <button type="button" onClick={() => setFotos(prev => prev.filter((_, idx) => idx !== i))}
-                                        className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#E05252' }}>
-                                        <X size={10} color="white" />
-                                    </button>
-                                </div>
+            {obra && (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="card space-y-4">
+                        <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>DADOS PRINCIPAIS</p>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="form-label">Data</label>
+                                <input className="input" type="date" required
+                                    value={form.data_concretagem}
+                                    onChange={e => setForm(p => ({ ...p, data_concretagem: e.target.value }))} />
+                            </div>
+                            <div>
+                                <label className="form-label">FCK (MPa)</label>
+                                <input className="input" type="number" required min={1}
+                                    value={form.fck}
+                                    onChange={e => setForm(p => ({ ...p, fck: Number(e.target.value) }))} />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="form-label">Volume (m³)</label>
+                            <input className="input" type="number" step="0.1" required placeholder="Ex: 12.5"
+                                value={form.volume_m3}
+                                onChange={e => setForm(p => ({ ...p, volume_m3: e.target.value }))} />
+                        </div>
+                    </div>
+
+                    {/* Elementos */}
+                    <div className="card space-y-3">
+                        <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>ELEMENTOS CONCRETADOS</p>
+                        <div className="flex flex-wrap gap-2">
+                            {ELEMENTOS.map(el => (
+                                <button key={el} type="button"
+                                    onClick={() => toggleElemento(el)}
+                                    className="text-xs px-3 py-1.5 rounded-full font-medium transition-all"
+                                    style={{
+                                        background: form.elementos_concretados.includes(el) ? 'var(--green-primary)' : 'var(--bg-card)',
+                                        color: form.elementos_concretados.includes(el) ? '#fff' : 'var(--text-secondary)',
+                                        border: `1px solid ${form.elementos_concretados.includes(el) ? 'var(--green-primary)' : 'var(--border-subtle)'}`,
+                                    }}>
+                                    {el}
+                                </button>
                             ))}
                         </div>
-                    )}
-                </div>
+                    </div>
 
-                {error && <p className="text-sm px-2" style={{ color: '#E05252' }}>{error}</p>}
+                    {/* Cor de identificação */}
+                    <div className="card space-y-3">
+                        <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>COR DE IDENTIFICAÇÃO</p>
+                        <div className="flex flex-wrap gap-3">
+                            {CORES.map(cor => (
+                                <button key={cor} type="button"
+                                    onClick={() => setForm(p => ({ ...p, cor_hex: cor }))}
+                                    className="w-8 h-8 rounded-full transition-all"
+                                    style={{
+                                        background: cor,
+                                        boxShadow: form.cor_hex === cor ? `0 0 0 3px white, 0 0 0 5px ${cor}` : 'none'
+                                    }} />
+                            ))}
+                        </div>
+                    </div>
 
-                <button type="submit" disabled={loading} className="btn-primary w-full">
-                    {loading ? <><Loader2 size={18} className="animate-spin" /> Salvando...</> : <><HardHat size={18} /> Salvar Concretagem</>}
-                </button>
-            </form>
+                    {/* Dados adicionais */}
+                    <div className="card space-y-3">
+                        <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>INFORMAÇÕES ADICIONAIS</p>
+                        <div>
+                            <label className="form-label">Fornecedor / Concreteira</label>
+                            <input className="input" placeholder="Nome da concreteira"
+                                value={form.fornecedor}
+                                onChange={e => setForm(p => ({ ...p, fornecedor: e.target.value }))} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div>
+                                <label className="form-label">Betoneira / Caminhão</label>
+                                <input className="input" placeholder="Placa ou nº"
+                                    value={form.caminhao}
+                                    onChange={e => setForm(p => ({ ...p, caminhao: e.target.value }))} />
+                            </div>
+                            <div>
+                                <label className="form-label">Nota Fiscal</label>
+                                <input className="input" placeholder="Nº da NF"
+                                    value={form.nota_fiscal}
+                                    onChange={e => setForm(p => ({ ...p, nota_fiscal: e.target.value }))} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="form-label">Responsável Técnico</label>
+                            <input className="input" placeholder="Eng. responsável"
+                                value={form.responsavel}
+                                onChange={e => setForm(p => ({ ...p, responsavel: e.target.value }))} />
+                        </div>
+                    </div>
+
+                    <button type="submit" disabled={salvando} className="btn-primary w-full">
+                        {salvando ? 'Salvando...' : 'Registrar Concretagem'}
+                    </button>
+                </form>
+            )}
         </div>
     )
 }
