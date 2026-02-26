@@ -39,7 +39,7 @@ export default function NovoApontamentoEquipamento() {
         const form = e.currentTarget
 
         const obra_id = (form.elements.namedItem('obra_id') as HTMLSelectElement).value
-        const data = (form.elements.namedItem('data') as HTMLInputElement).value
+        const dataApontamento = (form.elements.namedItem('data') as HTMLInputElement).value
         const horas_trabalhadas = Number((form.elements.namedItem('horas_trabalhadas') as HTMLInputElement).value)
         const atividade_realizada = (form.elements.namedItem('atividade_realizada') as HTMLInputElement).value
         const observacao = (form.elements.namedItem('observacao') as HTMLTextAreaElement).value
@@ -53,7 +53,7 @@ export default function NovoApontamentoEquipamento() {
 
         const { error: insertError } = await supabase.from('apontamento_equipamentos').insert({
             obra_id,
-            data,
+            data: dataApontamento,
             equipamento,
             horas_trabalhadas,
             atividade_realizada,
@@ -62,7 +62,7 @@ export default function NovoApontamentoEquipamento() {
         })
 
         if (insertError) {
-            setError('Erro ao salvar no banco de dados.')
+            setError(`Erro ao salvar: ${insertError.message}`)
             setLoading(false)
             return
         }

@@ -37,7 +37,7 @@ export default function NovaFVS() {
         setError('')
         const form = e.currentTarget
         const obra_id = (form.elements.namedItem('obra_id') as HTMLSelectElement).value
-        const data = (form.elements.namedItem('data') as HTMLInputElement).value
+        const dataFvs = (form.elements.namedItem('data') as HTMLInputElement).value
         const servico_inspecionado = (form.elements.namedItem('servico_inspecionado') as HTMLInputElement).value
         const local_trecho = (form.elements.namedItem('local_trecho') as HTMLInputElement).value
         const status = (form.elements.namedItem('status') as HTMLSelectElement).value
@@ -50,7 +50,7 @@ export default function NovaFVS() {
 
         const { error: insertError } = await supabase.from('fvs').insert({
             obra_id,
-            data,
+            data: dataFvs,
             servico_inspecionado,
             local_trecho,
             verificacoes: finalChecks,
@@ -60,7 +60,7 @@ export default function NovaFVS() {
         })
 
         if (insertError) {
-            setError('Erro ao salvar FVS no banco de dados.')
+            setError(`Erro ao salvar: ${insertError.message}`)
             setLoading(false)
             return
         }

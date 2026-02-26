@@ -36,9 +36,9 @@ export default function NovoRomaneio() {
         const form = e.currentTarget
 
         const obra_id = (form.elements.namedItem('obra_id') as HTMLSelectElement).value
-        const data = (form.elements.namedItem('data') as HTMLInputElement).value
+        const dataViagem = (form.elements.namedItem('data') as HTMLInputElement).value
         const qtd_viagens = Number((form.elements.namedItem('qtd_viagens') as HTMLInputElement).value)
-        const placa = (form.elements.namedItem('placa') as HTMLInputElement).value
+        const placa = (form.elements.namedItem('placa') as HTMLInputElement).value || null
         const material_transportado = (form.elements.namedItem('material_transportado') as HTMLInputElement).value
         const origem = (form.elements.namedItem('origem') as HTMLInputElement).value
         const destino = (form.elements.namedItem('destino') as HTMLInputElement).value
@@ -52,7 +52,7 @@ export default function NovoRomaneio() {
 
         const { error: insertError } = await supabase.from('viagens_caminhao').insert({
             obra_id,
-            data,
+            data: dataViagem,
             tipo_caminhao,
             placa,
             qtd_viagens,
@@ -63,7 +63,7 @@ export default function NovoRomaneio() {
         })
 
         if (insertError) {
-            setError('Erro ao salvar no banco de dados.')
+            setError(`Erro ao salvar: ${insertError.message}`)
             setLoading(false)
             return
         }
