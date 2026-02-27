@@ -192,8 +192,8 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
                             )}
                         </div>
 
-                        {/* Settings gear — admin only */}
-                        {roleFetched && role === 'admin' && (
+                        {/* Settings gear — diretor only */}
+                        {roleFetched && (role === 'diretor' || role === 'admin') && (
                             <button onClick={() => router.push('/configuracoes')} style={{
                                 background: 'transparent', border: 'none', cursor: 'pointer',
                                 color: 'var(--text-secondary)', padding: 6, borderRadius: 8,
@@ -206,11 +206,11 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
                         {/* Role chip */}
                         {roleFetched && role && (() => {
                             const colors: Record<string, { bg: string; color: string; border: string }> = {
+                                diretor: { bg: 'rgba(127,166,83,0.15)', color: 'var(--green-primary)', border: 'rgba(127,166,83,0.3)' },
                                 admin: { bg: 'rgba(127,166,83,0.15)', color: 'var(--green-primary)', border: 'rgba(127,166,83,0.3)' },
                                 engenheiro: { bg: 'rgba(91,155,213,0.15)', color: '#5B9BD5', border: 'rgba(91,155,213,0.3)' },
-                                visualizador: { bg: 'rgba(156,163,175,0.12)', color: '#9CA3AF', border: 'rgba(156,163,175,0.25)' },
                             };
-                            const labels: Record<string, string> = { admin: 'ADMIN', engenheiro: 'ENGENHEIRO', visualizador: 'VIEWER' };
+                            const labels: Record<string, string> = { diretor: 'DIRETOR', admin: 'DIRETOR', engenheiro: 'ENGENHEIRO' };
                             const c = colors[role] || colors.engenheiro;
                             return (
                                 <span style={{

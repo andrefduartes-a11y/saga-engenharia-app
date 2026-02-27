@@ -16,9 +16,13 @@ const NAV_GROUPS = [
         icon: '🏗️',
         items: [
             { href: '/concreto', icon: <HardHat size={15} />, label: 'Concretagem' },
-            { href: '/terraplanagem', icon: <Mountain size={15} />, label: 'Terraplanagem' },
-            { href: '/equipamentos', icon: <Settings2 size={15} />, label: 'Equipamentos' },
-            { href: '/caminhoes', icon: <Truck size={15} />, label: 'Caminhões' },
+            {
+                href: '/terraplanagem', icon: <Mountain size={15} />, label: 'Terraplanagem',
+                subItems: [
+                    { href: '/equipamentos', icon: <Settings2 size={13} />, label: 'Equipamentos' },
+                    { href: '/caminhoes', icon: <Truck size={13} />, label: 'Caminhões' },
+                ]
+            },
         ],
     },
     {
@@ -136,52 +140,87 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
                                 <div>
                                     {group.items.map(item => {
                                         const active = isActive(item.href);
+                                        const hasSubItems = 'subItems' in item && Array.isArray(item.subItems);
+                                        const subActive = hasSubItems && item.subItems!.some(s => isActive(s.href));
                                         return (
-                                            <a
-                                                key={item.href}
-                                                href={item.href}
-                                                onClick={isMobile ? onMobileClose : undefined}
-                                                title={collapsed && !isMobile ? item.label : undefined}
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: collapsed && !isMobile ? 0 : 10,
-                                                    padding: collapsed && !isMobile ? '9px 0' : '7px 14px 7px 28px',
-                                                    justifyContent: collapsed && !isMobile ? 'center' : 'flex-start',
-                                                    textDecoration: 'none',
-                                                    color: active ? '#fff' : 'var(--text-secondary)',
-                                                    fontSize: 13, fontWeight: active ? 600 : 400,
-                                                    borderLeft: collapsed && !isMobile ? 'none' : (active ? '2px solid var(--saga-gray-light)' : '2px solid transparent'),
-                                                    borderRight: collapsed && !isMobile && active ? '2px solid var(--saga-gray-light)' : 'none',
-                                                    background: active ? 'rgba(82,95,107,0.15)' : 'transparent',
-                                                    transition: 'all 0.15s',
-                                                }}
-                                                onMouseEnter={e => {
-                                                    if (!active) {
-                                                        (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)';
-                                                        (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)';
-                                                    }
-                                                }}
-                                                onMouseLeave={e => {
-                                                    if (!active) {
-                                                        (e.currentTarget as HTMLElement).style.background = 'transparent';
-                                                        (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)';
-                                                    }
-                                                }}
-                                            >
-                                                <span style={{
-                                                    opacity: active ? 1 : 0.6,
-                                                    color: active ? 'var(--saga-gray-light)' : 'inherit',
-                                                    flexShrink: 0,
-                                                }}>
-                                                    {item.icon}
-                                                </span>
-                                                {(!collapsed || isMobile) && item.label}
-                                            </a>
+                                            <div key={item.href}>
+                                                {/* Main item */}
+                                                <a
+                                                    href={item.href}
+                                                    onClick={isMobile ? onMobileClose : undefined}
+                                                    title={collapsed && !isMobile ? item.label : undefined}
+                                                    style={{
+                                                        display: 'flex', alignItems: 'center',
+                                                        gap: collapsed && !isMobile ? 0 : 10,
+                                                        padding: collapsed && !isMobile ? '9px 0' : '7px 14px 7px 28px',
+                                                        justifyContent: collapsed && !isMobile ? 'center' : 'flex-start',
+                                                        textDecoration: 'none',
+                                                        color: active ? '#fff' : 'var(--text-secondary)',
+                                                        fontSize: 13, fontWeight: active ? 600 : 400,
+                                                        borderLeft: collapsed && !isMobile ? 'none' : (active ? '2px solid var(--saga-gray-light)' : '2px solid transparent'),
+                                                        borderRight: collapsed && !isMobile && active ? '2px solid var(--saga-gray-light)' : 'none',
+                                                        background: active ? 'rgba(82,95,107,0.15)' : 'transparent',
+                                                        transition: 'all 0.15s',
+                                                    }}
+                                                    onMouseEnter={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; } }}
+                                                    onMouseLeave={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)'; } }}
+                                                >
+                                                    <span style={{ opacity: active ? 1 : 0.6, color: active ? 'var(--saga-gray-light)' : 'inherit', flexShrink: 0 }}>
+                                                        {item.icon}
+                                                    </span>
+                                                    {(!collapsed || isMobile) && item.label}
+                                                </a>
+
+                                                {/* Sub-items (e.g. Equipamentos, Caminhões under Terraplanagem) */}
+                                                {hasSubItems && (!collapsed || isMobile) && (active || subActive) && item.subItems!.map(sub => {
+                                                    const subIsActive = isActive(sub.href);
+                                                    return (
+                                                        <a
+                                                            key={sub.href}
+                                                            href={sub.href}
+                                                            onClick={isMobile ? onMobileClose : undefined}
+                                                            style={{
+                                                                display: 'flex', alignItems: 'center', gap: 8,
+                                                                padding: '5px 14px 5px 44px',
+                                                                textDecoration: 'none',
+                                                                color: subIsActive ? '#fff' : 'var(--text-muted)',
+                                                                fontSize: 12, fontWeight: subIsActive ? 600 : 400,
+                                                                borderLeft: subIsActive ? '2px solid rgba(82,95,107,0.5)' : '2px solid transparent',
+                                                                background: subIsActive ? 'rgba(82,95,107,0.1)' : 'transparent',
+                                                                transition: 'all 0.15s',
+                                                            }}
+                                                            onMouseEnter={e => { if (!subIsActive) { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.03)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)'; } }}
+                                                            onMouseLeave={e => { if (!subIsActive) { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)'; } }}
+                                                        >
+                                                            <span style={{ opacity: subIsActive ? 1 : 0.5, flexShrink: 0 }}>{sub.icon}</span>
+                                                            {sub.label}
+                                                        </a>
+                                                    );
+                                                })}
+
+                                                {/* Collapsed: show sub-items as icons too */}
+                                                {hasSubItems && collapsed && !isMobile && item.subItems!.map(sub => {
+                                                    const subIsActive = isActive(sub.href);
+                                                    return (
+                                                        <a key={sub.href} href={sub.href} title={sub.label}
+                                                            style={{
+                                                                display: 'flex', justifyContent: 'center', padding: '6px 0',
+                                                                textDecoration: 'none',
+                                                                color: subIsActive ? '#fff' : 'var(--text-muted)',
+                                                                background: subIsActive ? 'rgba(82,95,107,0.12)' : 'transparent',
+                                                                transition: 'all 0.15s',
+                                                                borderRight: subIsActive ? '2px solid var(--saga-gray-light)' : 'none',
+                                                            }}>
+                                                            <span style={{ opacity: subIsActive ? 1 : 0.45 }}>{sub.icon}</span>
+                                                        </a>
+                                                    );
+                                                })}
+                                            </div>
                                         );
                                     })}
                                 </div>
                             )}
+
                         </div>
                     );
                 })}

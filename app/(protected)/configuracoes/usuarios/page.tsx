@@ -54,14 +54,12 @@ const ALL_PERM_KEYS = PERMISSION_GROUPS.flatMap(g => g.items.map(i => i.key))
 
 // Permissões padrão por role
 const DEFAULT_PERMS: Record<string, Record<string, boolean>> = {
+    diretor: Object.fromEntries(ALL_PERM_KEYS.map(k => [k, true])),
     admin: Object.fromEntries(ALL_PERM_KEYS.map(k => [k, true])),
     engenheiro: Object.fromEntries(ALL_PERM_KEYS.map(k => [k, [
         'verConcretagem', 'verTerraplanagem', 'verEquipamentos', 'verCaminhoes',
         'verRDO', 'verInspecoes', 'verIT', 'verProjetos', 'verDocumentos',
         'verSuprimentos', 'verAssistente',
-    ].includes(k)])),
-    visualizador: Object.fromEntries(ALL_PERM_KEYS.map(k => [k, [
-        'verConcretagem', 'verRDO', 'verProjetos', 'verDocumentos',
     ].includes(k)])),
 }
 
@@ -77,9 +75,8 @@ interface Perfil {
 }
 
 const ROLES = [
-    { value: 'admin', label: 'Admin', desc: 'Acesso total ao sistema' },
-    { value: 'engenheiro', label: 'Engenheiro', desc: 'Acesso operacional por obra' },
-    { value: 'visualizador', label: 'Visualizador', desc: 'Somente leitura' },
+    { value: 'diretor', label: 'Diretor', desc: 'Acesso total — vê todas as obras' },
+    { value: 'engenheiro', label: 'Engenheiro', desc: 'Acesso operacional por obras vinculadas' },
 ]
 
 const parsePerms = (raw: Record<string, boolean> | null, role: string): Record<string, boolean> => {
@@ -183,9 +180,9 @@ export default function UsuariosPage() {
     const getRoleBadge = (role: string) => ROLES.find(r => r.value === role)?.label || role
 
     const roleColor: Record<string, string> = {
-        admin: '#E85D75',
-        engenheiro: '#7FA653',
-        visualizador: '#5B9BD5',
+        diretor: '#7FA653',
+        admin: '#7FA653',
+        engenheiro: '#5B9BD5',
     }
 
     return (

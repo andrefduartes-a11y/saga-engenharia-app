@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useObra } from '@/lib/obra-context'
-import { Building2, MapPin, ChevronRight, Plus } from 'lucide-react'
+import { Building2, MapPin, ChevronRight, Plus, Lock } from 'lucide-react'
 
 interface Obra {
     id: string
@@ -20,16 +20,47 @@ export default function SelecionarObraPage() {
     const { setObra } = useObra()
     const [obras, setObras] = useState<Obra[]>([])
     const [loading, setLoading] = useState(true)
+    const [role, setRole] = useState('')
+    const [obrasPermitidas, setObrasPermitidas] = useState<string[]>([])
 
     useEffect(() => {
-        supabase
-            .from('obras')
-            .select('id, nome, endereco, responsavel_tecnico, status')
-            .order('nome')
-            .then(({ data }) => {
-                setObras(data || [])
+        // Fetch role + obras_permitidas first
+        fetch('/api/me')
+            .then(r => r.ok ? r.json() : null)
+            .then(async d => {
+                const userRole = d?.role || 'engenheiro'
+                const permitidas: string[] = d?.obras_ids || []
+                setRole(userRole)
+                setObrasPermitidas(permitidas)
+
+                // Fetch all obras from DB
+                const { data } = await supabase
+                    .from('obras')
+                    .select('id, nome, endereco, responsavel_tecnico, status')
+                    .order('nome')
+
+                const all: Obra[] = data || []
+
+                // Diretor (or admin) sees all; engenheiro sees only assigned
+                if (userRole === 'diretor' || userRole === 'admin') {
+                    setObras(all)
+                } else {
+                    // Filter to obras_permitidas — if none assigned, show empty
+                    const filtered = permitidas.length > 0
+                        ? all.filter(o => permitidas.includes(o.id))
+                        : []
+                    setObras(filtered)
+
+                    // Auto-select if only one obra assigned
+                    if (filtered.length === 1) {
+                        setObra(filtered[0])
+                        router.replace('/dashboard')
+                        return
+                    }
+                }
                 setLoading(false)
             })
+            .catch(() => setLoading(false))
     }, [])
 
     function handleSelect(obra: Obra) {
@@ -44,7 +75,9 @@ export default function SelecionarObraPage() {
                     Selecionar Obra
                 </h1>
                 <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-                    Escolha a obra em que vai trabalhar hoje
+                    {role === 'diretor' || role === 'admin'
+                        ? 'Visualize qualquer obra do sistema'
+                        : 'Escolha a obra em que vai trabalhar hoje'}
                 </p>
             </div>
 
@@ -56,16 +89,30 @@ export default function SelecionarObraPage() {
                 </div>
             ) : obras.length === 0 ? (
                 <div className="card text-center py-10">
-                    <Building2 size={40} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
-                    <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-                        Nenhuma obra cadastrada
-                    </p>
-                    <p className="text-xs mt-1 mb-4" style={{ color: 'var(--text-muted)' }}>
-                        Cadastre a primeira obra para começar
-                    </p>
-                    <a href="/obras" className="btn-primary inline-flex items-center gap-2">
-                        <Plus size={16} /> Cadastrar obra
-                    </a>
+                    {role === 'engenheiro' ? (
+                        <>
+                            <Lock size={36} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
+                            <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                                Nenhuma obra vinculada
+                            </p>
+                            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+                                Solicite ao diretor que vincule você a uma obra no painel de configurações.
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <Building2 size={40} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
+                            <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                                Nenhuma obra cadastrada
+                            </p>
+                            <p className="text-xs mt-1 mb-4" style={{ color: 'var(--text-muted)' }}>
+                                Cadastre a primeira obra para começar
+                            </p>
+                            <a href="/obras" className="btn-primary inline-flex items-center gap-2">
+                                <Plus size={16} /> Cadastrar obra
+                            </a>
+                        </>
+                    )}
                 </div>
             ) : (
                 <div className="space-y-2">
