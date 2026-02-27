@@ -35,12 +35,44 @@ export default function EADPage() {
                 </div>
             </div>
 
+            {/* ── Boas Vindas Video ─────────────────────────────────────────── */}
+            <div style={{
+                borderRadius: 16, overflow: 'hidden',
+                background: 'rgba(52,152,219,0.06)',
+                border: '1px solid rgba(52,152,219,0.2)',
+            }}>
+                {/* Header */}
+                <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10, borderBottom: '1px solid rgba(52,152,219,0.12)' }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(52,152,219,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <PlayCircle size={20} style={{ color: '#3498DB' }} />
+                    </div>
+                    <div>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)' }}>🎓 Boas Vindas</div>
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Vídeo introdutório — assista antes de começar</div>
+                    </div>
+                </div>
+                {/* Embedded player — 16:9 aspect ratio */}
+                <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, background: '#000' }}>
+                    <iframe
+                        src="https://drive.google.com/file/d/1hN_SINLmITRgaERCJs49ZUgP_3POSofQ/preview"
+                        title="Boas Vindas — SAGA Engenharia"
+                        allow="autoplay; encrypted-media; fullscreen"
+                        allowFullScreen
+                        style={{
+                            position: 'absolute', top: 0, left: 0,
+                            width: '100%', height: '100%',
+                            border: 'none',
+                        }}
+                    />
+                </div>
+            </div>
+
             {loading ? (
                 <div className="space-y-2">{[1, 2].map(i => <div key={i} className="card animate-pulse" style={{ height: 80 }} />)}</div>
             ) : modulos.length === 0 ? (
-                <div className="card text-center py-12">
-                    <GraduationCap size={48} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
-                    <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Nenhum módulo disponível</p>
+                <div className="card text-center py-8">
+                    <GraduationCap size={40} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
+                    <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Nenhum módulo disponível ainda</p>
                     <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Os treinamentos serão adicionados aqui</p>
                 </div>
             ) : (
