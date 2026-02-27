@@ -1,0 +1,5303 @@
+[
+  {
+    "codigo": "IT.01A",
+    "titulo": "Terraplenagem",
+    "revisao": "00",
+    "categoria": "Infraestrutura",
+    "subcategoria": "Terraplenagem e Preparação",
+    "normas": [
+      "NBR 6118:2023",
+      "NBR 7480:2007",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Escavadeira hidráulica",
+      "Motoniveladora",
+      "Rolo compactador",
+      "Caminhão basculante",
+      "Nível de mangueira",
+      "Trena",
+      "Estacas de madeira"
+    ],
+    "materiais": [
+      "Solo selecionado para aterro",
+      "Brita (quando necessário para drenagem)",
+      "Cal ou cimento (quando necessário para estabilização"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina com biqueira de aço",
+      "Colete refletivo",
+      "Protetor auricular",
+      "Óculos de proteção"
+    ],
+    "condicoes_inicio": [
+      "Projeto topográfico aprovado e disponível na obra",
+      "Levantamento planialtimétrico concluído",
+      "Árvores e vegetação removidas conforme licença ambiental",
+      "Licença ambiental (quando exigida) emitida"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Limpeza e Destocamento",
+        "passos": [
+          "Remover toda a vegetação, tocos, raízes e entulho da área de intervenção",
+          "Destinar os resíduos conforme plano de gerenciamento ambiental",
+          "Verificar a existência de interferências (redes, cabos, tubulações) antes de iniciar a escavação"
+        ]
+      },
+      {
+        "secao": "2. Corte e Escavação",
+        "passos": [
+          "Executar o corte conforme cotas de projeto, acompanhando o topógrafo",
+          "Verificar a estabilidade dos taludes durante a escavação — inclinação máxima conforme projeto geotécnico",
+          "Retirar o solo de corte com caminhão basculante para bota-fora aprovado"
+        ]
+      },
+      {
+        "secao": "3. Aterro e Compactação",
+        "passos": [
+          "Lançar o material de aterro em camadas de no máximo 30 cm (espessura solta)",
+          "Umedecer o solo até a umidade ótima antes da compactação (verificar com ensaio Proctor)",
+          "Compactar cada camada com rolo compactador até atingir grau mínimo de 95% do Proctor Normal",
+          "Coletar amostras para ensaio de compactação (densidade in situ) a cada 500 m² ou conforme projeto",
+          "Não executar aterro sobre material orgânico, lixo ou solo mole — remover antes"
+        ]
+      },
+      {
+        "secao": "4. Controles Ambientais",
+        "passos": [
+          "Instalar barreiras de sedimento (leiras de terra ou mantas) para evitar assoreamento de cursos d'água",
+          "Não executar movimentação de terra em período de chuva intensa",
+          "Proteger taludes com plantio de gramíneas ou manta geotêxtil após conclusão"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Cota de terraplenagem (nível final)",
+        "tolerancia": "± 5 cm em relação ao projeto topográfico"
+      },
+      {
+        "item": "B",
+        "descricao": "Grau de compactação do aterro",
+        "tolerancia": "Mínimo 95% do Proctor Normal"
+      },
+      {
+        "item": "C",
+        "descricao": "Inclinação de taludes",
+        "tolerancia": "Conforme projeto geotécnico"
+      },
+      {
+        "item": "D",
+        "descricao": "Ausência de material orgânico no aterro",
+        "tolerancia": "Inspeção visual — nenhum resíduo orgânico"
+      },
+      {
+        "item": "E",
+        "descricao": "Controles ambientais instalados",
+        "tolerancia": "Barreiras de sedimento conforme plano ambiental"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.01B",
+    "titulo": "Compactação de Aterro",
+    "revisao": "00",
+    "categoria": "Infraestrutura",
+    "subcategoria": "Terraplenagem e Preparação",
+    "normas": [
+      "NBR 7182:2016 (Ensaio de Proctor)",
+      "NBR 9895:2016 (Índice de Suporte California)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Rolo compactador liso ou pé-de-carneiro",
+      "Caminhão pipa (umedecimento)",
+      "Densímetro nuclear ou cilindro de Proctor (ensaio de campo)",
+      "Trena"
+    ],
+    "materiais": [
+      "Solo selecionado (classificação HRB conforme projeto)",
+      "Água para umedecimento"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Colete refletivo",
+      "Protetor auricular"
+    ],
+    "condicoes_inicio": [
+      "Ensaio Proctor do material de aterro realizado em laboratório",
+      "Umidade ótima e massa específica máxima seca definidas",
+      "Superfície de fundação do aterro aprovada pelo geotécnico"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparo do Material",
+        "passos": [
+          "Verificar a umidade do solo a ser compactado — coletar amostra e comparar com umidade ótima do Proctor",
+          "Umedecer com caminhão pipa se umidade estiver abaixo; aeração se estiver acima",
+          "Espalhar o material em camadas uniformes de no máximo 30 cm (espessura solta)"
+        ]
+      },
+      {
+        "secao": "2. Compactação",
+        "passos": [
+          "Compactar com número de passadas definido nos testes de campo (normalmente 4 a 8 passadas)",
+          "Sobrepor as faixas do rolo em pelo menos 20 cm para não deixar faixas sem compactação",
+          "Realizar a compactação em camadas — nunca lançar mais de 30 cm antes de compactar"
+        ]
+      },
+      {
+        "secao": "3. Controle de Qualidade",
+        "passos": [
+          "Realizar ensaio de densidade in situ (densímetro nuclear ou método do frasco de areia) a cada 500 m² ou conforme projeto",
+          "Calcular o grau de compactação: GC = (densidade campo / densidade máxima Proctor) × 100%",
+          "Camadas com GC < 95% devem ser recompactadas antes do lançamento da próxima camada"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Espessura de cada camada de aterro (solta)",
+        "tolerancia": "Máximo 30 cm"
+      },
+      {
+        "item": "B",
+        "descricao": "Grau de compactação (GC)",
+        "tolerancia": "Mínimo 95% do Proctor Normal"
+      },
+      {
+        "item": "C",
+        "descricao": "Umidade do solo na compactação",
+        "tolerancia": "Umidade ótima ± 2%"
+      },
+      {
+        "item": "D",
+        "descricao": "Frequência de ensaios de densidade",
+        "tolerancia": "A cada 500 m² ou conforme projeto"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.02",
+    "titulo": "Locação de Obra",
+    "revisao": "00",
+    "categoria": "Infraestrutura",
+    "subcategoria": "Locação",
+    "normas": [
+      "NBR 13133:1994 (Execução de levantamento topográfico)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Teodolito ou estação total",
+      "Nível topográfico",
+      "Trena de aço 50 m",
+      "Estacas de madeira",
+      "Pregos",
+      "Linha de nylon",
+      "Esquadro de pedreiro",
+      "Gabarito de obras (sarrafos e tábuas)"
+    ],
+    "materiais": [
+      "Madeira serrada para gabarito (1\" × 6\")",
+      "Pregos 15×17",
+      "Tinta ou spray (para marcações)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Projeto arquitetônico e planta de locação aprovados",
+      "Terraplenagem concluída e aprovada",
+      "Ponto de referência (RN e marco topográfico) definido e materializado"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Implantação do Gabarito",
+        "passos": [
+          "Instalar o gabarito a 1,0 m além dos limites externos da edificação para não ser perturbado pela escavação",
+          "Nivelar a tábua do gabarito na cota definida em projeto (topo do gabarito = cota ± 0,00 ou nível de referência)",
+          "Fixar as tábuas horizontais do gabarito com sarrafos verticais nivelados e aprumados"
+        ]
+      },
+      {
+        "secao": "2. Marcação dos Eixos",
+        "passos": [
+          "Esticar linhas de nylon sobre o gabarito para marcar os eixos de pilares e paredes",
+          "Verificar o esquadro dos eixos principais com o método 3-4-5 (triângulo pitagórico)",
+          "Verificar a diagonal: diferença máxima entre as diagonais da edificação = ± 5 mm para cada 10 m",
+          "Marcar a posição dos eixos nas tábuas do gabarito com prego e etiqueta identificada"
+        ]
+      },
+      {
+        "secao": "3. Conferência",
+        "passos": [
+          "Conferir todas as dimensões externas com trena de aço",
+          "Verificar o nivelamento do gabarito com nível topográfico",
+          "Registrar e assinar o croqui de locação antes de iniciar as escavações"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Esquadro da edificação (método 3-4-5)",
+        "tolerancia": "Desvio máximo ± 5 mm a cada 10 m de diagonal"
+      },
+      {
+        "item": "B",
+        "descricao": "Nivelamento do gabarito",
+        "tolerancia": "± 3 mm em relação ao RN de projeto"
+      },
+      {
+        "item": "C",
+        "descricao": "Dimensões externas da edificação",
+        "tolerancia": "± 10 mm em relação ao projeto"
+      },
+      {
+        "item": "D",
+        "descricao": "Alinhamento com o lote e recuos",
+        "tolerancia": "Conforme projeto e legislação municipal"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.03A",
+    "titulo": "Fundação em Tubulão",
+    "revisao": "00",
+    "categoria": "Fundações",
+    "subcategoria": "Fundações Profundas",
+    "normas": [
+      "NBR 6122:2022 (Projeto e execução de fundações)",
+      "NBR 6118:2023",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Concha manual ou escavadeira rotativa",
+      "Lâmpada ou lanterna (inspeção)",
+      "Tremonha para concretagem",
+      "Vibrador de imersão",
+      "Escada de acesso",
+      "Trena, prumo"
+    ],
+    "materiais": [
+      "Concreto usinado fck ≥ 20 MPa",
+      "Armadura conforme projeto estrutural",
+      "Forma metálica ou madeira para colarinho"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas",
+      "Cinto de segurança (acesso ao tubulão)",
+      "Detector de gases (em terrenos com risco de gases)"
+    ],
+    "condicoes_inicio": [
+      "Locação dos tubulões concluída e aprovada",
+      "Projeto estrutural de fundações aprovado",
+      "Laudo de sondagem disponível na obra"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Escavação",
+        "passos": [
+          "Escavar manualmente ou mecanicamente até a cota de apoio definida em projeto",
+          "Diâmetro mínimo do fuste: 60 cm (para acesso manual de inspeção)",
+          "Verificar a cota de apoio com o engenheiro — solo deve estar íntegro e sem material amolecido no fundo",
+          "Executar o alargamento da base (campânula) conforme projeto — ângulo máximo 45° com a vertical"
+        ]
+      },
+      {
+        "secao": "2. Inspeção do Fundo",
+        "passos": [
+          "Inspecionar o fundo do tubulão antes de concretar — solo deve ser firme, sem água acumulada excessiva",
+          "Remover material solto e limpar o fundo com concha manual",
+          "Registrar a cota atingida e as condições do solo no diário de obra"
+        ]
+      },
+      {
+        "secao": "3. Concretagem",
+        "passos": [
+          "Lançar o concreto pelo centro do tubulão com tremonha — evitar segregação",
+          "Adensar com vibrador de imersão",
+          "Concretar em etapas se o tubulão for muito profundo — máximo 2 m de queda livre",
+          "Posicionar a armadura de espera do pilar antes do final da concretagem"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Cota de apoio atingida",
+        "tolerancia": "Conforme projeto — aprovação do engenheiro"
+      },
+      {
+        "item": "B",
+        "descricao": "Diâmetro do fuste",
+        "tolerancia": "Mínimo 60 cm — tolerância ± 5 cm"
+      },
+      {
+        "item": "C",
+        "descricao": "Desaprumo do tubulão",
+        "tolerancia": "Máximo 1/30 da profundidade ou 3 cm"
+      },
+      {
+        "item": "D",
+        "descricao": "Posição em planta (desvio do eixo)",
+        "tolerancia": "± 5 cm"
+      },
+      {
+        "item": "E",
+        "descricao": "Limpeza do fundo antes da concretagem",
+        "tolerancia": "Inspeção visual — sem material solto ou água acumulada"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.03B",
+    "titulo": "Fundação em Sapata",
+    "revisao": "00",
+    "categoria": "Fundações",
+    "subcategoria": "Fundações Rasas",
+    "normas": [
+      "NBR 6122:2022",
+      "NBR 6118:2023",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Escavadeira ou escavação manual",
+      "Forma de madeira (rodapé)",
+      "Vibrador de imersão",
+      "Trena, nível, prumo"
+    ],
+    "materiais": [
+      "Concreto magro fck ≥ 10 MPa (regularização)",
+      "Concreto estrutural fck conforme projeto",
+      "Armadura CA-50/CA-60 conforme projeto",
+      "Desmoldante para formas"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Escavação da vala concluída na cota de apoio",
+      "Projeto estrutural de fundações aprovado",
+      "Engenheiro verificou a qualidade do solo de apoio"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparo da Base",
+        "passos": [
+          "Regularizar o fundo da escavação com concreto magro (lastro) de 5 cm de espessura",
+          "Aguardar cura mínima de 24 horas do concreto magro",
+          "Marcar os eixos da sapata sobre o concreto magro"
+        ]
+      },
+      {
+        "secao": "2. Armação",
+        "passos": [
+          "Montar a grelha de armadura sobre espaçadores (cobrimento conforme projeto — mínimo 40 mm)",
+          "Posicionar as esperas dos pilares e verificar alinhamento com o eixo da sapata",
+          "Inspecionar antes de concretar — obter aprovação do engenheiro"
+        ]
+      },
+      {
+        "secao": "3. Concretagem",
+        "passos": [
+          "Lançar o concreto em camadas de até 40 cm, adensando com vibrador",
+          "Sarrafear e desempenar o topo da sapata",
+          "Proteger com lona e manter úmida por 7 dias"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Cota de apoio e qualidade do solo",
+        "tolerancia": "Aprovação do engenheiro"
+      },
+      {
+        "item": "B",
+        "descricao": "Posição em planta (desvio do eixo)",
+        "tolerancia": "± 5 cm"
+      },
+      {
+        "item": "C",
+        "descricao": "Cobrimento das armaduras",
+        "tolerancia": "Mínimo 40 mm (fundação) — desvio máximo -5 mm"
+      },
+      {
+        "item": "D",
+        "descricao": "Dimensões da sapata (comprimento e largura)",
+        "tolerancia": "± 20 mm em relação ao projeto"
+      },
+      {
+        "item": "E",
+        "descricao": "Posição das esperas dos pilares",
+        "tolerancia": "± 5 mm do eixo do pilar"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.03C",
+    "titulo": "Sapata Contra Barranco",
+    "revisao": "00",
+    "categoria": "Fundações",
+    "subcategoria": "Fundações Rasas",
+    "normas": [
+      "NBR 6122:2022",
+      "NBR 6118:2023",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Escavação manual",
+      "Colher de pedreiro",
+      "Vibrador",
+      "Trena, esquadro"
+    ],
+    "materiais": [
+      "Concreto estrutural fck conforme projeto",
+      "Armadura conforme projeto",
+      "Chapisco (cimento e areia grossa 1:3)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Escavação em barranco concluída conforme projeto",
+      "Projeto estrutural aprovado",
+      "Solo de apoio verificado pelo engenheiro"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparação da Superfície",
+        "passos": [
+          "Limpar e umedecer as paredes e fundo do barranco",
+          "Aplicar chapisco nas superfícies laterais do barranco que ficarão em contato com o concreto",
+          "Aguardar 24 horas após o chapisco"
+        ]
+      },
+      {
+        "secao": "2. Marcação e Armação",
+        "passos": [
+          "Marcar a posição dos pilares sobre o barranco com tinta spray",
+          "Montar a armadura da sapata com espaçadores de cobrimento adequados",
+          "Posicionar as esperas dos pilares no eixo correto"
+        ]
+      },
+      {
+        "secao": "3. Concretagem",
+        "passos": [
+          "Lançar e adensar o concreto contra o barranco",
+          "Verificar se o concreto preencheu completamente os cantos e laterais",
+          "Proteger com lona por 7 dias"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Posição das esperas dos pilares",
+        "tolerancia": "± 5 mm do eixo"
+      },
+      {
+        "item": "B",
+        "descricao": "Cobrimento das armaduras",
+        "tolerancia": "Mínimo 40 mm — desvio máximo -5 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Chapisco nas laterais do barranco",
+        "tolerancia": "Inspeção visual — cobertura uniforme"
+      },
+      {
+        "item": "D",
+        "descricao": "Preenchimento completo do concreto",
+        "tolerancia": "Inspeção visual — sem vazios aparentes após desforma"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.03D",
+    "titulo": "Fundação em Baldrame",
+    "revisao": "00",
+    "categoria": "Fundações",
+    "subcategoria": "Fundações Rasas",
+    "normas": [
+      "NBR 6122:2022",
+      "NBR 6118:2023",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Forma de madeira",
+      "Vibrador",
+      "Trena, nível, prumo"
+    ],
+    "materiais": [
+      "Concreto ciclópico (concreto + pedras de mão 30%)",
+      "Blocos de alvenaria para impermeabilização",
+      "Argamassa de cimento e areia"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Locação da obra concluída",
+      "Escavação das valas concluída",
+      "Projeto estrutural aprovado"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Execução do Concreto Ciclópico",
+        "passos": [
+          "Lançar concreto convencional e inserir pedras de mão (30% do volume máximo) intercaladamente",
+          "As pedras devem ter espaçamento mínimo de 5 cm entre si e 5 cm das faces da forma",
+          "Adensar com vibrador ou soquete manual ao redor de cada pedra"
+        ]
+      },
+      {
+        "secao": "2. Alvenaria de Baldrame",
+        "passos": [
+          "Após cura do concreto ciclópico (mínimo 3 dias), assentar a 1ª fiada de blocos com argamassa de cimento e areia",
+          "A 1ª fiada deve ter os blocos impermeabilizados com argamassa de impermeabilização",
+          "Verificar nível e prumo a cada fiada"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Proporção de pedras no concreto ciclópico",
+        "tolerancia": "Máximo 30% do volume"
+      },
+      {
+        "item": "B",
+        "descricao": "Afastamento das pedras das faces",
+        "tolerancia": "Mínimo 5 cm"
+      },
+      {
+        "item": "C",
+        "descricao": "Nível do topo do baldrame",
+        "tolerancia": "± 5 mm"
+      },
+      {
+        "item": "D",
+        "descricao": "Prumo do baldrame",
+        "tolerancia": "± 5 mm por metro"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.03E",
+    "titulo": "Fundação em Radier",
+    "revisao": "00",
+    "categoria": "Fundações",
+    "subcategoria": "Fundações Rasas",
+    "normas": [
+      "NBR 6122:2022",
+      "NBR 6118:2023",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Vibrador de imersão",
+      "Régua metálica de sarrafeamento",
+      "Desempenadeira de aço",
+      "Trena, nível de mangueira"
+    ],
+    "materiais": [
+      "Lona plástica 200 micras",
+      "Concreto fck conforme projeto",
+      "Armadura CA-50 (ferragem positiva e negativa)",
+      "Espaçadores de cobrimento",
+      "Gabarito metálico (cadeirinha)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Base compactada e nivelada (GC ≥ 95% Proctor Normal)",
+      "Tubulações embutidas instaladas, testadas e aprovadas",
+      "Armadura montada e aprovada pelo engenheiro"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparo da Base",
+        "passos": [
+          "Estender a lona plástica 200 micras sobre toda a área do radier, com bordas voltadas para cima nos limites",
+          "Verificar o nível da base com nível de mangueira — desvio máximo ± 5 mm"
+        ]
+      },
+      {
+        "secao": "2. Armação",
+        "passos": [
+          "Montar a ferragem positiva (inferior) sobre espaçadores adequados — cobrimento mínimo 30 mm",
+          "Instalar as cadeirinhas (gabaritos metálicos) para suporte da ferragem negativa (superior)",
+          "Montar a ferragem negativa, verificando o espaçamento e o cobrimento superior"
+        ]
+      },
+      {
+        "secao": "3. Concretagem",
+        "passos": [
+          "Concretar continuamente sem interrupções, avançando de um extremo ao outro",
+          "Adensar com vibrador de imersão a cada 40 cm",
+          "Sarrafear com régua metálica e desempenar com desempenadeira de aço",
+          "Curar com lona plástica por 7 dias"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nivelamento da base (antes da concretagem)",
+        "tolerancia": "± 5 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Cobrimento inferior da armadura",
+        "tolerancia": "Mínimo 30 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Espessura do radier",
+        "tolerancia": "Conforme projeto ± 5 mm"
+      },
+      {
+        "item": "D",
+        "descricao": "Planicidade da superfície (após concretagem)",
+        "tolerancia": "± 5 mm com régua de 2 m"
+      },
+      {
+        "item": "E",
+        "descricao": "Cura úmida",
+        "tolerancia": "Mínimo 7 dias"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.03F",
+    "titulo": "Estaca Pré-Fabricada de Concreto",
+    "revisao": "00",
+    "categoria": "Fundações",
+    "subcategoria": "Fundações Profundas",
+    "normas": [
+      "NBR 6122:2022",
+      "NBR 7480:2007",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Bate-estacas (trilho, percussão ou vibratório)",
+      "Guia de cravação",
+      "Trena, prumo de fio"
+    ],
+    "materiais": [
+      "Estacas pré-fabricadas de concreto (CA-50, fck conforme projeto)",
+      "Solda (emenda de estacas, quando necessário)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Protetor auricular",
+      "Colete refletivo",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Locação das estacas concluída e aprovada",
+      "Plano de cravação aprovado pelo engenheiro",
+      "Estacas recebidas com certificado do fabricante"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Posicionamento e Cravação",
+        "passos": [
+          "Posicionar a estaca no ponto de locação com desvio máximo de ± 5 cm do eixo",
+          "Verificar a verticalidade da estaca antes da cravação (desvio máximo 1/100)",
+          "Iniciar a cravação com golpes progressivamente maiores até atingir a nega (recusa) definida em projeto"
+        ]
+      },
+      {
+        "secao": "2. Emenda de Estacas",
+        "passos": [
+          "Quando necessário, emendar as estacas por solda elétrica conforme projeto",
+          "Verificar alinhamento da emenda antes de soldar — desvio máximo 2 mm",
+          "Aguardar resfriamento da solda antes de reiniciar a cravação"
+        ]
+      },
+      {
+        "secao": "3. Arrasamento",
+        "passos": [
+          "Arrasar a estaca na cota definida em projeto com esmerilhadeira ou corte a frio",
+          "Expor a armadura para embutimento no bloco de coroamento conforme projeto"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Posição em planta (desvio do eixo)",
+        "tolerancia": "± 5 cm"
+      },
+      {
+        "item": "B",
+        "descricao": "Verticalidade (desvio de prumo)",
+        "tolerancia": "Máximo 1/100 do comprimento"
+      },
+      {
+        "item": "C",
+        "descricao": "Nega (recusa de cravação)",
+        "tolerancia": "Conforme projeto — registrar valores por estaca"
+      },
+      {
+        "item": "D",
+        "descricao": "Cota de arrasamento",
+        "tolerancia": "± 2 cm"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.03G",
+    "titulo": "Estaca Escavada Concretada In Loco",
+    "revisao": "00",
+    "categoria": "Fundações",
+    "subcategoria": "Fundações Profundas",
+    "normas": [
+      "NBR 6122:2022",
+      "NBR 6118:2023",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Escavadeira rotativa (trado contínuo ou coquilha)",
+      "Tremonha",
+      "Vibrador de imersão",
+      "Grua ou guindaste (para armadura)"
+    ],
+    "materiais": [
+      "Concreto fck ≥ 20 MPa (slump 10 ± 2 cm)",
+      "Armadura conforme projeto (gaiola)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Locação das estacas aprovada",
+      "Projeto estrutural aprovado",
+      "Laudo de sondagem disponível"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Escavação",
+        "passos": [
+          "Escavar com trado mecânico até a cota de apoio definida no projeto",
+          "Verificar a cota e as condições do solo no fundo — sem material amolecido",
+          "Em solos arenosos ou com presença de água, utilizar fluido estabilizador (bentonita) ou revestimento provisório"
+        ]
+      },
+      {
+        "secao": "2. Descida da Armadura",
+        "passos": [
+          "Descer a gaiola de armadura com guia, centralizando com espaçadores de cobrimento",
+          "A gaiola deve ficar suspensa sem apoiar no fundo — verificar comprimento"
+        ]
+      },
+      {
+        "secao": "3. Concretagem",
+        "passos": [
+          "Concretar com tremonha a partir do fundo, deslocando continuamente para cima",
+          "Manter o tubo da tremonha sempre imerso no concreto fresco (mínimo 2 m)",
+          "Registrar o volume concretado e comparar com o volume teórico calculado"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Cota de apoio atingida",
+        "tolerancia": "Conforme projeto — aprovação do engenheiro"
+      },
+      {
+        "item": "B",
+        "descricao": "Cobrimento da armadura (espaçadores)",
+        "tolerancia": "Mínimo 40 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Volume de concreto concretado vs. teórico",
+        "tolerancia": "Volume real ≥ volume teórico (excesso indica perda)"
+      },
+      {
+        "item": "D",
+        "descricao": "Posição em planta (desvio do eixo)",
+        "tolerancia": "± 5 cm"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.03H",
+    "titulo": "Estaca Hélice Contínua",
+    "revisao": "00",
+    "categoria": "Fundações",
+    "subcategoria": "Fundações Profundas",
+    "normas": [
+      "NBR 6122:2022",
+      "NBR 6118:2023",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Perfuratriz de hélice contínua monitorada",
+      "Bomba de concreto de alta pressão",
+      "Guindaste (para armadura)",
+      "Sistema de monitoramento eletrônico"
+    ],
+    "materiais": [
+      "Concreto bombeável fck ≥ 25 MPa (slump 18 ± 2 cm)",
+      "Armadura conforme projeto (gaiola)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Protetor auricular",
+      "Colete refletivo"
+    ],
+    "condicoes_inicio": [
+      "Locação aprovada",
+      "Plano de execução aprovado pelo engenheiro",
+      "Sistema de monitoramento eletrônico calibrado e funcionando"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Perfuração e Concretagem Simultânea",
+        "passos": [
+          "Posicionar a hélice no ponto de locação com desvio máximo de ± 5 cm",
+          "Perfurar até a cota de projeto com rotação contínua da hélice",
+          "Ao atingir a cota, iniciar simultaneamente a extração da hélice e o bombeamento do concreto",
+          "A taxa de extração deve ser sincronizada com o fluxo de concreto — monitorar pelo sistema eletrônico",
+          "Manter pressão positiva de concreto — nunca interromper o bombeamento durante a extração"
+        ]
+      },
+      {
+        "secao": "2. Inserção da Armadura",
+        "passos": [
+          "Inserir a gaiola de armadura por gravidade imediatamente após o término da extração",
+          "A gaiola deve penetrar pela própria gravidade — se não penetrar, verificar se o concreto está muito rígido",
+          "Registrar a profundidade de penetração da gaiola"
+        ]
+      },
+      {
+        "secao": "3. Controle e Registro",
+        "passos": [
+          "Registrar: volume de concreto por metro linear, velocidade de extração, torque e pressão de bombeamento",
+          "Comparar o volume real com o volume teórico — mínimo 110% do volume teórico"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Posição em planta (desvio do eixo)",
+        "tolerancia": "± 5 cm"
+      },
+      {
+        "item": "B",
+        "descricao": "Volume de concreto (real vs. teórico)",
+        "tolerancia": "Mínimo 110% do volume teórico"
+      },
+      {
+        "item": "C",
+        "descricao": "Profundidade de penetração da gaiola",
+        "tolerancia": "Conforme projeto — registrar por estaca"
+      },
+      {
+        "item": "D",
+        "descricao": "Registro eletrônico de execução",
+        "tolerancia": "Arquivo disponível para cada estaca executada"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.04",
+    "titulo": "Execução de Formas",
+    "revisao": "00",
+    "categoria": "Estrutura",
+    "subcategoria": "Formas e Cimbramento",
+    "normas": [
+      "NBR 7190-1:2022",
+      "NBR 6118:2023",
+      "NBR 14931:2004",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra circular, serrote",
+      "Martelo, pregos, parafusos",
+      "Nível a bolha, prumo de fio",
+      "Trena, esquadro",
+      "Escoramento metálico ou de madeira"
+    ],
+    "materiais": [
+      "Painéis de compensado plastificado 12 mm ou 18 mm",
+      "Sarrafos e pranchões de madeira",
+      "Parafusos e arames de arame-fardo",
+      "Desmoldante (óleo vegetal ou produto específico)",
+      "Escoras metálicas ou de madeira"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Cinto de segurança (em altura)"
+    ],
+    "condicoes_inicio": [
+      "Armadura de fundação ou laje anterior concluída e aprovada",
+      "Projeto de formas ou detalhamento estrutural aprovado",
+      "Painéis de forma inspecionados — sem empenamento ou furos"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Montagem de Formas de Pilares",
+        "passos": [
+          "Montar os painéis laterais sobre a planta marcada no piso, aprumando e alinhando com prumo e nível",
+          "Fixar os gravatas (cintas de aperto) espaçadas conforme pressão do concreto fresco (máx. 50 cm no terço inferior)",
+          "Aplicar desmoldante interno antes de fechar o painel"
+        ]
+      },
+      {
+        "secao": "2. Montagem de Formas de Vigas",
+        "passos": [
+          "Instalar os escoramentos da viga na posição e espaçamento de projeto",
+          "Montar o fundo da viga e verificar o nível e contra-flecha (quando especificada)",
+          "Montar as laterais e fixar com gravatas"
+        ]
+      },
+      {
+        "secao": "3. Montagem de Formas de Lajes",
+        "passos": [
+          "Instalar os escoramentos com espaçamento máximo de 1,0 m (ou conforme projeto)",
+          "Assentar os painéis de laje, verificando a planicidade com régua de 2 m — tolerância ± 5 mm",
+          "Verificar todas as emendas — sem frestas que permitam vazamento de nata"
+        ]
+      },
+      {
+        "secao": "4. Desforma",
+        "passos": [
+          "Prazo mínimo para desforma de faces laterais: 1 a 3 dias",
+          "Prazo mínimo para desforma de fundo de vigas e lajes: conforme NBR 14931 (mínimo 14 dias para fck ≥ 25 MPa)",
+          "Desformar somente com autorização do engenheiro após análise dos CPs de resistência"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Prumo dos pilares (antes da concretagem)",
+        "tolerancia": "± 3 mm por metro de altura"
+      },
+      {
+        "item": "B",
+        "descricao": "Alinhamento das vigas",
+        "tolerancia": "± 5 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Planicidade das lajes",
+        "tolerancia": "± 5 mm com régua de 2 m"
+      },
+      {
+        "item": "D",
+        "descricao": "Estanqueidade das juntas das formas",
+        "tolerancia": "Inspeção visual — sem frestas"
+      },
+      {
+        "item": "E",
+        "descricao": "Escoramento: vãos e prumo",
+        "tolerancia": "Conforme projeto — inspeção visual"
+      },
+      {
+        "item": "F",
+        "descricao": "Prazo de desforma (fundo de lajes/vigas)",
+        "tolerancia": "Mínimo 14 dias — aprovação do engenheiro"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.05",
+    "titulo": "Armação de Aço",
+    "revisao": "00",
+    "categoria": "Estrutura",
+    "subcategoria": "Armação",
+    "normas": [
+      "NBR 6118:2023",
+      "NBR 7480:2007",
+      "NBR 14931:2004",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Bancada de corte e dobra",
+      "Dobradeira de aço",
+      "Cortadora de aço",
+      "Arame recozido, torquês, alicate",
+      "Trena, espaçadores de cobrimento"
+    ],
+    "materiais": [
+      "Barras de aço CA-50 e CA-60 (diâmetros conforme projeto)",
+      "Arame recozido nº 18",
+      "Espaçadores de cobrimento (plástico ou concreto)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina com biqueira",
+      "Luvas de raspa",
+      "Óculos",
+      "Protetor auricular"
+    ],
+    "condicoes_inicio": [
+      "Projeto estrutural aprovado e disponível na obra",
+      "Certificado de qualidade das barras de aço disponível",
+      "Local de trabalho limpo e organizado"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Recebimento e Armazenamento",
+        "passos": [
+          "Conferir o certificado de qualidade: fabricante, bitola, categoria (CA-50 ou CA-60), número de corrida",
+          "Verificar oxidação — ferrugem superficial aceitável; ferrugem com laminação: rejeitar",
+          "Armazenar sobre cavaletes por bitola, identificadas, em local coberto e afastado do solo"
+        ]
+      },
+      {
+        "secao": "2. Corte",
+        "passos": [
+          "Preparar lista de corte a partir do projeto",
+          "Marcar os comprimentos com giz antes do corte",
+          "Executar cortes com cortadora de disco ou guilhotina — nunca com maçarico"
+        ]
+      },
+      {
+        "secao": "3. Dobramento",
+        "passos": [
+          "Raio mínimo de dobramento: 2,5Ø para CA-50 e 1,5Ø para CA-60",
+          "Usar gabaritos compatíveis com a bitola",
+          "Nunca aquecer a barra para dobrar"
+        ]
+      },
+      {
+        "secao": "4. Montagem",
+        "passos": [
+          "Posicionar as barras conforme projeto (espaçamentos, quantidades, diâmetros)",
+          "Ligar com arame recozido em todos os cruzamentos",
+          "Posicionar espaçadores conforme tabela de cobrimento mínimo da NBR 6118",
+          "Espaçamento mínimo entre barras: 1,2× o agregado graúdo",
+          "Obter aprovação do engenheiro antes de concretar"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Bitola, quantidade e posição das barras",
+        "tolerancia": "Conforme projeto — desvio máximo de posição: ± 5 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Espaçamento entre barras",
+        "tolerancia": "Mínimo 1,2× agregado graúdo; conforme projeto ± 5 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Cobrimento (espaçadores posicionados)",
+        "tolerancia": "Conforme tabela NBR 6118 — desvio máximo -5 mm"
+      },
+      {
+        "item": "D",
+        "descricao": "Diâmetro e espaçamento dos estribos",
+        "tolerancia": "Conforme projeto — desvio máximo ± 10 mm"
+      },
+      {
+        "item": "E",
+        "descricao": "Comprimento de ancoragem e emenda",
+        "tolerancia": "Conforme projeto (NBR 6118 seção 9)"
+      },
+      {
+        "item": "F",
+        "descricao": "Certificado de qualidade do aço",
+        "tolerancia": "Disponível no arquivo da obra antes da concretagem"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.06",
+    "titulo": "Concretagem",
+    "revisao": "00",
+    "categoria": "Estrutura",
+    "subcategoria": "Concretagem",
+    "normas": [
+      "NBR 6118:2023",
+      "NBR 14931:2004",
+      "NBR 12655:2022",
+      "NBR NM 67:1998",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Vibrador de imersão",
+      "Régua metálica",
+      "Desempenadeira de aço",
+      "Bomba de concreto (quando necessário)",
+      "Cone de slump test",
+      "Moldes cilíndricos para CPs"
+    ],
+    "materiais": [
+      "Concreto usinado ou dosado em obra (fck conforme projeto)",
+      "Desmoldante para formas",
+      "Lona plástica (cura)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha",
+      "Óculos",
+      "Protetor auricular"
+    ],
+    "condicoes_inicio": [
+      "Formas concluídas e aprovadas (IT.04)",
+      "Armadura montada, inspecionada e aprovada (IT.05)",
+      "Nota fiscal do concreto conferida (fck, slump, relação a/c)"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Recebimento do Concreto",
+        "passos": [
+          "Conferir a nota fiscal: fck, relação a/c, hora de saída, volume",
+          "Realizar slump test a cada caminhão ou a cada 50 m³ — slump dentro da tolerância ± 10 mm",
+          "Nunca adicionar água ao concreto no canteiro",
+          "Coletar corpos de prova: mínimo 2 CPs por ensaio (7 e 28 dias) — NBR 5738"
+        ]
+      },
+      {
+        "secao": "2. Lançamento",
+        "passos": [
+          "Altura máxima de queda livre: 1,5 m (acima disso, usar tremonha)",
+          "Lançar em camadas de no máximo 40 cm",
+          "Em pilares, lançar pelo centro da forma, em camadas"
+        ]
+      },
+      {
+        "secao": "3. Adensamento",
+        "passos": [
+          "Inserir a agulha verticalmente a cada 40–50 cm",
+          "Tempo de vibração por ponto: 5 a 15 segundos",
+          "Não tocar armaduras ou formas com a agulha"
+        ]
+      },
+      {
+        "secao": "4. Cura",
+        "passos": [
+          "Iniciar a cura nas primeiras 2 horas após o lançamento",
+          "Cura úmida com lona plástica por mínimo 7 dias, mantendo superfície úmida",
+          "Proteger de chuvas fortes nas primeiras 4 horas e de temperaturas abaixo de 5°C"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Slump test (abatimento)",
+        "tolerancia": "Conforme projeto ± 10 mm — rejeitar fora da faixa"
+      },
+      {
+        "item": "B",
+        "descricao": "Temperatura do concreto no lançamento",
+        "tolerancia": "Máx. 35°C — mínimo 5°C"
+      },
+      {
+        "item": "C",
+        "descricao": "Altura máxima de queda livre",
+        "tolerancia": "Máximo 1,50 m sem tremonha"
+      },
+      {
+        "item": "D",
+        "descricao": "Coleta de CPs",
+        "tolerancia": "Mínimo 2 CPs a cada 50 m³"
+      },
+      {
+        "item": "E",
+        "descricao": "Resistência fck aos 28 dias",
+        "tolerancia": "Conforme projeto estrutural (NBR 12655)"
+      },
+      {
+        "item": "F",
+        "descricao": "Cura úmida",
+        "tolerancia": "Mínimo 7 dias corridos"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.06A",
+    "titulo": "Controle Tecnológico do Concreto",
+    "revisao": "00",
+    "categoria": "Estrutura",
+    "subcategoria": "Controle de Qualidade",
+    "normas": [
+      "NBR 12655:2022",
+      "NBR NM 67:1998",
+      "NBR 5738:2016",
+      "NBR 5739:2018",
+      "NBR 14931:2004"
+    ],
+    "ferramentas": [
+      "Cone de Abrams (slump test)",
+      "Moldes cilíndricos Ø15×30 cm",
+      "Termômetro",
+      "Balança",
+      "Megôhmetro"
+    ],
+    "materiais": [
+      "Desmoldante para moldes de CPs",
+      "Etiquetas de identificação",
+      "Planilha de controle de concretagem"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha"
+    ],
+    "condicoes_inicio": [
+      "Plano de controle tecnológico aprovado pelo engenheiro",
+      "Equipamentos de ensaio calibrados e disponíveis",
+      "Planilhas de controle preparadas"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Verificação da Nota Fiscal",
+        "passos": [
+          "Conferir: fck especificado, relação a/c, consumo de cimento, tipo de aditivo, slump especificado, hora de saída",
+          "Concreto deve ser lançado em até 2 horas após a saída da usina",
+          "Registrar número da NF, volume, hora de chegada e início do lançamento"
+        ]
+      },
+      {
+        "secao": "2. Ensaio de Abatimento (Slump Test)",
+        "passos": [
+          "Coletar amostra do caminhão após descartar os primeiros 0,3 m³",
+          "Preencher o cone em 3 camadas, 25 golpes por camada",
+          "Retirar o cone em 5 a 10 segundos e medir imediatamente",
+          "Resultado fora da tolerância (± 10 mm): recusar o caminhão"
+        ]
+      },
+      {
+        "secao": "3. Moldagem de Corpos de Prova",
+        "passos": [
+          "Preencher moldes em 2 camadas, 25 golpes cada, logo após o slump test",
+          "Identificar com etiqueta: data, hora, estrutura, slump, número da NF",
+          "Manter por 24 h em local protegido, desmoldar e enviar ao laboratório"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Slump test realizado",
+        "tolerancia": "Dentro da tolerância especificada ± 10 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Temperatura do concreto no recebimento",
+        "tolerancia": "Entre 5°C e 35°C"
+      },
+      {
+        "item": "C",
+        "descricao": "CPs moldados e identificados",
+        "tolerancia": "Mínimo 2 por ensaio, identificação completa"
+      },
+      {
+        "item": "D",
+        "descricao": "Resistência aos 7 dias",
+        "tolerancia": "≥ 70% do fck especificado"
+      },
+      {
+        "item": "E",
+        "descricao": "Resistência aos 28 dias",
+        "tolerancia": "≥ fck especificado em projeto"
+      },
+      {
+        "item": "F",
+        "descricao": "Planilha de controle arquivada",
+        "tolerancia": "Documento completo disponível"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.07",
+    "titulo": "Alvenaria Estrutural",
+    "revisao": "00",
+    "categoria": "Alvenaria e Vedação",
+    "subcategoria": "Alvenaria Estrutural",
+    "normas": [
+      "NBR 15961-2:2011 (Alvenaria estrutural)",
+      "NBR 6136:2016 (Blocos de concreto)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Colher de pedreiro",
+      "Nível a bolha",
+      "Prumo de face",
+      "Linha de nylon",
+      "Esquadro",
+      "Trena"
+    ],
+    "materiais": [
+      "Blocos de concreto estrutural ou cerâmico (classe conforme projeto)",
+      "Argamassa de assentamento (cimento, areia e cal)",
+      "Graute (para preenchimento de alvéolos armados)",
+      "Armadura conforme projeto"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Fundação concluída, curada e aprovada",
+      "Projeto de alvenaria estrutural aprovado",
+      "Primeira fiada marcada nos 4 cantos"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Marcação e Primeira Fiada",
+        "passos": [
+          "Marcar a posição das paredes nos 4 cantos com gabarito ou trena + esquadro",
+          "Assentar a primeira fiada a seco (sem argamassa) para verificar a modulação",
+          "Iniciar a primeira fiada pelas extremidades externas, verificando nível e prumo"
+        ]
+      },
+      {
+        "secao": "2. Assentamento das Fiadas",
+        "passos": [
+          "Esticar linha de nylon entre os cantos para guia de nível",
+          "Aplicar argamassa de assentamento com espessura de 10 mm (± 3 mm)",
+          "Verificar prumo e planeza a cada 3 fiadas",
+          "Manter amarrações entre paredes conforme projeto"
+        ]
+      },
+      {
+        "secao": "3. Grauteamento",
+        "passos": [
+          "Lançar o graute nos alvéolos armados conforme projeto, em camadas máx. de 60 cm",
+          "Adensar com vergalhão ou vibrador de agulha fina",
+          "Não executar o grauteamento em temperatura abaixo de 5°C"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Prumo das paredes",
+        "tolerancia": "± 3 mm por metro de altura / máx. 10 mm total"
+      },
+      {
+        "item": "B",
+        "descricao": "Planeza das paredes",
+        "tolerancia": "± 5 mm com régua de 2 m"
+      },
+      {
+        "item": "C",
+        "descricao": "Nível das fiadas",
+        "tolerancia": "± 3 mm"
+      },
+      {
+        "item": "D",
+        "descricao": "Espessura da junta de argamassa",
+        "tolerancia": "10 mm ± 3 mm"
+      },
+      {
+        "item": "E",
+        "descricao": "Posição de vãos e aberturas",
+        "tolerancia": "± 10 mm em relação ao projeto"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.08A",
+    "titulo": "Alvenaria Não Estrutural",
+    "revisao": "00",
+    "categoria": "Alvenaria e Vedação",
+    "subcategoria": "Alvenaria de Vedação",
+    "normas": [
+      "NBR 8545:2020 (Execução de alvenaria sem função estrutural)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Colher de pedreiro",
+      "Nível a bolha",
+      "Prumo de face",
+      "Linha de nylon",
+      "Esquadro",
+      "Trena",
+      "Finca-pinos"
+    ],
+    "materiais": [
+      "Blocos cerâmicos ou de concreto (vedação)",
+      "Argamassa de assentamento",
+      "Tela metálica galvanizada 15×15 mm",
+      "Ferro cabelo Ø6 mm (ancoragem em pilares)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Estrutura de concreto concluída e desformada",
+      "Projeto arquitetônico aprovado",
+      "Eixos e cotas das paredes marcados no piso"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Marcação",
+        "passos": [
+          "Marcar os eixos das paredes no piso e transferir para laje ou viga acima",
+          "Verificar o esquadro dos ângulos com esquadro de 90°"
+        ]
+      },
+      {
+        "secao": "2. Assentamento",
+        "passos": [
+          "Instalar a tela metálica 15×15 mm a cada 3 fiadas na interface com estrutura de concreto",
+          "Fixar ferro cabelo Ø6 mm nos pilares com finca-pinos a cada 50 cm de altura",
+          "Verificar nível e prumo a cada fiada",
+          "Manter espessura de junta de 10 mm ± 3 mm"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Prumo das paredes",
+        "tolerancia": "± 3 mm/m — máx. 10 mm total"
+      },
+      {
+        "item": "B",
+        "descricao": "Planeza das paredes",
+        "tolerancia": "± 5 mm com régua de 2 m"
+      },
+      {
+        "item": "C",
+        "descricao": "Ancoragem em pilares (tela ou ferro cabelo)",
+        "tolerancia": "A cada 3 fiadas / 50 cm — inspeção visual"
+      },
+      {
+        "item": "D",
+        "descricao": "Espessura da junta de argamassa",
+        "tolerancia": "10 mm ± 3 mm"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.08B",
+    "titulo": "Encunhamento de Alvenaria",
+    "revisao": "00",
+    "categoria": "Alvenaria e Vedação",
+    "subcategoria": "Alvenaria de Vedação",
+    "normas": [
+      "NBR 8545:2020",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Colher de pedreiro",
+      "Nível a bolha",
+      "Prumo"
+    ],
+    "materiais": [
+      "Tijolos maciços (encunhamento externo)",
+      "Argamassa de encunhamento (expansiva ou cimento + cal)",
+      "Espuma de poliuretano (alternativa)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Óculos",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Alvenaria executada e com argamassa curada (mínimo 3 pavimentos acima concluídos)",
+      "A parede não deve estar sujeita a deformação diferida da estrutura"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Encunhamento Externo",
+        "passos": [
+          "Executar somente após 3 pavimentos acima da parede estarem concluídos (para que a estrutura não transfira carga para a alvenaria antes do encunhamento)",
+          "Preencher a folga com tijolos maciços inclinados (~45°), comprimidos contra a laje",
+          "Aplicar argamassa nas interfaces"
+        ]
+      },
+      {
+        "secao": "2. Encunhamento Interno",
+        "passos": [
+          "Preencher a folga com argamassa expansiva ou espuma de poliuretano",
+          "Garantir preenchimento completo sem vazio"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Prazo de execução após alvenaria",
+        "tolerancia": "Mínimo após 3 pavimentos acima concluídos"
+      },
+      {
+        "item": "B",
+        "descricao": "Encunhamento externo (tijolos inclinados)",
+        "tolerancia": "Desvio de posição ± 2 cm"
+      },
+      {
+        "item": "C",
+        "descricao": "Encunhamento interno (argamassa/espuma)",
+        "tolerancia": "Preenchimento completo — inspeção visual"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.09A",
+    "titulo": "Revestimento em Gesso Sarrafeado",
+    "revisao": "00",
+    "categoria": "Revestimentos",
+    "subcategoria": "Revestimento em Gesso",
+    "normas": [
+      "NBR 13207:1994 (Gesso para construção civil)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Desempenadeira de PVC",
+      "Espátula metálica",
+      "Régua de alumínio",
+      "Balde, concha",
+      "Nivel a bolha"
+    ],
+    "materiais": [
+      "Gesso em pó",
+      "Água limpa"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas nitrílicas",
+      "Óculos de proteção",
+      "Máscara PFF1 (pó de gesso)"
+    ],
+    "condicoes_inicio": [
+      "Alvenaria concluída, prumo e nível verificados",
+      "Instalações elétricas e hidráulicas embutidas e testadas",
+      "Superfície limpa, sem pó e levemente umedecida"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparação da Massa",
+        "passos": [
+          "Adicionar o gesso em pó sobre a água — nunca o contrário (para evitar grumos)",
+          "Misturar até consistência pastosa e homogênea",
+          "Usar dentro do tempo de trabalhabilidade (aproximadamente 20 a 30 minutos)"
+        ]
+      },
+      {
+        "secao": "2. Aplicação",
+        "passos": [
+          "Proteger pontos elétricos, hidráulicos e esquadrias",
+          "Aplicar pasta de gesso sobre a superfície com desempenadeira, em camada uniforme de 10 a 15 mm",
+          "Sarrafear com régua de alumínio, usando as taliscas como gabarito",
+          "Após 3 minutos do início do endurecimento, raspar o excesso com a desempenadeira em movimentos circulares",
+          "Acabamento final: feltragem com desempenadeira de PVC ou espuma"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Planicidade da superfície",
+        "tolerancia": "± 2 mm com régua de 2 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Prumo da parede revestida",
+        "tolerancia": "± 3 mm por metro"
+      },
+      {
+        "item": "C",
+        "descricao": "Espessura do revestimento",
+        "tolerancia": "10 a 15 mm"
+      },
+      {
+        "item": "D",
+        "descricao": "Aspecto visual (acabamento)",
+        "tolerancia": "Inspeção visual — sem ondulações ou marcas"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.09B",
+    "titulo": "Revestimento em Gesso Destorcido",
+    "revisao": "00",
+    "categoria": "Revestimentos",
+    "subcategoria": "Revestimento em Gesso",
+    "normas": [
+      "NBR 13207:1994",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Desempenadeira de PVC",
+      "Espátula",
+      "Esponja de feltro"
+    ],
+    "materiais": [
+      "Gesso em pó",
+      "Água"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas nitrílicas",
+      "Máscara PFF1"
+    ],
+    "condicoes_inicio": [
+      "Superfície base em bom estado e sem irregularidades grosseiras (variação máx. 5 mm)",
+      "Instalações embutidas concluídas"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Aplicação Sem Taliscas",
+        "passos": [
+          "Aplicar a pasta de gesso diretamente sobre a superfície sem uso de taliscas",
+          "Regularizar visualmente, corrigindo altos e baixos sem referência de gabarito",
+          "Acabamento final com feltro ou desempenadeira de PVC"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Planicidade visual",
+        "tolerancia": "Inspeção visual — sem ondulações aparentes"
+      },
+      {
+        "item": "B",
+        "descricao": "Aspecto geral (acabamento feltrado)",
+        "tolerancia": "Inspeção visual — homogêneo"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.10",
+    "titulo": "Assentamento de Azulejo em Parede",
+    "revisao": "00",
+    "categoria": "Revestimentos",
+    "subcategoria": "Revestimento Cerâmico de Paredes",
+    "normas": [
+      "NBR 13754:1996 (Revestimento de parede com placas cerâmicas)",
+      "NBR 14081-2:2012",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Desempenadeira dentada (B1 ou B2)",
+      "Desempenadeira lisa",
+      "Martelo de borracha",
+      "Nível, prumo",
+      "Trena, régua de alumínio",
+      "Espaçadores de junta",
+      "Cortadora manual ou elétrica"
+    ],
+    "materiais": [
+      "Azulejo ou revestimento cerâmico conforme especificação",
+      "Argamassa colante AC-I ou AC-II",
+      "Rejunte a base de cimento",
+      "Espaçadores 2 mm"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Joelheiras",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Emboço/reboco ou gesso concluído, seco e aprumado",
+      "Instalações elétricas e hidráulicas embutidas",
+      "Modulação planejada e aprovada"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Modulação",
+        "passos": [
+          "Planejar a modulação a seco: evitar cortes menores que 1/3 da peça nas bordas e extremidades visíveis",
+          "Marcar as linhas guia (horizontal e vertical) com nível e prumo"
+        ]
+      },
+      {
+        "secao": "2. Assentamento",
+        "passos": [
+          "Aplicar argamassa colante com desempenadeira dentada em movimentos horizontais",
+          "Assentar as peças antes de formar a película esbranquiçada (máx. 15 min)",
+          "Pressionar cada peça com martelo de borracha, verificando o nível",
+          "Usar espaçadores de junta 2 mm",
+          "Verificar aderência: levantar uma peça a cada 20 — argamassa deve cobrir ≥ 65% do verso"
+        ]
+      },
+      {
+        "secao": "3. Rejuntamento",
+        "passos": [
+          "Aguardar mínimo 72 horas após o assentamento",
+          "Retirar espaçadores, limpar as juntas",
+          "Aplicar rejunte com desempenadeira de borracha em movimentos diagonais",
+          "Remover excesso com esponja úmida"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Prumo e nível das peças",
+        "tolerancia": "± 2 mm por metro"
+      },
+      {
+        "item": "B",
+        "descricao": "Junta entre peças",
+        "tolerancia": "3 mm ± 1 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Aderência das peças (percussão)",
+        "tolerancia": "Som cheio — sem peças ocas"
+      },
+      {
+        "item": "D",
+        "descricao": "Planicidade da superfície",
+        "tolerancia": "± 3 mm com régua de 2 m"
+      },
+      {
+        "item": "E",
+        "descricao": "Prazo para rejuntamento",
+        "tolerancia": "Mínimo 72 horas"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.11A",
+    "titulo": "Emboço / Reboco Interno com Talisca",
+    "revisao": "00",
+    "categoria": "Revestimentos",
+    "subcategoria": "Revestimento em Argamassa",
+    "normas": [
+      "NBR 7200:1998 (Execução de revestimento de paredes)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Colher de pedreiro",
+      "Régua de alumínio",
+      "Desempenadeira de madeira ou plástico",
+      "Prumo de face",
+      "Trena",
+      "Taliscas"
+    ],
+    "materiais": [
+      "Argamassa de cimento, cal e areia",
+      "Tela galvanizada (prumadas hidráulicas)",
+      "Taliscas"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de PVC",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Alvenaria concluída e aprovada",
+      "Instalações embutidas concluídas e testadas",
+      "Superfície limpa e umedecida"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Taliscamento",
+        "passos": [
+          "Identificar os pontos de menor espessura com prumo de face",
+          "Assentar taliscas com espaçamento máximo de 1,80 m",
+          "Transferir pontos passando linha entre taliscas"
+        ]
+      },
+      {
+        "secao": "2. Aplicação",
+        "passos": [
+          "Envolver prumadas hidráulicas com tela galvanizada",
+          "Chapear a massa com colher de pedreiro",
+          "Sarrafear com régua de alumínio usando as taliscas como gabarito",
+          "Desempenar com desempenadeira de madeira após início de endurecimento",
+          "Retirar taliscas e preencher os buracos com argamassa"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Taliscamento",
+        "tolerancia": "Espaçamento máximo 1,80 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Planicidade",
+        "tolerancia": "± 3 mm com régua de alumínio de 2 m"
+      },
+      {
+        "item": "C",
+        "descricao": "Espessura do revestimento",
+        "tolerancia": "5 a 20 mm (máx. por camada)"
+      },
+      {
+        "item": "D",
+        "descricao": "Prumo da parede revestida",
+        "tolerancia": "± 3 mm/m"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.11B",
+    "titulo": "Emboço / Reboco Interno Sem Talisca",
+    "revisao": "00",
+    "categoria": "Revestimentos",
+    "subcategoria": "Revestimento em Argamassa",
+    "normas": [
+      "NBR 7200:1998",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Colher de pedreiro",
+      "Régua de alumínio",
+      "Desempenadeira"
+    ],
+    "materiais": [
+      "Argamassa de cimento, cal e areia",
+      "Tela estuque"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de PVC",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Superfície base em condições adequadas (desvio máx. 5 mm)",
+      "Instalações embutidas concluídas"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Aplicação",
+        "passos": [
+          "Aplicar tela estuque nas prumadas hidráulicas",
+          "Identificar os pontos de menor espessura visualmente",
+          "Chapear e sarrafear visualmente, sem referência de talisca",
+          "Feltrar com esponja ou desempenadeira de PVC"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Planicidade",
+        "tolerancia": "± 5 mm com régua de 2 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Aspecto geral",
+        "tolerancia": "Inspeção visual — homogêneo"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.11C",
+    "titulo": "Emboço Externo em Argamassa",
+    "revisao": "00",
+    "categoria": "Revestimentos",
+    "subcategoria": "Revestimento Externo",
+    "normas": [
+      "NBR 7200:1998",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Colher de pedreiro",
+      "Régua de alumínio",
+      "Desempenadeira",
+      "Prumo de face",
+      "Andaime",
+      "Brocha"
+    ],
+    "materiais": [
+      "Argamassa de cimento e areia (massa)",
+      "Tela galvanizada (onde espessura > 4 cm)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de PVC",
+      "Cinto de segurança (se necessário)"
+    ],
+    "condicoes_inicio": [
+      "Alvenaria externa concluída",
+      "Proteção dos contramarcos instalada"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparação",
+        "passos": [
+          "Proteger a parte inferior dos contramarcos",
+          "Vedar locais quebrados na alvenaria",
+          "Remover sujeiras, graxas e concreto; limpar o pé da parede",
+          "Molhar a superfície com brocha quando necessário"
+        ]
+      },
+      {
+        "secao": "2. Taliscamento e Execução",
+        "passos": [
+          "Identificar pontos de menor espessura com prumo de face",
+          "Assentar taliscas com espaçamento máximo 1,80 m",
+          "Onde espessura > 4 cm: colocar tela galvanizada",
+          "Envolver prumadas hidráulicas com tela galvanizada tipo pinteiro",
+          "Chapar, sarrafear e desempenar",
+          "Retirar taliscas e preencher buracos",
+          "Após conclusão, executar a espala dos contramarcos"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Taliscamento",
+        "tolerancia": "Espaçamento máximo 1,80 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Planicidade",
+        "tolerancia": "± 3 mm com régua de alumínio de 2 m"
+      },
+      {
+        "item": "C",
+        "descricao": "Espalas, quinas e cantos",
+        "tolerancia": "Inspeção visual"
+      },
+      {
+        "item": "D",
+        "descricao": "Aspecto geral (acabamento)",
+        "tolerancia": "Inspeção visual"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.11D",
+    "titulo": "Reboco Externo com Talisca",
+    "revisao": "00",
+    "categoria": "Revestimentos",
+    "subcategoria": "Revestimento Externo",
+    "normas": [
+      "NBR 7200:1998",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Colher de pedreiro",
+      "Régua de alumínio",
+      "Desempenadeira",
+      "Prumo de face",
+      "Andaime"
+    ],
+    "materiais": [
+      "Argamassa de cimento, areia e Tela estuque"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de PVC",
+      "Cinto de segurança",
+      "Corda"
+    ],
+    "condicoes_inicio": [
+      "Alvenaria ou emboço concluído e curado",
+      "Andaimes ou plataformas de trabalho instalados e seguros"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Execução",
+        "passos": [
+          "Seguir os mesmos passos da IT.11C para taliscamento e aplicação",
+          "Para o reboco, feltrar a superfície com espuma ou desempenadeira de PVC lisa após o sarrafeamento"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Taliscamento",
+        "tolerancia": "Espaçamento máximo 1,80 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Planicidade",
+        "tolerancia": "± 3 mm com régua de alumínio de 2 m"
+      },
+      {
+        "item": "C",
+        "descricao": "Espalas, quinas e cantos",
+        "tolerancia": "Inspeção visual"
+      },
+      {
+        "item": "D",
+        "descricao": "Aspecto geral (acabamento)",
+        "tolerancia": "Inspeção visual"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.12",
+    "titulo": "Execução de Piso de Regularização (Contrapiso)",
+    "revisao": "00",
+    "categoria": "Pisos",
+    "subcategoria": "Piso de Base",
+    "normas": [
+      "NBR 13753:1996",
+      "NBR 9575:2010",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Betoneira",
+      "Carrinho de mão",
+      "Colher de pedreiro",
+      "Régua metálica",
+      "Desempenadeira de aço e plástico",
+      "Mangueira de nível",
+      "Taliscas"
+    ],
+    "materiais": [
+      "Cimento Portland",
+      "Areia",
+      "Água"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha",
+      "Respirador contra pó"
+    ],
+    "condicoes_inicio": [
+      "Local limpo e sem entulho",
+      "Revestimento interno em argamassa concluído",
+      "Impermeabilização concluída (em áreas molhadas)"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparo da Base",
+        "passos": [
+          "Remover entulhos e resíduos com marreta e ponteiro",
+          "Varrer e limpar completamente a base",
+          "Transferir níveis do contrapiso com mangueira de nível",
+          "Assentar taliscas com distância máxima de 1,80 m"
+        ]
+      },
+      {
+        "secao": "2. Execução",
+        "passos": [
+          "Molhar a superfície (ponte de aderência)",
+          "Proteger ralos",
+          "Lançar argamassa, ultrapassando o nível das taliscas",
+          "Sarrafear em vaivém com régua metálica até nível das taliscas",
+          "Desempenar com desempenadeira de aço",
+          "Isolar da circulação por mínimo 1 dia"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Caimento em áreas molhadas",
+        "tolerancia": "Sem empoçamento — verificar jogando água"
+      },
+      {
+        "item": "B",
+        "descricao": "Espessura",
+        "tolerancia": "3 cm ± 5 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Acabamento",
+        "tolerancia": "Inspeção visual"
+      },
+      {
+        "item": "D",
+        "descricao": "Aderência (após 3 dias)",
+        "tolerancia": "Som cheio ao bater com martelo — sem som cavo"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.13",
+    "titulo": "Execução de Piso Laminado",
+    "revisao": "00",
+    "categoria": "Pisos",
+    "subcategoria": "Piso Laminado",
+    "normas": [
+      "NBR 15279:2005",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Espaçadores",
+      "Martelo",
+      "Batedor de réguas",
+      "Cinta de tração",
+      "Régua"
+    ],
+    "materiais": [
+      "Piso laminado",
+      "Cola PVA",
+      "Manta de polietileno expandido 2 mm",
+      "Filme plástico 0,2 mm (barreira de umidade)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina"
+    ],
+    "condicoes_inicio": [
+      "Contrapiso concluído há pelo menos 2 dias",
+      "Instalações hidráulicas e elétricas concluídas e testadas",
+      "Local limpo"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Verificação do Contrapiso",
+        "passos": [
+          "Verificar irregularidades com régua: saliências > 3 mm remover; depressões > 3 mm corrigir com argamassa de secagem rápida"
+        ]
+      },
+      {
+        "secao": "2. Barreira de Umidade e Manta",
+        "passos": [
+          "Em andares térreos, estender filme plástico 0,2 mm com sobreposição de 20 cm nas bordas",
+          "Aplicar manta de polietileno expandido com emendas não coincidindo com juntas longitudinais do piso"
+        ]
+      },
+      {
+        "secao": "3. Instalação das Réguas",
+        "passos": [
+          "Definir o sentido de instalação (direção menor do ambiente)",
+          "Aplicar cola PVA no lado fêmea continuamente",
+          "Encaixar da esquerda para a direita, amarrando fileiras com desalinhamento mínimo de 20 cm",
+          "Usar espaçadores de 8 mm nas bordas",
+          "Aguardar 24 horas antes de retirar espaçadores para colocação do rodapé"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Alinhamento das réguas",
+        "tolerancia": "Desvio máximo 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Encaixe entre réguas",
+        "tolerancia": "Sem frestas"
+      },
+      {
+        "item": "C",
+        "descricao": "Alinhamento dos rodapés",
+        "tolerancia": "Dente máximo 2 mm"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.14",
+    "titulo": "Execução de Telhado — Estrutura em Madeira",
+    "revisao": "00",
+    "categoria": "Cobertura",
+    "subcategoria": "Estrutura de Madeira",
+    "normas": [
+      "NBR 7190-1:2022",
+      "NBR 7678:1983",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra circular",
+      "Martelo",
+      "Parafusadeira",
+      "Nível a bolha e laser",
+      "Esquadro",
+      "Prumo",
+      "Andaime"
+    ],
+    "materiais": [
+      "Madeira tratada (frechal, caibros, ripas, terças, cumeeira)",
+      "Pregos galvanizados",
+      "Parafusos estruturais",
+      "Chumbadores",
+      "Selador de corte de madeira"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Cinto tipo paraquedista com talabarte duplo",
+      "Luvas de raspa",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Laje ou viga de coroamento concluída e com resistência adequada",
+      "Projeto de cobertura aprovado",
+      "Madeira tratada, certificada e aclimatada (mínimo 48h no canteiro)",
+      "Andaimes e proteções coletivas instalados"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Frechal",
+        "passos": [
+          "Verificar nivelamento da viga de coroamento com nível de mangueira — desvio máximo ± 5 mm",
+          "Instalar o frechal com chumbadores a cada 1,0 m",
+          "Aplicar manta asfáltica entre o frechal e a alvenaria"
+        ]
+      },
+      {
+        "secao": "2. Montagem",
+        "passos": [
+          "Posicionar as terças com espaçamento de projeto (geralmente 1,5 m)",
+          "Instalar caibros com espaçamento especificado (normalmente 50 cm), fixados nas terças",
+          "Montar cumeeira e espigões/rincões verificando alinhamento e inclinação",
+          "Verificar caimento mínimo: 30% para cerâmica, 5% para metálica"
+        ]
+      },
+      {
+        "secao": "3. Ripamento",
+        "passos": [
+          "Instalar ripas no espaçamento definido pelo tipo de telha",
+          "Fixar cada ripa com mínimo 2 pregos por caibro",
+          "Verificar alinhamento a cada 3 fiadas com linha de nylon"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nivelamento do frechal",
+        "tolerancia": "± 5 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Caimento das águas",
+        "tolerancia": "Mínimo 30% para cerâmica / 5% para metálica"
+      },
+      {
+        "item": "C",
+        "descricao": "Espaçamento dos caibros",
+        "tolerancia": "Conforme projeto ± 10 mm"
+      },
+      {
+        "item": "D",
+        "descricao": "Alinhamento das ripas",
+        "tolerancia": "± 5 mm com linha de nylon a cada 3 fiadas"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.14A",
+    "titulo": "Assentamento de Telhas Cerâmicas",
+    "revisao": "00",
+    "categoria": "Cobertura",
+    "subcategoria": "Telhas Cerâmicas",
+    "normas": [
+      "NBR 15310:2009",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Trena",
+      "Linha de nylon",
+      "Martelo de borracha",
+      "Andaime",
+      "Esmerilhadeira (cortes)"
+    ],
+    "materiais": [
+      "Telhas cerâmicas conforme projeto",
+      "Argamassa de cimento e areia ou grampos inox",
+      "Cumeeira cerâmica",
+      "Rufos"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Cinto paraquedista",
+      "Luvas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Estrutura de madeira concluída e aprovada (IT.14)",
+      "Ripamento verificado e alinhado",
+      "Telhas inspecionadas — sem trincas ou defeitos"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Assentamento",
+        "passos": [
+          "Começar de baixo para cima, da beira ao cume, da direita para a esquerda",
+          "Primeira fiada de beira alinhada com linha de nylon rigorosamente",
+          "Avanço sobre o beiral: 5 a 7 cm além da ripa de beira",
+          "Verificar alinhamento horizontal a cada 3 fiadas"
+        ]
+      },
+      {
+        "secao": "2. Arremates",
+        "passos": [
+          "Assentar cumeeira com argamassa 1:3 ou grampos",
+          "Verificar rejuntamento da cumeeira — sem frestas",
+          "Executar rufos com sobreposição mínima de 10 cm em encontros com paredes"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Alinhamento horizontal",
+        "tolerancia": "± 10 mm com linha de nylon a cada 3 fiadas"
+      },
+      {
+        "item": "B",
+        "descricao": "Avanço no beiral",
+        "tolerancia": "5 a 7 cm"
+      },
+      {
+        "item": "C",
+        "descricao": "Sobreposição de rufos",
+        "tolerancia": "Mínimo 10 cm"
+      },
+      {
+        "item": "D",
+        "descricao": "Estanqueidade",
+        "tolerancia": "Sem infiltração após chuva"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.14B",
+    "titulo": "Assentamento de Telhas Metálicas / Fibrocimento",
+    "revisao": "00",
+    "categoria": "Cobertura",
+    "subcategoria": "Telhas Metálicas",
+    "normas": [
+      "NBR 7581:2012 (Telhas onduladas de fibrocimento)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Furadeira",
+      "Serra tico-tico (para cortes)",
+      "Trena",
+      "Linha de nylon",
+      "Andaime"
+    ],
+    "materiais": [
+      "Telhas metálicas galvanizadas ou de fibrocimento conforme projeto",
+      "Parafusos de fixação com vedação (bucha e arruela de borracha)",
+      "Cumeeira metálica ou de fibrocimento",
+      "Rufos e flashings"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Cinto paraquedista",
+      "Luvas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Estrutura de suporte (terças e caibros) concluída",
+      "Inclinação mínima verificada: 5% para metálica / 15% para fibrocimento"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Iniciar da beira ao cume, da direita para esquerda",
+          "Sobrepor as telhas conforme mínimo do fabricante (geralmente 20 cm longitudinal e 1 onda lateral)",
+          "Fixar com parafusos rosca-metálica nos picos da onda, sobre as terças",
+          "Não apertar excessivamente os parafusos — comprimir apenas a arruela de vedação",
+          "Instalar cumeeira com sobreposição mínima de 10 cm sobre as telhas"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Sobreposição longitudinal",
+        "tolerancia": "Mínimo 20 cm (verificar fabricante)"
+      },
+      {
+        "item": "B",
+        "descricao": "Fixação (parafusos) nos picos",
+        "tolerancia": "Todos os pontos fixados — inspeção visual"
+      },
+      {
+        "item": "C",
+        "descricao": "Cumeeira (sobreposição sobre telhas)",
+        "tolerancia": "Mínimo 10 cm"
+      },
+      {
+        "item": "D",
+        "descricao": "Estanqueidade",
+        "tolerancia": "Sem infiltração após chuva"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.14C",
+    "titulo": "Execução de Calhas e Rufos",
+    "revisao": "00",
+    "categoria": "Cobertura",
+    "subcategoria": "Calhas e Rufos",
+    "normas": [
+      "NBR 10844:1989",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Tesoura de chapa",
+      "Alicate",
+      "Parafusadeira",
+      "Rebitador",
+      "Nível a bolha",
+      "Andaime"
+    ],
+    "materiais": [
+      "Calha galvanizada ou PVC",
+      "Rufo galvanizado ou alumínio",
+      "Silicone neutro",
+      "Rebites pop",
+      "Parafusos inox",
+      "Condutor vertical"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Cinto paraquedista",
+      "Luvas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Estrutura e cobertura de telhas concluídas",
+      "Projeto hidráulico pluvial disponível"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Calhas",
+        "passos": [
+          "Caimento mínimo: 0,5% em direção ao condutor vertical",
+          "Fixar suportes (ganchos) com espaçamento máximo de 0,80 m",
+          "Emendas com sobreposição mínima de 10 cm, vedadas com silicone neutro"
+        ]
+      },
+      {
+        "secao": "2. Rufos",
+        "passos": [
+          "Penetração mínima de 10 cm sob telhas e 10 cm sobre parede",
+          "Selar base com silicone neutro",
+          "Executar dobras em quinas para garantir estanqueidade"
+        ]
+      },
+      {
+        "secao": "3. Condutores Verticais",
+        "passos": [
+          "Fixar à parede com abraçadeiras a cada 1,5 m",
+          "Prever cotovelo na base com caixa de areia ou prolongamento até ponto de descarga"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Caimento da calha",
+        "tolerancia": "Mínimo 0,5% (5 mm/m)"
+      },
+      {
+        "item": "B",
+        "descricao": "Sobreposição das emendas",
+        "tolerancia": "Mínimo 10 cm, vedadas"
+      },
+      {
+        "item": "C",
+        "descricao": "Penetração do rufo sob telhas",
+        "tolerancia": "Mínimo 10 cm"
+      },
+      {
+        "item": "D",
+        "descricao": "Teste de estanqueidade (mangueira)",
+        "tolerancia": "Sem vazamento ou represamento"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.15",
+    "titulo": "Impermeabilização de Lajes e Coberturas",
+    "revisao": "00",
+    "categoria": "Impermeabilização",
+    "subcategoria": "Lajes e Coberturas",
+    "normas": [
+      "NBR 9952:2014",
+      "NBR 9574:2008",
+      "NBR 9575:2010",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Maçarico a gás",
+      "Rolo",
+      "Espátula",
+      "Vassoura",
+      "Esponja abrasiva"
+    ],
+    "materiais": [
+      "Manta asfáltica polímero APP ou SBS (mínimo 3 mm)",
+      "Primer asfáltico",
+      "Argamassa de regularização",
+      "Areia lavada (proteção mecânica)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Óculos",
+      "Avental de couro (maçarico)",
+      "Respirador",
+      "Cinto nas bordas"
+    ],
+    "condicoes_inicio": [
+      "Laje com mínimo 21 dias de cura",
+      "Base seca, limpa, firme e com caimento mínimo 0,5%",
+      "Temperatura entre 10°C e 35°C, sem previsão de chuva nas próximas 24 h"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparação da Base",
+        "passos": [
+          "Regularizar com argamassa 1:3, caimento mínimo 0,5%",
+          "Aguardar 7 dias de cura antes do primer",
+          "Arredondar cantos piso-parede (raio mínimo 3 cm)"
+        ]
+      },
+      {
+        "secao": "2. Primer e Manta",
+        "passos": [
+          "Aplicar primer uniforme — aguardar cura completa (2–4 h)",
+          "Planejar emendas: longitudinal ≥ 10 cm, transversal ≥ 15 cm",
+          "Aplicar com maçarico aquecendo a face inferior da manta até fluir",
+          "Rolar firmemente para expulsar bolhas",
+          "Subir manta nas paredes: mínimo 30 cm de rodapé",
+          "Reforço duplo nos ralos (2 camadas em gravata)"
+        ]
+      },
+      {
+        "secao": "3. Teste e Proteção",
+        "passos": [
+          "Tampar ralos e encher com 2 cm de água por 72 horas",
+          "Inspecionar por baixo — sem umidade ou gotejamento",
+          "Aplicar proteção mecânica: areia (2 cm) ou argamassa (3 cm)"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Caimento da base para ralos",
+        "tolerancia": "Mínimo 0,5%"
+      },
+      {
+        "item": "B",
+        "descricao": "Sobreposição longitudinal da manta",
+        "tolerancia": "Mínimo 10 cm"
+      },
+      {
+        "item": "C",
+        "descricao": "Sobreposição transversal",
+        "tolerancia": "Mínimo 15 cm"
+      },
+      {
+        "item": "D",
+        "descricao": "Rodapé de impermeabilização",
+        "tolerancia": "Mínimo 30 cm acima da proteção mecânica"
+      },
+      {
+        "item": "E",
+        "descricao": "Teste de estanqueidade (72 horas)",
+        "tolerancia": "Sem umidade ou gotejamento"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.15A",
+    "titulo": "Impermeabilização de Reservatórios e Piscinas",
+    "revisao": "00",
+    "categoria": "Impermeabilização",
+    "subcategoria": "Reservatórios",
+    "normas": [
+      "NBR 9574:2008",
+      "NBR 9575:2010",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Trincha",
+      "Rolo",
+      "Espátula",
+      "Escova de aço"
+    ],
+    "materiais": [
+      "Argamassa de base cimentícia impermeabilizante cristalizante ou polimérica",
+      "Tela de reforço em fibra de vidro",
+      "Primer cimentício (quando especificado)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas nitrílicas",
+      "Óculos",
+      "Respirador"
+    ],
+    "condicoes_inicio": [
+      "Estrutura concluída com resistência mínima de 28 dias",
+      "Base limpa, sem graxas, óleos ou nata de cimento",
+      "Fissuras e nichos reparados"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparação",
+        "passos": [
+          "Escovar e limpar toda a superfície com escova de aço",
+          "Arredondar cantos com argamassa (raio mínimo 3 cm)"
+        ]
+      },
+      {
+        "secao": "2. Aplicação",
+        "passos": [
+          "Aplicar mínimo 3 demãos cruzadas de impermeabilizante cimentício",
+          "Embeber tela de reforço na 1ª demão nos cantos e juntas de concretagem",
+          "Aguardar cura entre demãos conforme fabricante"
+        ]
+      },
+      {
+        "secao": "3. Teste",
+        "passos": [
+          "Encher o reservatório e aguardar 72 horas — sem queda do nível da água",
+          "Verificar externamente ausência de manchas ou umidade"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Número de demãos",
+        "tolerancia": "Mínimo 3 demãos cruzadas"
+      },
+      {
+        "item": "B",
+        "descricao": "Tela de reforço em cantos e juntas",
+        "tolerancia": "Inspeção visual — embutida na 1ª demão"
+      },
+      {
+        "item": "C",
+        "descricao": "Teste de estanqueidade (72 horas)",
+        "tolerancia": "Sem queda de nível ou manchas externas"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.15B",
+    "titulo": "Impermeabilização de Banheiros e Áreas Molhadas",
+    "revisao": "00",
+    "categoria": "Impermeabilização",
+    "subcategoria": "Áreas Molhadas",
+    "normas": [
+      "NBR 9574:2008",
+      "NBR 9575:2010",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Trincha",
+      "Rolo de espuma",
+      "Espátula",
+      "Desempenadeira"
+    ],
+    "materiais": [
+      "Impermeabilizante flexível bicomponente (polímero + cimento)",
+      "Tela de poliéster ou fibra de vidro",
+      "Argamassa de regularização"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas nitrílicas",
+      "Óculos",
+      "Respirador (em ambientes confinados)"
+    ],
+    "condicoes_inicio": [
+      "Emboço concluído e seco",
+      "Instalações hidráulicas embutidas e testadas",
+      "Base limpa e sem pó"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparação",
+        "passos": [
+          "Reparar fissuras e furos com argamassa",
+          "Executar cantos arredondados (raio mínimo 3 cm)",
+          "Umedecer levemente a base"
+        ]
+      },
+      {
+        "secao": "2. Aplicação",
+        "passos": [
+          "Misturar componentes conforme fabricante",
+          "1ª demão: aplicar e embeber tela de reforço nos cantos e ralos enquanto fresca",
+          "Aguardar secagem (2–4 h) e aplicar 2ª demão perpendicular",
+          "Em box de chuveiro: impermeabilizar até 1,80 m de altura",
+          "Mínimo 2 demãos (3 em box e ralos)"
+        ]
+      },
+      {
+        "secao": "3. Teste",
+        "passos": [
+          "Tampar ralo e encher com 2 cm de água — aguardar 72 horas",
+          "Verificar em ambientes adjacentes e abaixo — sem infiltração"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Cantos arredondados",
+        "tolerancia": "Raio mínimo 3 cm"
+      },
+      {
+        "item": "B",
+        "descricao": "Número de demãos",
+        "tolerancia": "Mínimo 2 (3 em box e ralos)"
+      },
+      {
+        "item": "C",
+        "descricao": "Altura nas paredes (box)",
+        "tolerancia": "Mínimo 1,80 m"
+      },
+      {
+        "item": "D",
+        "descricao": "Teste de estanqueidade (72 horas)",
+        "tolerancia": "Sem infiltração em estruturas vizinhas"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.16",
+    "titulo": "Instalação de Tubulações de Água Fria",
+    "revisao": "00",
+    "categoria": "Instalações Hidrossanitárias",
+    "subcategoria": "Água Fria",
+    "normas": [
+      "NBR 5626:2020",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra manual",
+      "Furadeira",
+      "Chave de tubo",
+      "Manômetro",
+      "Bomba de pressão"
+    ],
+    "materiais": [
+      "Tubos e conexões PVC soldável (diâmetros conforme projeto)",
+      "Adesivo PVC (cola e limpador)",
+      "Fita teflon",
+      "Argamassa para fechamento dos roços"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Projeto hidrossanitário aprovado",
+      "Alvenaria e estrutura concluídas",
+      "Pontos de consumo definidos conforme projeto"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Roços",
+        "passos": [
+          "Executar roços conforme projeto — horizontal máx. 1/3 da espessura da parede",
+          "Nunca cortar alvenaria estrutural horizontalmente"
+        ]
+      },
+      {
+        "secao": "2. Instalação",
+        "passos": [
+          "Cortar tubos em ângulo reto, sem rebarbas",
+          "Limpar encaixe e tubo com limpador PVC antes da cola",
+          "Aplicar cola em toda a superfície de encaixe e inserir com quarto de volta",
+          "Fixar com abraçadeiras: máx. 1,0 m horizontal / 1,5 m vertical",
+          "Embalar tubos em roços com tubo corrugado flexível"
+        ]
+      },
+      {
+        "secao": "3. Teste Hidrostático",
+        "passos": [
+          "Pressurizar a 1,5× a pressão de trabalho (mín. +150 kPa) com bomba manual",
+          "Manter por 4 horas — queda máx. 20 kPa",
+          "Fechar roços somente após aprovação do teste"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Roços: profundidade",
+        "tolerancia": "Máx. 1/3 da espessura da parede"
+      },
+      {
+        "item": "B",
+        "descricao": "Fixação com abraçadeiras",
+        "tolerancia": "Máx. 1,0 m horizontal / 1,5 m vertical"
+      },
+      {
+        "item": "C",
+        "descricao": "Teste hidrostático — pressão",
+        "tolerancia": "1,5× pressão de trabalho"
+      },
+      {
+        "item": "D",
+        "descricao": "Duração do teste",
+        "tolerancia": "4 horas — queda máx. 20 kPa"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.16A",
+    "titulo": "Instalação de Tubulações de Água Quente",
+    "revisao": "00",
+    "categoria": "Instalações Hidrossanitárias",
+    "subcategoria": "Água Quente",
+    "normas": [
+      "NBR 7198:1993",
+      "NBR 5626:2020",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra manual ou policorte",
+      "Furadeira",
+      "Soprador de ar quente (para soldagem PEX/CPVC)"
+    ],
+    "materiais": [
+      "Tubos e conexões CPVC ou PEX (conforme projeto)",
+      "Isolamento térmico (camisas de espuma de polietileno)",
+      "Expansores e conexões press (para PEX)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Instalação de água fria concluída",
+      "Pontos de aquecimento (aquecedor/boiler) definidos"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Instalar tubulações de água quente em CPVC ou PEX — nunca usar PVC comum (deforma com temperatura)",
+          "Para CPVC: seguir procedimento de colagem específico com adesivo para CPVC",
+          "Para PEX: usar sistema de expansão ou conexões press conforme fabricante",
+          "Envolver as tubulações com isolamento térmico para minimizar perda de calor"
+        ]
+      },
+      {
+        "secao": "2. Dilatação",
+        "passos": [
+          "Prever liras de dilatação ou curvas em U nos trechos retos longos (> 6 m) para absorver a dilatação térmica",
+          "Fixar as tubulações em suportes que permitam deslizamento axial (suportes deslizantes)"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Material das tubulações",
+        "tolerancia": "CPVC ou PEX — nunca PVC comum"
+      },
+      {
+        "item": "B",
+        "descricao": "Isolamento térmico",
+        "tolerancia": "100% dos trechos isolados — inspeção visual"
+      },
+      {
+        "item": "C",
+        "descricao": "Teste hidrostático",
+        "tolerancia": "Mesmos critérios da IT.16"
+      },
+      {
+        "item": "D",
+        "descricao": "Liras de dilatação (> 6 m)",
+        "tolerancia": "Previstas conforme cálculo térmico"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.16B",
+    "titulo": "Instalação de Esgoto Sanitário",
+    "revisao": "00",
+    "categoria": "Instalações Hidrossanitárias",
+    "subcategoria": "Esgoto",
+    "normas": [
+      "NBR 8160:1999",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra manual",
+      "Furadeira",
+      "Nível a bolha",
+      "Trena"
+    ],
+    "materiais": [
+      "Tubos e conexões PVC série Normal ou Reforçada (cinza)",
+      "Anéis de borracha para juntas elásticas",
+      "Adesivo PVC"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Projeto de esgoto aprovado",
+      "Posição dos pontos de esgoto marcados conforme projeto"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Tubulações",
+        "passos": [
+          "Declividade mínima: 2% (tubos ≤ Ø100 mm) e 1% (tubos > Ø100 mm)",
+          "Anéis de borracha: limpar e lubrificar com sabão neutro antes da montagem",
+          "Afastamento mínimo de 50 cm entre tubos de esgoto e água fria (quando paralelos)"
+        ]
+      },
+      {
+        "secao": "2. Ventilação e CI",
+        "passos": [
+          "Instalar caixas de inspeção (CI) em mudanças > 45° e a cada 15 m de tubulação enterrada",
+          "Ventilação da coluna: tubo saindo acima do telhado, mínimo 30 cm acima da cumeeira"
+        ]
+      },
+      {
+        "secao": "3. Teste",
+        "passos": [
+          "Tampar extremidades e inserir água — manter nível mínimo 30 cm acima do ponto mais alto do ramal por 2 horas",
+          "Teste de fumaça para verificar sifões e ralos"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Declividade (≤ Ø100 mm)",
+        "tolerancia": "Mínimo 2% (20 mm/m)"
+      },
+      {
+        "item": "B",
+        "descricao": "Declividade (> Ø100 mm)",
+        "tolerancia": "Mínimo 1% (10 mm/m)"
+      },
+      {
+        "item": "C",
+        "descricao": "Ventilação acima do telhado",
+        "tolerancia": "Mínimo 30 cm acima da cumeeira"
+      },
+      {
+        "item": "D",
+        "descricao": "Teste de estanqueidade (2 horas)",
+        "tolerancia": "Sem vazamento"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.16C",
+    "titulo": "Instalação de Águas Pluviais",
+    "revisao": "00",
+    "categoria": "Instalações Hidrossanitárias",
+    "subcategoria": "Águas Pluviais",
+    "normas": [
+      "NBR 10844:1989",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra manual",
+      "Furadeira",
+      "Nível a bolha",
+      "Trena"
+    ],
+    "materiais": [
+      "Tubos e conexões PVC (cor laranja — pluvial ou cinza se separado)",
+      "Ralos sifonados e grelhas",
+      "Calhas PVC ou galvanizadas"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Projeto de drenagem pluvial aprovado",
+      "Telhado e calhas concluídos"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Condutores e Ramais",
+        "passos": [
+          "Dimensionar condutores conforme área de contribuição (NBR 10844) — mínimo Ø75 mm",
+          "Instalar condutores verticais fixados à parede com abraçadeiras a cada 1,5 m",
+          "Prever caixa de areia ou separador de gordura antes do descarte na rede pública"
+        ]
+      },
+      {
+        "secao": "2. Ralos e Grelhas",
+        "passos": [
+          "Instalar ralos sifonados em áreas externas cobertas — evitar conexão direta com a rede de esgoto",
+          "Verificar caimento do piso em direção aos ralos: mínimo 0,5%"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Diâmetro mínimo dos condutores verticais",
+        "tolerancia": "Ø75 mm para áreas menores — conforme NBR 10844"
+      },
+      {
+        "item": "B",
+        "descricao": "Caimento do piso externo para ralos",
+        "tolerancia": "Mínimo 0,5% — sem empoçamento"
+      },
+      {
+        "item": "C",
+        "descricao": "Fixação dos condutores",
+        "tolerancia": "Abraçadeiras a cada 1,5 m"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.16D",
+    "titulo": "Instalação de Louças e Metais",
+    "revisao": "00",
+    "categoria": "Instalações Hidrossanitárias",
+    "subcategoria": "Acabamentos Hidráulicos",
+    "normas": [
+      "NBR 5626:2020",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Chave de boca",
+      "Chave inglesa",
+      "Furadeira",
+      "Nível a bolha"
+    ],
+    "materiais": [
+      "Louças sanitárias (vaso, lavatório, tanque)",
+      "Metais (torneiras, registros, chuveiros, flexíveis)",
+      "Bucha e parafusos de fixação",
+      "Fita teflon",
+      "Vedante para vaso (cera ou flangeado)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Revestimento de pisos e paredes concluído",
+      "Tubulações de água fria e esgoto testadas",
+      "Pontos de hidráulica conferidos (altura e distância conforme fabricante das louças)"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Vaso Sanitário",
+        "passos": [
+          "Marcar a posição dos parafusos de fixação conforme gabarito do fabricante",
+          "Instalar o vedante de cera ou flange de esgoto",
+          "Fixar o vaso com parafusos + buchas — não apertar excessivamente (pode trincar)",
+          "Conectar a caixa acoplada ou válvula de descarga"
+        ]
+      },
+      {
+        "secao": "2. Lavatório e Tanque",
+        "passos": [
+          "Fixar suporte ou coluna conforme projeto",
+          "Conectar sifão ao ralo e ramal de esgoto",
+          "Instalar torneira com fita teflon nas roscas"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nível das louças",
+        "tolerancia": "± 2 mm verificado com nível"
+      },
+      {
+        "item": "B",
+        "descricao": "Vedação do vaso ao piso",
+        "tolerancia": "Sem folga entre base e piso"
+      },
+      {
+        "item": "C",
+        "descricao": "Funcionamento das descargas e registros",
+        "tolerancia": "Opera sem vazamento — inspeção funcional"
+      },
+      {
+        "item": "D",
+        "descricao": "Ausência de vazamentos",
+        "tolerancia": "Inspeção visual após 30 min de uso"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.16E",
+    "titulo": "Teste e Vistoria de Instalações Hidráulicas",
+    "revisao": "00",
+    "categoria": "Instalações Hidrossanitárias",
+    "subcategoria": "Controle e Testes",
+    "normas": [
+      "NBR 5626:2020",
+      "NBR 8160:1999",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Manômetro",
+      "Bomba de pressão manual",
+      "Mangueira de ligação"
+    ],
+    "materiais": [
+      "Planilha de controle de testes"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha"
+    ],
+    "condicoes_inicio": [
+      "Todas as tubulações de água fria, quente e esgoto instaladas",
+      "Pontos vedados para o teste"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Teste de Água Fria e Quente",
+        "passos": [
+          "Pressurizar a 1,5× a pressão máxima de serviço por 4 horas",
+          "Registrar pressão inicial e final — queda máx. 20 kPa"
+        ]
+      },
+      {
+        "secao": "2. Teste de Esgoto",
+        "passos": [
+          "Tampar extremidades e encher com coluna de água de 30 cm acima do ponto mais alto por 2 horas",
+          "Teste de fumaça para verificar ventilação e sifões"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Teste hidrostático (água fria e quente)",
+        "tolerancia": "4 horas — queda máx. 20 kPa"
+      },
+      {
+        "item": "B",
+        "descricao": "Teste de esgoto (2 horas)",
+        "tolerancia": "Sem vazamento nas juntas"
+      },
+      {
+        "item": "C",
+        "descricao": "Relatório de teste assinado",
+        "tolerancia": "Documento arquivado no dossiê da obra"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.17",
+    "titulo": "Instalação Elétrica — Eletrodutos e Fiação",
+    "revisao": "00",
+    "categoria": "Instalações Elétricas",
+    "subcategoria": "Eletrodutos e Fiação",
+    "normas": [
+      "NBR 5410:2004",
+      "NR-10",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Furadeira",
+      "Ponteiro",
+      "Alicate universal",
+      "Alicate de corte",
+      "Chave de fenda",
+      "Puxador de fios",
+      "Testador de tensão"
+    ],
+    "materiais": [
+      "Eletrodutos corrugados ou rígidos PVC (cinza)",
+      "Conexões e caixas PVC/metálicas",
+      "Condutores de cobre conforme projeto",
+      "Fita isolante"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas dielétricas (para testes com tensão)",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Circuito DESENERGIZADO e sinalizado",
+      "Projeto elétrico aprovado e disponível"
+    ],
+    "sequencia": [
+      {
+        "secao": "⚠️ SEGURANÇA FUNDAMENTAL",
+        "passos": [
+          "NUNCA trabalhar em circuito energizado sem autorização",
+          "Sinalizar o quadro com cadeado e placa NÃO LIGUE"
+        ]
+      },
+      {
+        "secao": "1. Eletrodutos",
+        "passos": [
+          "Roços: horizontal máx. 1/3 da espessura da parede",
+          "Distância máxima entre caixas de passagem: 15 m ou 3 curvas de 90°",
+          "Fixar com abraçadeiras a cada 1,0 m (horizontal) e 1,5 m (vertical)"
+        ]
+      },
+      {
+        "secao": "2. Passagem de Fios",
+        "passos": [
+          "Somente após emboço/reboco concluído",
+          "Deixar folga mínima de 15 cm nas caixas",
+          "Cores: fase (preto/vermelho/cinza), neutro (azul claro), terra (verde/verde-amarelo)",
+          "Emendas somente em caixas de passagem — nunca em eletrodutos"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Roços: profundidade",
+        "tolerancia": "Máx. 1/3 da espessura da parede"
+      },
+      {
+        "item": "B",
+        "descricao": "Distância entre caixas de passagem",
+        "tolerancia": "Máx. 15 m ou 3 curvas de 90°"
+      },
+      {
+        "item": "C",
+        "descricao": "Código de cores dos condutores",
+        "tolerancia": "NBR 5410 — inspecionado em 100% dos circuitos"
+      },
+      {
+        "item": "D",
+        "descricao": "Emendas de condutores",
+        "tolerancia": "Somente em caixas — nunca em eletrodutos"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.17A",
+    "titulo": "Passagem de Fiação — Quadros de Distribuição",
+    "revisao": "00",
+    "categoria": "Instalações Elétricas",
+    "subcategoria": "Quadro Elétrico",
+    "normas": [
+      "NBR 5410:2004",
+      "NR-10",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Alicate universal",
+      "Chave de fenda",
+      "Chave Philips",
+      "Multímetro",
+      "Testador de fases"
+    ],
+    "materiais": [
+      "Quadro de distribuição (embutir ou sobrepor)",
+      "Disjuntores DR, DPS conforme projeto",
+      "Barramento de neutros e terras",
+      "Abraçadeiras e identificadores de circuito"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas dielétricas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Circuito DESENERGIZADO",
+      "Projeto elétrico (diagrama unifilar) aprovado"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Montagem do Quadro",
+        "passos": [
+          "Instalar o quadro em local seco, acessível e com altura conforme norma (0,70 m a 2,0 m do centro)",
+          "Instalar disjuntores, DR e DPS conforme diagrama unifilar",
+          "Conectar os condutores de fase, neutro e terra nos bornes corretos — sem inversões"
+        ]
+      },
+      {
+        "secao": "2. Identificação",
+        "passos": [
+          "Identificar cada circuito com etiqueta no disjuntor correspondente",
+          "Fixar o diagrama unifilar impresso dentro da tampa do quadro"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Identificação de todos os circuitos",
+        "tolerancia": "Etiqueta em cada disjuntor — inspeção visual"
+      },
+      {
+        "item": "B",
+        "descricao": "Diagrama unifilar no quadro",
+        "tolerancia": "Impresso e afixado dentro da tampa"
+      },
+      {
+        "item": "C",
+        "descricao": "Conexão fase/neutro/terra correta",
+        "tolerancia": "Verificado com multímetro antes do energizamento"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.17B",
+    "titulo": "Instalação de Tomadas, Interruptores e Pontos de Luz",
+    "revisao": "00",
+    "categoria": "Instalações Elétricas",
+    "subcategoria": "Acabamentos Elétricos",
+    "normas": [
+      "NBR 5410:2004",
+      "NR-10",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Chave de fenda",
+      "Alicate",
+      "Nível a bolha",
+      "Testador de tomadas"
+    ],
+    "materiais": [
+      "Tomadas, interruptores, espelhos conforme especificação",
+      "Parafusos de fixação",
+      "Conectores de emenda (no caso de emenda nas caixas)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas dielétricas (se com tensão)"
+    ],
+    "condicoes_inicio": [
+      "Circuito DESENERGIZADO",
+      "Acabamento da parede concluído (pintura ou revestimento)",
+      "Pontos de fiação puxados e identificados"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Conectar os condutores nos terminais corretos: fase, neutro e terra",
+          "Tomadas com pino-terra: o pino central é o condutor de proteção (PE)",
+          "Nivelar o dispositivo na caixa com nível a bolha",
+          "Fixar o espelho cobrindo completamente a borda da caixa"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nível horizontal das tomadas e interruptores",
+        "tolerancia": "± 2 mm com nível a bolha"
+      },
+      {
+        "item": "B",
+        "descricao": "Teste de funcionamento (tensão e polaridade)",
+        "tolerancia": "Testador de tomadas: fase/neutro/terra corretos"
+      },
+      {
+        "item": "C",
+        "descricao": "Espelho fixo sem folga",
+        "tolerancia": "Inspeção visual — cobre completamente a borda"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.17C",
+    "titulo": "Instalação de Iluminação e Pontos de Luz",
+    "revisao": "00",
+    "categoria": "Instalações Elétricas",
+    "subcategoria": "Iluminação",
+    "normas": [
+      "NBR 5410:2004",
+      "NR-10",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Chave de fenda",
+      "Alicate universal",
+      "Alicate de corte",
+      "Nível a bolha",
+      "Testador de tensão",
+      "Furadeira"
+    ],
+    "materiais": [
+      "Luminárias, spots, plafons conforme projeto",
+      "Bocais e soquetes",
+      "Parafusos e buchas de fixação",
+      "Fita isolante"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas dielétricas (quando com tensão)",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Circuito DESENERGIZADO e sinalizado no quadro",
+      "Fiação dos pontos de luz puxada e identificada",
+      "Acabamento de teto concluído (gesso, forro ou pintura)"
+    ],
+    "sequencia": [
+      {
+        "secao": "⚠️ SEGURANÇA",
+        "passos": [
+          "NUNCA instalar luminárias com o circuito energizado",
+          "Sinalizar o disjuntor com fita e placa NÃO LIGUE antes de iniciar"
+        ]
+      },
+      {
+        "secao": "1. Instalação de Luminárias de Teto",
+        "passos": [
+          "Abrir o furo no teto no diâmetro correto para a luminária (spot, plafon ou embutido)",
+          "Conectar os condutores nos bornes da luminária: fase (preto/vermelho), neutro (azul) e terra (verde-amarelo)",
+          "Verificar que não há condutor desencapado exposto fora dos terminais",
+          "Fixar a luminária com os parafusos do kit — apertar uniformemente sem forçar"
+        ]
+      },
+      {
+        "secao": "2. Instalação de Interruptores",
+        "passos": [
+          "Conectar o condutor de fase no borne de entrada e o condutor de retorno no borne de saída",
+          "Para interruptor paralelo (two-way): conectar conforme diagrama do fabricante",
+          "Nivelar o módulo na caixa e fixar o espelho"
+        ]
+      },
+      {
+        "secao": "3. Verificação Após Energizamento",
+        "passos": [
+          "Energizar o circuito e testar cada ponto de luz individualmente",
+          "Verificar o funcionamento correto dos interruptores simples e paralelos",
+          "Verificar ausência de aquecimento anormal nas luminárias após 15 minutos ligadas"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Conexões fase/neutro/terra corretas",
+        "tolerancia": "Verificado com testador antes do fechamento"
+      },
+      {
+        "item": "B",
+        "descricao": "Nivelamento das luminárias e espelhos",
+        "tolerancia": "± 2 mm com nível a bolha"
+      },
+      {
+        "item": "C",
+        "descricao": "Funcionamento de todos os pontos de luz",
+        "tolerancia": "100% testados após energizamento"
+      },
+      {
+        "item": "D",
+        "descricao": "Funcionamento dos interruptores (simples e paralelos)",
+        "tolerancia": "Operação correta — inspeção funcional"
+      },
+      {
+        "item": "E",
+        "descricao": "Aquecimento das luminárias (15 min ligadas)",
+        "tolerancia": "Sem aquecimento anormal — inspeção tátil"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.17D",
+    "titulo": "Aterramento e SPDA",
+    "revisao": "00",
+    "categoria": "Instalações Elétricas",
+    "subcategoria": "Aterramento",
+    "normas": [
+      "NBR 5419:2015 (SPDA)",
+      "NBR 5410:2004",
+      "NR-10"
+    ],
+    "ferramentas": [
+      "Terra-testador (megôhmetro de campo)",
+      "Furadeira",
+      "Chave de boca"
+    ],
+    "materiais": [
+      "Haste de aterramento (cobre ou aço cobreado Ø5/8\")",
+      "Condutor de proteção (verde-amarelo, seção conforme projeto)",
+      "Conector de aterramento",
+      "Caixa de inspeção do aterramento"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas dielétricas"
+    ],
+    "condicoes_inicio": [
+      "Projeto de SPDA e aterramento aprovado",
+      "Gabarito de implantação das hastes definido"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação das Hastes",
+        "passos": [
+          "Cravar as hastes de aterramento no solo conforme posicionamento do projeto",
+          "Profundidade mínima conforme projeto — geralmente 2 a 3 m",
+          "Conectar as hastes com condutor de cobre nu (malha de terra)"
+        ]
+      },
+      {
+        "secao": "2. Medição e Verificação",
+        "passos": [
+          "Medir a resistência de aterramento com terra-testador: máximo 10 Ω (NBR 5410)",
+          "Se resistência > 10 Ω: adicionar hastes ou tratamento do solo com sal/bentonita",
+          "Conectar a malha de terra ao barramento de terra do quadro principal"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Resistência de aterramento medida",
+        "tolerancia": "Máximo 10 Ω (NBR 5410)"
+      },
+      {
+        "item": "B",
+        "descricao": "Laudo de medição assinado por profissional habilitado",
+        "tolerancia": "Documento arquivado no dossiê da obra"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.17E",
+    "titulo": "Teste e Vistoria de Instalações Elétricas",
+    "revisao": "00",
+    "categoria": "Instalações Elétricas",
+    "subcategoria": "Controle e Testes",
+    "normas": [
+      "NBR 5410:2004",
+      "NR-10"
+    ],
+    "ferramentas": [
+      "Multímetro digital",
+      "Megôhmetro (500 VCC)",
+      "Alicate amperímetro",
+      "Testador de tomadas"
+    ],
+    "materiais": [
+      "Laudo de inspeção elétrica"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas dielétricas classe 00",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Toda a instalação concluída",
+      "Somente profissional habilitado (eletricista ou engenheiro eletricista)"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Pré-Energizamento",
+        "passos": [
+          "Teste de continuidade: verificar condutor de proteção (terra) em todas as tomadas",
+          "Teste de isolamento com megôhmetro 500 VCC: mínimo 1 MΩ por circuito"
+        ]
+      },
+      {
+        "secao": "2. Energizamento",
+        "passos": [
+          "Verificar tensão em todas as tomadas (127V ou 220V conforme projeto)",
+          "Testar funcionamento dos disjuntores e do DR",
+          "Medir resistência de aterramento: máximo 10 Ω"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Isolamento (megôhmetro 500V)",
+        "tolerancia": "≥ 1 MΩ por circuito"
+      },
+      {
+        "item": "B",
+        "descricao": "Tensão nas tomadas",
+        "tolerancia": "127V ou 220V ± 5%"
+      },
+      {
+        "item": "C",
+        "descricao": "Teste do DR",
+        "tolerancia": "Dispara ao pressionar botão de teste"
+      },
+      {
+        "item": "D",
+        "descricao": "Resistência de aterramento",
+        "tolerancia": "Máximo 10 Ω"
+      },
+      {
+        "item": "E",
+        "descricao": "Laudo assinado por habilitado (CREA/CFT)",
+        "tolerancia": "Arquivado no dossiê"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.18",
+    "titulo": "Colocação de Marcos e Batentes de Madeira",
+    "revisao": "00",
+    "categoria": "Esquadrias",
+    "subcategoria": "Esquadrias de Madeira",
+    "normas": [
+      "NBR 7190-1:2022",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Nível a bolha",
+      "Prumo de fio",
+      "Trena",
+      "Furadeira",
+      "Parafusadeira"
+    ],
+    "materiais": [
+      "Marcos e batentes de madeira seca (umidade < 14%)",
+      "Buchas e parafusos galvanizados",
+      "Calços de nivelamento",
+      "Massa corrida ou argamassa para remate"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Alvenaria concluída com vão nas dimensões corretas",
+      "Madeira seca e em bom estado (sem empenamento, trincas ou ataque de insetos)"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Posicionar o marco no vão com calços para centralizar",
+          "Verificar nível, prumo e esquadro antes de fixar",
+          "Fixar com parafusos e buchas — mínimo 3 fixações por lado",
+          "Verificar a diagonal: diferença máxima 2 mm"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nível e prumo do marco",
+        "tolerancia": "± 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Esquadro (diagonais)",
+        "tolerancia": "Diferença máxima 2 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Umidade da madeira",
+        "tolerancia": "< 14%"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.18A",
+    "titulo": "Instalação de Esquadrias de Alumínio",
+    "revisao": "00",
+    "categoria": "Esquadrias",
+    "subcategoria": "Esquadrias de Alumínio",
+    "normas": [
+      "NBR 10821:2017",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Furadeira",
+      "Chave de fenda",
+      "Nível a bolha",
+      "Prumo",
+      "Trena",
+      "Pistola de silicone"
+    ],
+    "materiais": [
+      "Esquadrias de alumínio conforme especificação",
+      "Buchas e parafusos inox",
+      "Silicone neutro",
+      "Calços de nivelamento"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Vão com folga de 1 cm por lado para alinhamento",
+      "Revestimento do vão concluído ou sequência definida",
+      "Esquadria inspecionada — sem amassados ou folgas excessivas"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Fixação",
+        "passos": [
+          "Centralizar com calços, verificar nível, prumo e esquadro",
+          "Fixar com parafusos e buchas: mínimo 3 por lado a cada 60 cm",
+          "Verificar diagonais: diferença máxima 2 mm"
+        ]
+      },
+      {
+        "secao": "2. Vedação",
+        "passos": [
+          "Preencher espaço entre marco e alvenaria com argamassa 1:3",
+          "Aplicar silicone neutro nas juntas marco/revestimento (interno e externo)"
+        ]
+      },
+      {
+        "secao": "3. Folhas e Ferragens",
+        "passos": [
+          "Instalar folhas nos trilhos e verificar deslizamento suave",
+          "Regular rolos e fixadores conforme fabricante",
+          "Testar abertura, fechamento, travas e fechos"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nível e prumo do marco",
+        "tolerancia": "± 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Diagonais do marco",
+        "tolerancia": "Diferença máxima 2 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Vedação com silicone (perimetral)",
+        "tolerancia": "Cordão contínuo — inspeção visual"
+      },
+      {
+        "item": "D",
+        "descricao": "Teste de estanqueidade (mangueira 5 min)",
+        "tolerancia": "Sem infiltração"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.18B",
+    "titulo": "Instalação de Esquadrias de PVC",
+    "revisao": "00",
+    "categoria": "Esquadrias",
+    "subcategoria": "Esquadrias de PVC",
+    "normas": [
+      "NBR 15498:2007",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Furadeira",
+      "Parafusadeira",
+      "Nível laser ou a bolha",
+      "Trena",
+      "Pistola de silicone"
+    ],
+    "materiais": [
+      "Esquadrias de PVC com reforço metálico interno",
+      "Parafusos inox",
+      "Espuma de poliuretano (vedação de juntas)",
+      "Silicone neutro"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Vão executado nas dimensões corretas com folga para instalação",
+      "Revestimento finalizado ou com sequência definida"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Posicionar, nivelar, aprumar e esquadrar o marco no vão",
+          "Fixar com parafusos inox — mínimo 3 pontos por lado",
+          "Preencher o espaço periférico com espuma de poliuretano (não comprimir o marco)",
+          "Selar externamente com silicone neutro"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nível, prumo e esquadro",
+        "tolerancia": "± 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Vedação perimetral (silicone + espuma)",
+        "tolerancia": "Contínua — sem vazios"
+      },
+      {
+        "item": "C",
+        "descricao": "Estanqueidade à água",
+        "tolerancia": "Sem infiltração após aspersão de 5 minutos"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.18C",
+    "titulo": "Instalação de Vidros e Espelhos",
+    "revisao": "00",
+    "categoria": "Esquadrias",
+    "subcategoria": "Vidros",
+    "normas": [
+      "NBR 7199:2016 (Vidros na construção civil)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Ventosa de vidro",
+      "Espátula",
+      "Pistola de silicone",
+      "Metro"
+    ],
+    "materiais": [
+      "Vidros conforme especificação (temperado, laminado, comum)",
+      "Silicone estrutural ou neutro (conforme aplicação)",
+      "Perfis de borracha (quando em caixilho)",
+      "Calços de apoio (neoprene)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Óculos",
+      "Protetor de punho"
+    ],
+    "condicoes_inicio": [
+      "Caixilhos ou marcos instalados, nivelados e aprovados",
+      "Vidros inspecionados: sem trincas, bolhas ou defeitos"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Posicionar calços de neoprene no fundo do caixilho (2 pontos a 1/4 do comprimento)",
+          "Inserir o vidro com ventosa — nunca pressionar com as mãos sem proteção",
+          "Vedar com silicone neutro ou perfil de borracha perifericamente",
+          "Proteger o vidro com fita adesiva ou papel até a entrega da obra"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Espessura do vidro conforme projeto/norma",
+        "tolerancia": "Conforme NBR 7199 para a aplicação"
+      },
+      {
+        "item": "B",
+        "descricao": "Vedação periférica",
+        "tolerancia": "Cordão contínuo de silicone — inspeção visual"
+      },
+      {
+        "item": "C",
+        "descricao": "Ausência de trincas e defeitos",
+        "tolerancia": "100% inspecionado visualmente"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.18D",
+    "titulo": "Instalação de Portas de Madeira",
+    "revisao": "00",
+    "categoria": "Esquadrias",
+    "subcategoria": "Portas de Madeira",
+    "normas": [
+      "ABNT NBR 15930-1:2011 (Portas de madeira)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Grampo de serra",
+      "Formão",
+      "Furadeira",
+      "Serra tico-tico",
+      "Nível a bolha"
+    ],
+    "materiais": [
+      "Porta de madeira conforme especificação",
+      "Ferragens (dobradiças, fechadura, maçaneta)",
+      "Parafusos inox",
+      "Massa corrida para acabamento"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Marco instalado, nivelado e aprumado (IT.18)",
+      "Porta seca (umidade < 14%) e em bom estado"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Encabeirar a porta no marco, verificando folgas: 2 mm laterais e superior, 5 mm inferior",
+          "Marcar e embeber as dobradiças no batente e na porta (formão)",
+          "Instalar dobradiças — verificar a abertura suave sem arrasto",
+          "Instalar fechadura e maçaneta conforme instruções do fabricante"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Folga lateral e superior",
+        "tolerancia": "2 mm (± 1 mm)"
+      },
+      {
+        "item": "B",
+        "descricao": "Folga inferior",
+        "tolerancia": "5 mm (± 2 mm) ou conforme projeto"
+      },
+      {
+        "item": "C",
+        "descricao": "Funcionamento da fechadura",
+        "tolerancia": "Opera sem esforço excessivo"
+      },
+      {
+        "item": "D",
+        "descricao": "Abertura e fechamento suave",
+        "tolerancia": "Sem arrasto — inspeção funcional"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.19",
+    "titulo": "Assentamento de Piso Cerâmico e Porcelanato",
+    "revisao": "00",
+    "categoria": "Pisos",
+    "subcategoria": "Piso Cerâmico",
+    "normas": [
+      "NBR 13753:1996",
+      "NBR 14081-2:2012",
+      "NBR 14992:2003",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Desempenadeira dentada",
+      "Desempenadeira de borracha",
+      "Martelo de borracha",
+      "Nível a bolha",
+      "Régua 2 m",
+      "Espaçadores",
+      "Cortadora cerâmica"
+    ],
+    "materiais": [
+      "Porcelanato ou cerâmico conforme projeto",
+      "Argamassa colante AC-II ou AC-III",
+      "Rejunte",
+      "Espaçadores 2–3 mm"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Joelheiras",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Contrapiso com mínimo 3 dias e planeza ± 3 mm",
+      "Revestimento de parede concluído",
+      "Instalações embutidas testadas"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Modulação e Base",
+        "passos": [
+          "Verificar planeza do contrapiso — corrigir desvios > 3 mm",
+          "Planejar modulação: evitar cortes < 1/3 da peça",
+          "Marcar linhas guia com esquadro 3-4-5"
+        ]
+      },
+      {
+        "secao": "2. Assentamento",
+        "passos": [
+          "Aplicar AC com desempenadeira dentada em ângulo 45°",
+          "Assentar antes da película esbranquiçada (máx. 15 min)",
+          "Para porcelanato técnico: dupla colagem (AC no verso também)",
+          "Verificar nível a cada 3 peças",
+          "Não pisar por 24 horas"
+        ]
+      },
+      {
+        "secao": "3. Rejuntamento",
+        "passos": [
+          "Aguardar mínimo 72 horas",
+          "Retirar espaçadores, aplicar rejunte em movimentos diagonais",
+          "Remover excesso com esponja úmida"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Planeza do contrapiso (base)",
+        "tolerancia": "± 3 mm com régua 2 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Junta entre peças",
+        "tolerancia": "2–3 mm conforme projeto"
+      },
+      {
+        "item": "C",
+        "descricao": "Aderência (percussão após 72 h)",
+        "tolerancia": "Som cheio em ≥ 95% da área"
+      },
+      {
+        "item": "D",
+        "descricao": "Planicidade final",
+        "tolerancia": "± 3 mm com régua 2 m (NBR 13753)"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.19A",
+    "titulo": "Rejuntamento de Pisos e Paredes",
+    "revisao": "00",
+    "categoria": "Pisos",
+    "subcategoria": "Rejuntamento",
+    "normas": [
+      "NBR 14992:2003",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Desempenadeira de borracha",
+      "Esponja",
+      "Espátula",
+      "Balde"
+    ],
+    "materiais": [
+      "Rejunte a base de cimento (áreas secas) ou epóxi (áreas molhadas, piscinas)",
+      "Água limpa"
+    ],
+    "epis": [
+      "Botina",
+      "Luvas nitrílicas",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Peças assentadas há mínimo 72 horas",
+      "Juntas limpas, sem restos de argamassa colante, espaçadores removidos"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Execução",
+        "passos": [
+          "Misturar o rejunte conforme fabricante — consistência firme e homogênea",
+          "Aplicar com desempenadeira de borracha em movimentos diagonais às juntas",
+          "Pressionar para preencher completamente as juntas",
+          "Remover excesso com esponja levemente úmida antes do endurecimento",
+          "Após cura (24 h), limpar resíduos com esponja úmida e pano seco"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Juntas completamente preenchidas",
+        "tolerancia": "Inspeção visual — sem vazios"
+      },
+      {
+        "item": "B",
+        "descricao": "Superfície do rejunte",
+        "tolerancia": "Levemente côncava e homogênea"
+      },
+      {
+        "item": "C",
+        "descricao": "Limpeza das peças após cura",
+        "tolerancia": "Sem resíduos visíveis de rejunte"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.20",
+    "titulo": "Execução de Rodapés e Soleiras",
+    "revisao": "00",
+    "categoria": "Acabamentos",
+    "subcategoria": "Rodapés e Soleiras",
+    "normas": [
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra de mármore ou policorte",
+      "Ventosa (para pedras)",
+      "Nível a bolha",
+      "Trena",
+      "Espátula"
+    ],
+    "materiais": [
+      "Rodapé (cerâmico, natural ou sintético conforme projeto)",
+      "Soleira (granito, mármore ou porcelanato conforme projeto)",
+      "Argamassa colante AC-I",
+      "Rejunte conforme cor do piso"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Óculos",
+      "Luvas de raspa"
+    ],
+    "condicoes_inicio": [
+      "Piso concluído e curado",
+      "Revestimento de parede concluído"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Rodapé",
+        "passos": [
+          "Cortar os rodapés nos comprimentos necessários — 45° nas quinas internas e externas",
+          "Aplicar AC na parede (não no rodapé)",
+          "Assentar alinhando com o piso e verificando nível horizontal"
+        ]
+      },
+      {
+        "secao": "2. Soleira",
+        "passos": [
+          "Assentar a soleira no nível correto: coplanar com o piso interno ou em desnível conforme projeto",
+          "Rejuntar com material da mesma cor do piso adjacente"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nível horizontal do rodapé",
+        "tolerancia": "± 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Alinhamento do rodapé com o piso",
+        "tolerancia": "Sem desnível visível — inspeção visual"
+      },
+      {
+        "item": "C",
+        "descricao": "Cortes em 45° (quinas)",
+        "tolerancia": "Fechados sem fresta — inspeção visual"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.21",
+    "titulo": "Preparação de Superfícies para Pintura",
+    "revisao": "00",
+    "categoria": "Pintura",
+    "subcategoria": "Preparação",
+    "normas": [
+      "NBR 13245:2011",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Lixa grãos 80, 120, 220",
+      "Espátula",
+      "Desempenadeira de aço",
+      "Rolo 15 cm",
+      "Aspirador de pó"
+    ],
+    "materiais": [
+      "Massa corrida PVA (interno) ou massa acrílica (externo/úmido)",
+      "Seladora acrílica",
+      "Fita crepe para proteção"
+    ],
+    "epis": [
+      "Botina",
+      "Luvas nitrílicas",
+      "Óculos",
+      "Máscara PFF2 (pó de gesso e massa)"
+    ],
+    "condicoes_inicio": [
+      "Emboço/reboco ou gesso totalmente secos e curados (mínimo 28 dias para argamassa / 7 dias para gesso)",
+      "Instalações concluídas e testadas",
+      "Esquadrias e batentes protegidos com fita crepe"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Limpeza e Reparos",
+        "passos": [
+          "Remover pó, eflorescências, restos de argamassa com espátula e vassoura",
+          "Reparar fissuras com massa corrida — aguardar cura",
+          "Tratar bolor com solução fungicida"
+        ]
+      },
+      {
+        "secao": "2. Seladora",
+        "passos": [
+          "Aplicar seladora acrílica com rolo ou brocha uniformemente",
+          "Aguardar secagem completa (mínimo 4 horas)"
+        ]
+      },
+      {
+        "secao": "3. Massa Corrida",
+        "passos": [
+          "Aplicar massa com desempenadeira em camadas finas (máx. 1 mm por demão)",
+          "Mínimo 2 demãos — lixar com lixa 120 entre demãos e 220 na final",
+          "Remover pó com pano úmido"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Secagem da base antes da seladora",
+        "tolerancia": "Máx. 12% umidade"
+      },
+      {
+        "item": "B",
+        "descricao": "Número de demãos de massa",
+        "tolerancia": "Mínimo 2"
+      },
+      {
+        "item": "C",
+        "descricao": "Planicidade da superfície preparada",
+        "tolerancia": "± 3 mm com régua de 2 m"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.21A",
+    "titulo": "Aplicação de Massa Corrida / PVA",
+    "revisao": "00",
+    "categoria": "Pintura",
+    "subcategoria": "Massa Corrida",
+    "normas": [
+      "NBR 13245:2011",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Desempenadeira de aço",
+      "Lixa 120 e 220",
+      "Rolo de espuma",
+      "Aspirador"
+    ],
+    "materiais": [
+      "Massa corrida PVA ou acrílica",
+      "Seladora acrílica"
+    ],
+    "epis": [
+      "Botina",
+      "Luvas nitrílicas",
+      "Óculos",
+      "Máscara PFF1"
+    ],
+    "condicoes_inicio": [
+      "Seladora aplicada e curada",
+      "Base seca e limpa"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Aplicação",
+        "passos": [
+          "Aplicar a 1ª demão de massa com desempenadeira de aço em camada fina",
+          "Aguardar secagem total (2 horas) — lixar com lixa 120",
+          "Limpar o pó e aplicar a 2ª demão",
+          "Lixar a 2ª demão com lixa 220 até superfície homogênea",
+          "Limpar pó antes de pintar"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Planicidade após lixamento final",
+        "tolerancia": "± 3 mm com régua de 2 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Superfície homogênea (sem ondulações)",
+        "tolerancia": "Inspeção sob luz rasante"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.21B",
+    "titulo": "Pintura Interna — Tinta Látex PVA",
+    "revisao": "00",
+    "categoria": "Pintura",
+    "subcategoria": "Pintura Interna",
+    "normas": [
+      "NBR 13245:2011",
+      "NBR 11702:2010",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Rolo de lã 15 cm",
+      "Brocha 4\"",
+      "Bandeja de pintura",
+      "Escada",
+      "Fita crepe"
+    ],
+    "materiais": [
+      "Tinta látex PVA acetinada ou fosca",
+      "Água (diluição conforme fabricante)"
+    ],
+    "epis": [
+      "Botina",
+      "Luvas nitrílicas",
+      "Óculos",
+      "Máscara PFF1"
+    ],
+    "condicoes_inicio": [
+      "Base preparada e lixada (IT.21)",
+      "Temperatura 10°C a 35°C, UR < 85%",
+      "Pisos e esquadrias protegidos"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Aplicação",
+        "passos": [
+          "1ª demão: diluir 20% de água, aplicar com rolo do teto para baixo",
+          "Usar trincha em cantos e arestas antes do rolo",
+          "Aguardar secagem (mínimo 2 horas)",
+          "Lixar levemente com lixa d'água 220 e limpar pó",
+          "2ª demão: diluir 10% ou sem diluição, direção perpendicular à 1ª",
+          "Mínimo 2 demãos (3 para paredes brancas ou cobertura de cores escuras)"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Número de demãos",
+        "tolerancia": "Mínimo 2 (3 para branco ou cores escuras)"
+      },
+      {
+        "item": "B",
+        "descricao": "Uniformidade da cor (luz rasante)",
+        "tolerancia": "Sem emendas, escorridos ou trechos descobertos"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.21C",
+    "titulo": "Pintura Externa — Tinta Acrílica / Elastomérica",
+    "revisao": "00",
+    "categoria": "Pintura",
+    "subcategoria": "Pintura Externa",
+    "normas": [
+      "NBR 13245:2011",
+      "NBR 11702:2010",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Rolo de lã 15 cm",
+      "Brocha",
+      "Escada",
+      "Andaime",
+      "Pistola airless (quando aplicável)"
+    ],
+    "materiais": [
+      "Tinta acrílica elastomérica ou acrílica premium",
+      "Seladora acrílica de fachada",
+      "Fundo preparador para fachada (quando necessário)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Cinto de segurança (trabalho em altura)",
+      "Luvas nitrílicas",
+      "Óculos",
+      "Máscara PFF2"
+    ],
+    "condicoes_inicio": [
+      "Emboço externo concluído e curado (mínimo 28 dias)",
+      "Temperatura entre 10°C e 35°C, sem chuva prevista por 24 horas",
+      "Andaimes instalados e aprovados"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparação",
+        "passos": [
+          "Limpar a fachada — remover pó, bolor, restos de argamassa",
+          "Tratar fissuras com selante elástico ou massa corrida acrílica",
+          "Aplicar fundo preparador ou seladora"
+        ]
+      },
+      {
+        "secao": "2. Pintura",
+        "passos": [
+          "Aplicar mínimo 2 demãos de tinta acrílica elastomérica",
+          "Para tinta elastomérica: aplicar com rolo de pelo 23 mm sem diluição",
+          "Aguardar secagem mínima entre demãos conforme fabricante"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Número de demãos",
+        "tolerancia": "Mínimo 2 demãos"
+      },
+      {
+        "item": "B",
+        "descricao": "Uniformidade (cor e textura)",
+        "tolerancia": "Inspeção visual — sem emendas ou diferença de tom"
+      },
+      {
+        "item": "C",
+        "descricao": "Cobertura total da fachada",
+        "tolerancia": "Inspeção 100% — sem trechos descobertos"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.21D",
+    "titulo": "Pintura de Esquadrias Metálicas",
+    "revisao": "00",
+    "categoria": "Pintura",
+    "subcategoria": "Pintura de Metais",
+    "normas": [
+      "NBR 13245:2011",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Lixa de ferro (grão 80 e 120)",
+      "Trincha 2\" e 3\"",
+      "Escova de aço",
+      "Pistola de pintura"
+    ],
+    "materiais": [
+      "Primer anticorrosivo (zarcão ou primer epóxi)",
+      "Tinta esmalte sintético ou tinta automotiva (conforme especificação)",
+      "Solvente/thinner conforme tinta"
+    ],
+    "epis": [
+      "Botina",
+      "Luvas nitrílicas",
+      "Óculos",
+      "Máscara com filtro para solvente (PFF2 ou cartucho orgânico)"
+    ],
+    "condicoes_inicio": [
+      "Superfícies lixadas, limpas, sem ferrugem, graxa ou tinta solta",
+      "Ambiente ventilado e sem risco de fagulhas (solventes inflamáveis)"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Preparação",
+        "passos": [
+          "Lixar toda a superfície com lixa 80 para remover ferrugem superficial",
+          "Passar escova de aço para remover carepas soltas",
+          "Limpar com pano seco"
+        ]
+      },
+      {
+        "secao": "2. Pintura",
+        "passos": [
+          "Aplicar 1 demão de primer anticorrosivo — aguardar cura completa (4 horas)",
+          "Lixar levemente com lixa 120 e limpar pó",
+          "Aplicar 2 demãos de esmalte sintético — aguardar secagem entre demãos"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Primer anticorrosivo aplicado",
+        "tolerancia": "Inspeção visual — cobertura total sem falhas"
+      },
+      {
+        "item": "B",
+        "descricao": "Número de demãos de esmalte",
+        "tolerancia": "Mínimo 2 demãos"
+      },
+      {
+        "item": "C",
+        "descricao": "Uniformidade e acabamento",
+        "tolerancia": "Inspeção visual — sem escorridos ou bolhas"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.22",
+    "titulo": "Piso de Granito / Mármore",
+    "revisao": "00",
+    "categoria": "Pisos",
+    "subcategoria": "Piso de Pedra Natural",
+    "normas": [
+      "NBR 15463:2013 (Pedras naturais para revestimento)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra de mármore",
+      "Ventosa de pedra",
+      "Desempenadeira",
+      "Régua 2 m",
+      "Nível"
+    ],
+    "materiais": [
+      "Placas de granito ou mármore conforme projeto",
+      "Argamassa de regularização ou AC-III",
+      "Rejunte de cimento branco ou epóxi",
+      "Cera protetora (opcional)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Óculos",
+      "Protetor de joelhos"
+    ],
+    "condicoes_inicio": [
+      "Contrapiso nivelado e curado",
+      "Placas aclimatadas e inspecionadas"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Assentamento",
+        "passos": [
+          "Planejar modulação a seco",
+          "Aplicar argamassa no contrapiso e no verso da placa (dupla colagem obrigatória para pedras > 60×60 cm)",
+          "Assentar com martelo de borracha verificando nível"
+        ]
+      },
+      {
+        "secao": "2. Acabamento",
+        "passos": [
+          "Aguardar mínimo 72 horas para rejuntar",
+          "Polir se necessário após cura total"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Planicidade (régua 2 m)",
+        "tolerancia": "± 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Aderência (percussão)",
+        "tolerancia": "Som cheio — sem som cavo"
+      },
+      {
+        "item": "C",
+        "descricao": "Junta entre peças",
+        "tolerancia": "Uniforme conforme projeto"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.22A",
+    "titulo": "Instalação de Piso Vinílico",
+    "revisao": "00",
+    "categoria": "Pisos",
+    "subcategoria": "Piso Vinílico",
+    "normas": [
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Régua de corte",
+      "Estilete",
+      "Rolo compressor manual",
+      "Espátula dentada (quando colado)"
+    ],
+    "materiais": [
+      "Piso vinílico (manta ou régua/click)",
+      "Cola para piso vinílico (quando colado)",
+      "Underlayer (quando flutuante)"
+    ],
+    "epis": [
+      "Botina",
+      "Joelheiras",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Contrapiso perfeitamente nivelado (± 2 mm) e seco",
+      "Ambiente com temperatura entre 18°C e 35°C"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Para sistema click: instalar underlayer e assentar réguas com encaixe (mesmos princípios do laminado)",
+          "Para sistema colado: aplicar cola com espátula dentada, deixar secar até o ponto certo (não grudar no dedo) e assentar a manta",
+          "Rolar com rolo compressor para garantir aderência uniforme"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Planeza do contrapiso",
+        "tolerancia": "± 2 mm — pré-requisito obrigatório"
+      },
+      {
+        "item": "B",
+        "descricao": "Encaixe ou aderência (colado)",
+        "tolerancia": "Sem bolhas, frestas ou bordas levantadas"
+      },
+      {
+        "item": "C",
+        "descricao": "Temperatura do ambiente durante instalação",
+        "tolerancia": "18°C a 35°C"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.22B",
+    "titulo": "Piso de Concreto Polido / Estampado",
+    "revisao": "00",
+    "categoria": "Pisos",
+    "subcategoria": "Piso de Concreto",
+    "normas": [
+      "NBR 7212:2012 (Concreto para pisos)",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Desempenadeira de aço rotativa (helicóptero)",
+      "Régua vibratória",
+      "Polidora de piso (para polido)",
+      "Moldes de estampagem (para estampado)"
+    ],
+    "materiais": [
+      "Concreto fck ≥ 25 MPa, agregado máx. 19 mm",
+      "Endurecedor mineral superficial (quando especificado)",
+      "Selante / verniz de proteção",
+      "Corante (para estampado)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas",
+      "Protetor auricular (desempenadeira rotativa)"
+    ],
+    "condicoes_inicio": [
+      "Base (sub-base) compactada e regularizada",
+      "Juntas de dilatação planejadas (máx. 25× a espessura para pisos externos)"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Concretagem",
+        "passos": [
+          "Lançar concreto na espessura especificada — geralmente 8 a 12 cm",
+          "Sarrafear com régua vibratória",
+          "Desempenar com desempenadeira de aço até superfície densa e fechada"
+        ]
+      },
+      {
+        "secao": "2. Acabamento",
+        "passos": [
+          "Aplicar endurecedor mineral (se especificado) antes do início de presa final",
+          "Polido: lixar com politriz de disco após cura completa (mínimo 28 dias)",
+          "Estampado: aplicar desmoldante colorido e imprimir os moldes enquanto o concreto está fresco"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Planicidade",
+        "tolerancia": "± 5 mm com régua 3 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Espessura",
+        "tolerancia": "Conforme projeto ± 5 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Juntas de dilatação executadas",
+        "tolerancia": "Conforme projeto — espaçamento máximo especificado"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.23",
+    "titulo": "Instalação de Louças Sanitárias",
+    "revisao": "00",
+    "categoria": "Acabamentos",
+    "subcategoria": "Louças e Metais",
+    "normas": [
+      "NBR 5626:2020",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Chave inglesa",
+      "Nível a bolha",
+      "Furadeira"
+    ],
+    "materiais": [
+      "Louças sanitárias conforme especificação",
+      "Kit de fixação (buchas, parafusos)",
+      "Vedante de cera ou flange de esgoto"
+    ],
+    "epis": [
+      "Botina",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Revestimentos de piso e parede concluídos",
+      "Pontos hidráulicos testados"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Instalar vaso com vedante de cera sobre flange — não apertar excessivamente",
+          "Instalar lavatório em colunas ou suporte nivelado",
+          "Conectar sifão, ralos e flexíveis conforme projeto",
+          "Testar funcionamento sem vazamento"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nivelamento das louças",
+        "tolerancia": "± 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Ausência de vazamentos após 30 min",
+        "tolerancia": "Inspeção visual — sem gotejamento"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.24",
+    "titulo": "Instalação de Metais e Acessórios",
+    "revisao": "00",
+    "categoria": "Acabamentos",
+    "subcategoria": "Metais",
+    "normas": [
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Chave de fenda",
+      "Chave inglesa",
+      "Furadeira",
+      "Nível"
+    ],
+    "materiais": [
+      "Torneiras, registros, chuveiros, portarrolos, toalheiros",
+      "Buchas e parafusos inox",
+      "Fita teflon"
+    ],
+    "epis": [
+      "Botina",
+      "Luvas"
+    ],
+    "condicoes_inicio": [
+      "Revestimentos concluídos",
+      "Louças instaladas"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Aplicar fita teflon nas roscas antes de conectar torneiras e chuveiros",
+          "Nivelar portarrolos e toalheiros com nível",
+          "Fixar acessórios com buchas adequadas ao tipo de parede"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nivelamento dos acessórios",
+        "tolerancia": "± 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Ausência de vazamentos nas conexões",
+        "tolerancia": "Inspeção visual após abertura da água"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.25",
+    "titulo": "Colocação de Rodapés",
+    "revisao": "00",
+    "categoria": "Acabamentos",
+    "subcategoria": "Rodapés",
+    "normas": [
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Serra inglete",
+      "Finca-pinos",
+      "Pregos ou cola de construção",
+      "Nível"
+    ],
+    "materiais": [
+      "Rodapés (MDF, madeira, porcelanato ou PVC conforme projeto)",
+      "Cola de construção ou pregos"
+    ],
+    "epis": [
+      "Botina",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Piso concluído",
+      "Paredes pintadas ou com acabamento final"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Instalação",
+        "passos": [
+          "Cortar as extremidades em 45° nas quinas internas e externas com serra inglete",
+          "Fixar com cola de construção e/ou finca-pinos",
+          "Verificar alinhamento com nível e régua"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Alinhamento horizontal",
+        "tolerancia": "± 2 mm"
+      },
+      {
+        "item": "B",
+        "descricao": "Encontros em 45° (quinas)",
+        "tolerancia": "Sem fresta visível"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.26",
+    "titulo": "Instalação de Forros (Gesso / PVC)",
+    "revisao": "00",
+    "categoria": "Acabamentos",
+    "subcategoria": "Forros",
+    "normas": [
+      "NBR 14715-1:2010",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Nível laser",
+      "Furadeira",
+      "Serra tico-tico",
+      "Nível a bolha",
+      "Prumo"
+    ],
+    "materiais": [
+      "Placas de gesso acartonado ou réguas PVC",
+      "Perfilados de alumínio (estrutura do forro)",
+      "Arames ou penduradores de aço",
+      "Parafusos e buchas"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Óculos",
+      "Máscara (pó de gesso)"
+    ],
+    "condicoes_inicio": [
+      "Estrutura de fixação do forro definida em projeto",
+      "Instalações elétricas (pontos de luz) embutidas na laje"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Estrutura de Suporte",
+        "passos": [
+          "Marcar o nível do forro em toda a periferia do ambiente com nível laser",
+          "Fixar o perfil U (caixilho perimétrico) na parede na cota definida",
+          "Instalar os penduradores (arames ou perfilados) na laje com espaçamento de 60 cm"
+        ]
+      },
+      {
+        "secao": "2. Instalação das Placas/Réguas",
+        "passos": [
+          "Encaixar as placas nos perfis — verificar planicidade a cada 3 placas",
+          "Fixar com parafusos nos perfis para forro de gesso",
+          "Instalar bocais de luz e grelhas de ar condicionado conforme projeto"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Nivelamento do forro",
+        "tolerancia": "± 3 mm com régua de 2 m"
+      },
+      {
+        "item": "B",
+        "descricao": "Alinhamento das placas/réguas",
+        "tolerancia": "Inspeção visual — sem degraus entre peças"
+      },
+      {
+        "item": "C",
+        "descricao": "Fixação dos penduradores",
+        "tolerancia": "A cada 60 cm — inspeção visual"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.26A",
+    "titulo": "Execução de Drywall — Paredes e Forros",
+    "revisao": "00",
+    "categoria": "Acabamentos",
+    "subcategoria": "Drywall",
+    "normas": [
+      "NBR 15758-1:2009",
+      "NBR 14715-1:2010",
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Furadeira",
+      "Parafusadeira",
+      "Nível laser e a bolha",
+      "Prumo",
+      "Faca para gesso",
+      "Lixa 120 e 220"
+    ],
+    "materiais": [
+      "Perfis metálicos (guia e montante) galvanizados",
+      "Chapas de gesso acartonado (Standard, RU ou RF)",
+      "Parafusos fosfatizados",
+      "Fita de papel microperfurada",
+      "Massa para juntas",
+      "Lã de rocha (isolamento)"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de raspa",
+      "Óculos",
+      "Máscara PFF1"
+    ],
+    "condicoes_inicio": [
+      "Instalações elétricas e hidráulicas concluídas",
+      "Projeto de drywall aprovado",
+      "UR < 80% e temperatura > 5°C"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Estrutura Metálica",
+        "passos": [
+          "Marcar posição das guias com nível laser",
+          "Fixar guias no piso e teto com parafusos + bucha a cada 60 cm",
+          "Instalar montantes a cada 600 mm entre eixos, verificando prumo"
+        ]
+      },
+      {
+        "secao": "2. Chapas",
+        "passos": [
+          "Fixar chapas com parafusos fosfatizados Ø3,5×25 mm a cada 250 mm",
+          "Cabeça do parafuso: 0,5 mm abaixo da superfície — sem romper o papel",
+          "Folga de 10–15 mm entre chapa e piso"
+        ]
+      },
+      {
+        "secao": "3. Tratamento de Juntas",
+        "passos": [
+          "Aplicar massa de junta + fita microperfurada",
+          "3 demãos de massa alargando a área progressivamente",
+          "Lixar com lixa 120 e depois 220"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Prumo dos montantes",
+        "tolerancia": "± 2 mm/m"
+      },
+      {
+        "item": "B",
+        "descricao": "Espaçamento dos montantes",
+        "tolerancia": "600 mm ± 5 mm"
+      },
+      {
+        "item": "C",
+        "descricao": "Embutimento do parafuso",
+        "tolerancia": "0,5 mm abaixo da superfície"
+      },
+      {
+        "item": "D",
+        "descricao": "Planicidade da superfície finalizada",
+        "tolerancia": "± 3 mm com régua 2 m"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.27",
+    "titulo": "Limpeza Final de Obra",
+    "revisao": "00",
+    "categoria": "Controle e Entrega",
+    "subcategoria": "Limpeza",
+    "normas": [
+      "NR-18"
+    ],
+    "ferramentas": [
+      "Vassoura, rodo, pá",
+      "Mangueira de alta pressão ou lavadora",
+      "Espátula, esponja abrasiva",
+      "Rodo de borracha"
+    ],
+    "materiais": [
+      "Detergente neutro",
+      "Limpa-vidros",
+      "Cera de piso (quando especificado)",
+      "Sacolas e bags para entulho"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina",
+      "Luvas de borracha",
+      "Óculos"
+    ],
+    "condicoes_inicio": [
+      "Todos os serviços de acabamento concluídos",
+      "Punch list verificado e pendências mínimas"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Remoção de Entulho",
+        "passos": [
+          "Remover todos os entulhos, embalagens e resíduos de materiais",
+          "Recolher fitas crepe, papelões de proteção e plásticos"
+        ]
+      },
+      {
+        "secao": "2. Limpeza Fina",
+        "passos": [
+          "Limpar piso com detergente neutro e água — remover respingos de tinta e argamassa",
+          "Limpar vidros com limpa-vidros",
+          "Limpar esquadrias removendo adesivos e resíduos de silicone",
+          "Limpar louças e metais com produto adequado"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Ausência de entulho e resíduos",
+        "tolerancia": "Inspeção visual — ambiente limpo"
+      },
+      {
+        "item": "B",
+        "descricao": "Vidros limpos (sem resíduos)",
+        "tolerancia": "Inspeção visual contra a luz"
+      },
+      {
+        "item": "C",
+        "descricao": "Pisos limpos (sem respingos de tinta/argamassa)",
+        "tolerancia": "Inspeção visual"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.28",
+    "titulo": "Vistoria Final e Lista de Pendências (Punch List)",
+    "revisao": "00",
+    "categoria": "Controle e Entrega",
+    "subcategoria": "Vistoria",
+    "normas": [
+      "NBR ISO 9001:2015",
+      "NBR 15575:2013",
+      "NBR 5674:2012"
+    ],
+    "ferramentas": [
+      "Tablet ou smartphone (app de inspeção)",
+      "Câmera fotográfica",
+      "Trena",
+      "Nível a bolha",
+      "Multímetro",
+      "Lanterna"
+    ],
+    "materiais": [
+      "Formulário de vistoria / punch list",
+      "Projeto executivo para confronto"
+    ],
+    "epis": [
+      "Capacete",
+      "Botina"
+    ],
+    "condicoes_inicio": [
+      "Todos os serviços concluídos",
+      "Limpeza final executada",
+      "Projeto executivo disponível"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Vistoria por Ambiente",
+        "passos": [
+          "Verificar estrutura e vedação: fissuras, manchas, alinhamentos",
+          "Verificar instalações hidráulicas: funcionamento de torneiras, vasos, ralos, pressão",
+          "Verificar instalações elétricas: tomadas, interruptores, pontos de luz, quadro",
+          "Verificar esquadrias: abertura, fechamento, travas, vedação",
+          "Verificar revestimentos: planicidade, rejunte, peças soltas (percussão)",
+          "Verificar pintura: uniformidade, cobertura, emendas",
+          "Verificar pisos: planicidade, caimento em áreas molhadas, juntas",
+          "Verificar limpeza"
+        ]
+      },
+      {
+        "secao": "2. Registro e Encaminhamento",
+        "passos": [
+          "Registrar cada pendência: local, descrição, foto, responsável e prazo",
+          "Priorizar: críticas (impedem uso), importantes (afetam qualidade), estéticas",
+          "Assinar o encerramento de cada item após correção verificada"
+        ]
+      },
+      {
+        "secao": "3. Entrega",
+        "passos": [
+          "Somente entregar ao cliente com todos os itens críticos e importantes encerrados",
+          "Emitir o Termo de Entrega assinado pelo engenheiro e pelo cliente"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Funcionamento hidráulico",
+        "tolerancia": "100% dos pontos testados e aprovados"
+      },
+      {
+        "item": "B",
+        "descricao": "Funcionamento elétrico",
+        "tolerancia": "100% dos pontos testados com testador"
+      },
+      {
+        "item": "C",
+        "descricao": "Peças de revestimento soltas",
+        "tolerancia": "Nenhuma — som cheio em 100% da área"
+      },
+      {
+        "item": "D",
+        "descricao": "Pendências críticas encerradas",
+        "tolerancia": "100% obrigatório antes da entrega"
+      },
+      {
+        "item": "E",
+        "descricao": "Termo de Entrega assinado",
+        "tolerancia": "Arquivado no dossiê da obra"
+      }
+    ]
+  },
+  {
+    "codigo": "IT.29",
+    "titulo": "Entrega de Obra ao Cliente",
+    "revisao": "00",
+    "categoria": "Controle e Entrega",
+    "subcategoria": "Entrega",
+    "normas": [
+      "NBR ISO 9001:2015",
+      "NBR 15575:2013",
+      "NBR 5674:2012"
+    ],
+    "ferramentas": [
+      "Câmera fotográfica",
+      "Tablet"
+    ],
+    "materiais": [
+      "Manual do Proprietário",
+      "Dossiê da Obra",
+      "Termo de Entrega",
+      "Chaves e documentos da obra"
+    ],
+    "epis": [],
+    "condicoes_inicio": [
+      "Punch list aprovado (IT.28)",
+      "Limpeza final concluída (IT.27)",
+      "Manual do proprietário elaborado"
+    ],
+    "sequencia": [
+      {
+        "secao": "1. Documentação",
+        "passos": [
+          "Organizar o dossiê da obra: projetos as-built, laudos técnicos, certificados de materiais, relatórios de ensaios",
+          "Elaborar o Manual do Proprietário com instruções de uso, manutenção preventiva e garantias"
+        ]
+      },
+      {
+        "secao": "2. Visita de Entrega",
+        "passos": [
+          "Apresentar o imóvel ao cliente, explicando os sistemas instalados",
+          "Demonstrar o funcionamento do quadro elétrico, registros, aquecedor e equipamentos",
+          "Entregar as chaves e os documentos da obra"
+        ]
+      },
+      {
+        "secao": "3. Assinatura do Termo",
+        "passos": [
+          "Assinar o Termo de Entrega de Obra em duas vias",
+          "Definir o prazo e o responsável para os itens estéticos não encerrados (se houver)"
+        ]
+      }
+    ],
+    "verificacoes": [
+      {
+        "item": "A",
+        "descricao": "Dossiê da obra completo e organizado",
+        "tolerancia": "Todos os documentos técnicos arquivados"
+      },
+      {
+        "item": "B",
+        "descricao": "Manual do proprietário entregue",
+        "tolerancia": "Documento entregue ao cliente"
+      },
+      {
+        "item": "C",
+        "descricao": "Termo de entrega assinado",
+        "tolerancia": "Duas vias assinadas e arquivadas"
+      },
+      {
+        "item": "D",
+        "descricao": "Chaves e documentos entregues",
+        "tolerancia": "Recibo assinado pelo cliente"
+      }
+    ]
+  }
+]
