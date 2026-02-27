@@ -5,7 +5,7 @@ import { useState } from 'react';
 import {
     HardHat, Mountain, ClipboardList, CheckSquare, BookOpen,
     FolderOpen, FileText, ShoppingCart, Bot, GraduationCap,
-    HelpCircle, Building2, Truck, Settings2,
+    HelpCircle, Truck, Settings2, Settings,
     ChevronDown, ChevronLeft, ChevronRight, Menu,
 } from 'lucide-react';
 
@@ -187,27 +187,29 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
                 })}
             </nav>
 
-            {/* Obras link */}
-            {(!collapsed || isMobile) && (
-                <a
-                    href="/obras"
-                    onClick={isMobile ? onMobileClose : undefined}
-                    style={{
-                        display: 'flex', alignItems: 'center', gap: 10,
-                        padding: '10px 14px',
-                        borderTop: '1px solid var(--border-subtle)',
-                        borderBottom: '1px solid var(--border-subtle)',
-                        textDecoration: 'none',
-                        color: pathname.startsWith('/obras') ? 'var(--text-primary)' : 'var(--text-muted)',
-                        fontSize: 12, fontWeight: 600,
-                        background: pathname.startsWith('/obras') ? 'rgba(82,95,107,0.1)' : 'transparent',
-                        transition: 'all 0.15s',
-                    }}
-                >
-                    <Building2 size={15} />
-                    Obras
-                </a>
-            )}
+            {/* Configurações link */}
+            <a
+                href="/configuracoes"
+                onClick={isMobile ? onMobileClose : undefined}
+                title={collapsed && !isMobile ? 'Configurações' : undefined}
+                style={{
+                    display: 'flex', alignItems: 'center',
+                    gap: collapsed && !isMobile ? 0 : 10,
+                    padding: collapsed && !isMobile ? '10px 0' : '10px 14px',
+                    justifyContent: collapsed && !isMobile ? 'center' : 'flex-start',
+                    borderTop: '1px solid var(--border-subtle)',
+                    textDecoration: 'none',
+                    color: pathname.startsWith('/configuracoes') ? 'var(--text-primary)' : 'var(--text-muted)',
+                    fontSize: 12, fontWeight: 600,
+                    background: pathname.startsWith('/configuracoes') ? 'rgba(82,95,107,0.1)' : 'transparent',
+                    transition: 'all 0.15s',
+                }}
+                onMouseEnter={e => { if (!pathname.startsWith('/configuracoes')) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; }}
+                onMouseLeave={e => { if (!pathname.startsWith('/configuracoes')) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+            >
+                <Settings size={15} />
+                {(!collapsed || isMobile) && 'Configurações'}
+            </a>
 
             {/* Collapse toggle */}
             {!isMobile && (

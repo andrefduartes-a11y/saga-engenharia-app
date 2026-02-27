@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { LogOut, ChevronDown, MapPin } from 'lucide-react'
+import { LogOut, ChevronDown, MapPin, Settings } from 'lucide-react'
 import { useObra } from '@/lib/obra-context'
 
 export default function TopBar({ user }: { user: { email?: string } | null }) {
@@ -97,6 +97,15 @@ export default function TopBar({ user }: { user: { email?: string } | null }) {
 
             {/* Ações */}
             <div className="flex items-center gap-2">
+                <Link
+                    href="/configuracoes"
+                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                    style={{ color: 'var(--text-muted)' }}
+                    title="Configurações"
+                >
+                    <Settings size={16} />
+                </Link>
+
                 <div
                     className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold"
                     style={{
