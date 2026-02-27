@@ -2,9 +2,8 @@ export const dynamic = 'force-dynamic'
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import BottomNav from '@/components/BottomNav'
-import TopBar from '@/components/TopBar'
 import { ObraProvider } from '@/lib/obra-context'
+import ProtectedShell from '@/components/ProtectedShell'
 
 export default async function ProtectedLayout({
     children,
@@ -20,14 +19,9 @@ export default async function ProtectedLayout({
 
     return (
         <ObraProvider>
-            <div className="flex flex-col min-h-screen relative" style={{ background: 'var(--bg-primary)' }}>
-                <div className="watermark-bg" />
-                <TopBar user={user} />
-                <main className="flex-1 pb-24 pt-2 relative z-10 w-full">
-                    {children}
-                </main>
-                <BottomNav />
-            </div>
+            <ProtectedShell user={user}>
+                {children}
+            </ProtectedShell>
         </ObraProvider>
     )
 }

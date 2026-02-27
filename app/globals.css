@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,34 +8,34 @@
 :root {
   /* === PALETA SAGA CONSTRUTORA === */
   --saga-gray: #525F6B;
-  /* cor primária da logo */
   --saga-gray-dark: #3A444E;
-  /* variação escura */
   --saga-gray-light: #7A8A96;
-  /* variação clara */
 
   /* Fundos */
   --bg-primary: #1A1F24;
-  /* fundo principal — escuro premium */
   --bg-card: #22292F;
-  /* fundo dos cards */
   --bg-elevated: #2B3640;
-  /* fundo elevado / sidebar */
   --bg-input: #1E252B;
-  /* fundo dos inputs */
+
+  /* Aliases para compatibilidade com o design system Executive */
+  --navy: #1A1F24;
+  --navy-card: #22292F;
+  --navy-light: #2B3640;
+  --sidebar-bg: #1C2028;
 
   /* Texto */
   --text-primary: #F0F2F4;
   --text-secondary: #9AABB5;
   --text-muted: #5E6E7A;
 
-  /* Acento (cor de ação) — usa o cinza da SAGA como primário */
+  /* Acento */
   --accent: #525F6B;
   --accent-hover: #3A444E;
   --accent-light: rgba(82, 95, 107, 0.15);
 
   /* Bordas */
   --border-color: rgba(255, 255, 255, 0.07);
+  --border-subtle: rgba(255, 255, 255, 0.07);
   --border-focus: rgba(82, 95, 107, 0.6);
 
   /* Status */
@@ -44,10 +44,15 @@
   --yellow-warn: #C9902A;
   --info: #5B9BD5;
 
-  /* Legacy — mantido para compatibilidade com páginas existentes */
+  /* Legacy */
   --green-primary: #52A87B;
   --bg-surface: #22292F;
   --danger: #D95252;
+
+  /* === COCKPIT LAYOUT === */
+  --sidebar-width: 220px;
+  --sidebar-collapsed-width: 52px;
+  --header-height: 56px;
 }
 
 * {
@@ -87,6 +92,245 @@ h4 {
   min-height: 100vh;
 }
 
+/* ─── Cockpit Layout ─── */
+.cockpit-layout {
+  display: flex;
+  min-height: 100dvh;
+}
+
+.cockpit-main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.22s ease;
+}
+
+.cockpit-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background: rgba(26, 31, 36, 0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.cockpit-content {
+  flex: 1;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* ─── Dashboard Grid (12 cols) ─── */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+}
+
+.col-3 {
+  grid-column: span 3;
+}
+
+.col-4 {
+  grid-column: span 4;
+}
+
+.col-5 {
+  grid-column: span 5;
+}
+
+.col-6 {
+  grid-column: span 6;
+}
+
+.col-7 {
+  grid-column: span 7;
+}
+
+.col-8 {
+  grid-column: span 8;
+}
+
+.col-12 {
+  grid-column: span 12;
+}
+
+/* ─── KPI Cards ─── */
+.kpi-value {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: 'Raleway', sans-serif;
+}
+
+.kpi-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ─── Intelligence / section blocks ─── */
+.intel-block {
+  background: var(--navy-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.intel-block-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  font-family: 'Raleway', sans-serif;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ─── Section Headers ─── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ─── Progress bars ─── */
+.progress-bar-track {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--saga-gray), var(--saga-gray-light));
+  transition: width 0.6s ease;
+}
+
+/* ─── Alerts ─── */
+.alert-success {
+  background: rgba(82, 168, 123, 0.11);
+  border: 1px solid rgba(82, 168, 123, 0.25);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: #52A87B;
+  font-size: 14px;
+}
+
+.alert-error {
+  background: rgba(217, 82, 82, 0.11);
+  border: 1px solid rgba(217, 82, 82, 0.25);
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: #F87171;
+  font-size: 14px;
+}
+
+/* ─── Sidebar desktop hidden on mobile ─── */
+@media (min-width: 769px) {
+  .sidebar-toggle {
+    display: none !important;
+  }
+
+  .bottom-nav-mobile {
+    display: none !important;
+  }
+}
+
+/* ─── Mobile (≤768px) ─── */
+@media (max-width: 768px) {
+  .sidebar-desktop {
+    display: none !important;
+  }
+
+  .cockpit-main {
+    margin-left: 0 !important;
+  }
+
+  .cockpit-header {
+    padding: 0 12px;
+  }
+
+  .cockpit-content {
+    padding: 12px;
+    padding-bottom: 80px;
+  }
+
+  .sidebar-toggle {
+    display: flex !important;
+  }
+
+  .role-chip {
+    display: none !important;
+  }
+
+  .col-3 {
+    grid-column: span 6;
+  }
+
+  .col-4,
+  .col-5,
+  .col-6,
+  .col-7,
+  .col-8 {
+    grid-column: span 12;
+  }
+
+  .kpi-value {
+    font-size: 22px;
+  }
+
+  .chart-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 480px;
+  }
+
+  .dash-heading {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+}
+
 /* ===================== CARDS ========================= */
 .card {
   background: var(--bg-card);
@@ -123,10 +367,11 @@ h4 {
 /* Título de seção */
 .section-title {
   font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: 'Raleway', sans-serif;
   text-transform: uppercase;
-  color: var(--text-muted);
+  letter-spacing: 0.1em;
 }
 
 /* ===================== BOTÕES ======================== */

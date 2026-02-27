@@ -5,7 +5,7 @@ import { useObra } from '@/lib/obra-context'
 import {
     HardHat, Mountain, ClipboardList, CheckSquare, BookOpen,
     FolderOpen, FileText, ShoppingCart, Bot, GraduationCap,
-    HelpCircle, Building2, ChevronRight, MapPin
+    HelpCircle, Building2, ChevronRight, MapPin, Settings2, Truck,
 } from 'lucide-react'
 
 const SECTIONS = [
@@ -14,6 +14,8 @@ const SECTIONS = [
         modules: [
             { href: '/concreto', icon: HardHat, label: 'Concretagem', desc: 'Lançamentos e traços', color: '#7FA653' },
             { href: '/terraplanagem', icon: Mountain, label: 'Terraplanagem', desc: 'Etapas e diários', color: '#D4A843' },
+            { href: '/equipamentos', icon: Settings2, label: 'Equipamentos', desc: 'Controle de horas', color: '#5B9BD5' },
+            { href: '/caminhoes', icon: Truck, label: 'Caminhões', desc: 'Controle de viagens', color: '#E67E22' },
         ]
     },
     {
@@ -45,81 +47,126 @@ const SECTIONS = [
 export default function DashboardPage() {
     const { obra } = useObra()
 
-    return (
-        <div className="px-4 py-4 space-y-6 animate-fade-up">
-            {/* Cabeçalho da obra */}
-            {obra ? (
-                <div className="card" style={{ padding: '14px 16px' }}>
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                                style={{ background: 'rgba(127,166,83,0.15)' }}>
-                                <Building2 size={20} style={{ color: 'var(--green-primary)' }} />
-                            </div>
-                            <div>
-                                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Obra atual</p>
-                                <p className="font-bold text-sm" style={{ color: 'var(--text-primary)' }}>{obra.nome}</p>
-                                {obra.endereco && (
-                                    <p className="text-xs flex items-center gap-1 mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                                        <MapPin size={10} /> {obra.endereco}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                        <Link href="/selecionar-obra"
-                            className="text-xs flex items-center gap-1"
-                            style={{ color: 'var(--green-primary)' }}>
-                            Trocar <ChevronRight size={14} />
-                        </Link>
-                    </div>
-                </div>
-            ) : (
-                <Link href="/selecionar-obra"
-                    className="card-hover flex items-center gap-3"
-                    style={{ padding: '14px 16px', borderColor: 'rgba(239,68,68,0.3)', borderWidth: 1 }}>
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                        style={{ background: 'rgba(239,68,68,0.1)' }}>
-                        <Building2 size={20} style={{ color: '#EF4444' }} />
-                    </div>
-                    <div className="flex-1">
-                        <p className="font-semibold text-sm" style={{ color: '#EF4444' }}>Nenhuma obra selecionada</p>
-                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Toque para selecionar</p>
-                    </div>
-                    <ChevronRight size={18} style={{ color: '#EF4444' }} />
-                </Link>
-            )}
+    const today = new Date().toLocaleDateString('pt-BR', {
+        weekday: 'long', day: 'numeric', month: 'long'
+    })
 
-            {/* Grid de Seções e Módulos */}
-            <div className="space-y-6">
+    return (
+        <div style={{ maxWidth: 900 }}>
+
+            {/* ── Heading ── */}
+            <div className="dash-heading" style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                marginBottom: 20, flexWrap: 'wrap', gap: 10,
+            }}>
+                <div>
+                    <h1 style={{
+                        fontSize: 18, fontWeight: 800, color: 'var(--text-primary)',
+                        fontFamily: "'Raleway', sans-serif", letterSpacing: '0.5px',
+                    }}>
+                        Visão Operacional
+                    </h1>
+                    <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 3, textTransform: 'capitalize' }}>
+                        {today}
+                    </p>
+                </div>
+
+                <Link href="/selecionar-obra" style={{ textDecoration: 'none' }}>
+                    <div style={{
+                        display: 'flex', alignItems: 'center', gap: 6,
+                        padding: '6px 12px', borderRadius: 8,
+                        background: obra ? 'rgba(82,168,123,0.1)' : 'rgba(239,68,68,0.08)',
+                        border: `1px solid ${obra ? 'rgba(82,168,123,0.25)' : 'rgba(239,68,68,0.2)'}`,
+                    }}>
+                        <Building2 size={14} style={{ color: obra ? 'var(--green-primary)' : '#EF4444', flexShrink: 0 }} />
+                        <div>
+                            <div style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: 'var(--text-muted)' }}>
+                                Obra Atual
+                            </div>
+                            <div style={{ fontSize: 12, fontWeight: 600, color: obra ? 'var(--text-primary)' : '#EF4444' }}>
+                                {obra ? obra.nome : 'Nenhuma selecionada'}
+                            </div>
+                            {obra?.endereco && (
+                                <div style={{ fontSize: 10, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 3, marginTop: 1 }}>
+                                    <MapPin size={9} /> {obra.endereco}
+                                </div>
+                            )}
+                        </div>
+                        <ChevronRight size={14} style={{ color: 'var(--text-muted)', marginLeft: 4 }} />
+                    </div>
+                </Link>
+            </div>
+
+            {/* ── Seções de Módulos ── */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
                 {SECTIONS.map((section, idx) => (
                     <div key={idx}>
-                        <div className="flex items-center gap-2 mb-3">
-                            <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                        {/* Section header */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                            <h2 className="section-title" style={{ fontSize: 11, whiteSpace: 'nowrap' }}>
                                 {section.title}
                             </h2>
-                            <div className="h-px flex-1" style={{ background: 'var(--border-subtle)' }} />
+                            <div style={{ height: 1, flex: 1, background: 'var(--border-subtle)' }} />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        {/* Cards grid */}
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+                            gap: 10,
+                        }}>
                             {section.modules.map(({ href, icon: Icon, label, desc, color }) => (
                                 <Link
                                     key={href}
                                     href={href}
-                                    className="card-hover flex flex-col items-start gap-2 py-4 px-3"
+                                    style={{ textDecoration: 'none' }}
                                 >
                                     <div
-                                        className="w-10 h-10 rounded-xl flex items-center justify-center"
-                                        style={{ background: `${color}20` }}
+                                        className="card"
+                                        style={{
+                                            padding: '16px 14px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.15s ease',
+                                            borderTop: `2px solid ${color}`,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: 10,
+                                            height: '100%',
+                                        }}
+                                        onMouseEnter={e => {
+                                            const el = e.currentTarget as HTMLElement
+                                            el.style.background = 'var(--bg-elevated)'
+                                            el.style.transform = 'translateY(-2px)'
+                                            el.style.boxShadow = `0 4px 16px ${color}22`
+                                        }}
+                                        onMouseLeave={e => {
+                                            const el = e.currentTarget as HTMLElement
+                                            el.style.background = 'var(--bg-card)'
+                                            el.style.transform = 'translateY(0)'
+                                            el.style.boxShadow = 'none'
+                                        }}
                                     >
-                                        <Icon size={20} style={{ color }} />
-                                    </div>
-                                    <div className="mt-1">
-                                        <p className="text-sm font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
-                                            {label}
-                                        </p>
-                                        <p className="text-xs leading-tight mt-1" style={{ color: 'var(--text-muted)' }}>
-                                            {desc}
-                                        </p>
+                                        <div style={{
+                                            width: 38, height: 38, borderRadius: 8,
+                                            background: `${color}18`,
+                                            border: `1px solid ${color}22`,
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        }}>
+                                            <Icon size={18} style={{ color }} />
+                                        </div>
+                                        <div>
+                                            <p style={{
+                                                fontSize: 13, fontWeight: 700,
+                                                color: 'var(--text-primary)', lineHeight: 1.2,
+                                            }}>
+                                                {label}
+                                            </p>
+                                            <p style={{
+                                                fontSize: 11, color: 'var(--text-muted)', marginTop: 3,
+                                            }}>
+                                                {desc}
+                                            </p>
+                                        </div>
                                     </div>
                                 </Link>
                             ))}
