@@ -367,8 +367,8 @@ function DiretorDashboard() {
                                 {section.modules.map(mod => {
                                     const Icon = mod.icon
                                     return (
-                                        <Link key={mod.href} href={mod.href} style={{ textDecoration: 'none' }}>
-                                            <div className="card" style={{ padding: '12px 14px', borderRadius: 12, cursor: 'pointer', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 10, transition: 'all 0.15s' }}
+                                        <Link key={mod.href} href={mod.href} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                                            <div className="card" style={{ padding: '12px 14px', borderRadius: 12, cursor: 'pointer', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'flex-start', gap: 10, transition: 'all 0.15s', minHeight: 68, height: '100%', boxSizing: 'border-box' }}
                                                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = mod.color + '55'; (e.currentTarget as HTMLElement).style.background = mod.color + '0a' }}
                                                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-subtle)'; (e.currentTarget as HTMLElement).style.background = '' }}
                                             >
