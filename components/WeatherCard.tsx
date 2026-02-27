@@ -36,14 +36,19 @@ interface WeatherData {
 }
 
 async function fetchWeather(cidade: string): Promise<WeatherData> {
+    // Strip state abbreviation: 'Itabira - MG' → 'Itabira', 'São Paulo, SP' → 'São Paulo'
+    const cleanCidade = cidade
+        .replace(/\s*[-,]\s*[A-Z]{2}$/, '')  // remove ' - MG' or ', SP' at end
+        .trim()
+
     // Step 1: Geocode city name → lat/lon
     const geoRes = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json`,
+        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cleanCidade)}&count=1&language=pt&format=json&countryCode=BR`,
         { cache: 'no-store' }
     )
     if (!geoRes.ok) throw new Error(`Geocoding error: ${geoRes.status}`)
     const geo = await geoRes.json()
-    if (!geo.results?.length) throw new Error(`Cidade "${cidade}" não encontrada`)
+    if (!geo.results?.length) throw new Error(`"${cleanCidade}" não encontrada`)
 
     const { latitude, longitude } = geo.results[0]
 

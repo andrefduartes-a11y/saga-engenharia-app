@@ -78,14 +78,15 @@ function WeatherSection({ obras, agendamentos }: { obras: Obra[]; agendamentos: 
             <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>
                 🌤️ PREVISÃO DO TEMPO — PRÓXIMOS 5 DIAS
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                 {uniqueCidades.map(({ cidade, agendamentos: ags }) => (
-                    <WeatherCard
-                        key={cidade}
-                        cidade={cidade}
-                        agendamentos={ags}
-                        compact={uniqueCidades.length > 1}
-                    />
+                    <div key={cidade} style={{ flex: '1 1 280px', maxWidth: 340 }}>
+                        <WeatherCard
+                            cidade={cidade}
+                            agendamentos={ags}
+                            compact={uniqueCidades.length > 1}
+                        />
+                    </div>
                 ))}
                 {/* Obras sem cidade cadastrada */}
                 {obrasWithoutCity.length > 0 && (
