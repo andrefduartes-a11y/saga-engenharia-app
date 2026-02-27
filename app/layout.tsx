@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: 'Saga Engenharia',
   description: 'Apoio técnico ao engenheiro de obra no canteiro',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/ico-cinza.png',
+    apple: '/ico-cinza.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
