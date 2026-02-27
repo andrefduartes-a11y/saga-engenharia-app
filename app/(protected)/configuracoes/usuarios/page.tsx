@@ -12,50 +12,51 @@ const PERMISSION_GROUPS = [
     {
         label: '🏗️ Engenharia Operacional',
         items: [
-            { key: 'verConcretagem', label: 'Concretagem' },
-            { key: 'verTerraplanagem', label: 'Terraplanagem' },
-            { key: 'verEquipamentos', label: 'Equipamentos' },
-            { key: 'verCaminhoes', label: 'Caminhões' },
+            { key: 'verConcretagem', editKey: 'editarConcretagem', label: 'Concretagem' },
+            { key: 'verTerraplanagem', editKey: 'editarTerraplanagem', label: 'Terraplanagem' },
+            { key: 'verEquipamentos', editKey: 'editarEquipamentos', label: 'Equipamentos' },
+            { key: 'verCaminhoes', editKey: 'editarCaminhoes', label: 'Caminhões' },
         ],
     },
     {
         label: '📊 Controle e Qualidade',
         items: [
-            { key: 'verRDO', label: 'RDO — Diário de Obras' },
-            { key: 'verInspecoes', label: 'FVS — Inspeções' },
-            { key: 'verIT', label: 'IT — Instruções Técnicas' },
+            { key: 'verRDO', editKey: 'editarRDO', label: 'RDO — Diário de Obras' },
+            { key: 'verInspecoes', editKey: 'editarInspecoes', label: 'FVS — Inspeções' },
+            { key: 'verIT', editKey: null, label: 'IT — Instruções Técnicas' },
         ],
     },
     {
         label: '📁 Documentação',
         items: [
-            { key: 'verProjetos', label: 'Projetos' },
-            { key: 'verDocumentos', label: 'Documentos' },
+            { key: 'verProjetos', editKey: 'editarProjetos', label: 'Projetos' },
+            { key: 'verDocumentos', editKey: 'editarDocumentos', label: 'Documentos' },
         ],
     },
     {
         label: '⚙️ Gestão e Suporte',
         items: [
-            { key: 'verSuprimentos', label: 'Suprimentos' },
-            { key: 'verAssistente', label: 'Assistente IA' },
-            { key: 'verEAD', label: 'EAD / Treinamentos' },
-            { key: 'verFAQ', label: 'FAQ / DRH' },
+            { key: 'verSuprimentos', editKey: 'editarSuprimentos', label: 'Suprimentos' },
+            { key: 'verAssistente', editKey: null, label: 'Assistente IA' },
+            { key: 'verEAD', editKey: null, label: 'EAD / Treinamentos' },
+            { key: 'verFAQ', editKey: null, label: 'FAQ / DRH' },
         ],
     },
     {
         label: '🔐 Administração',
         items: [
-            { key: 'verConfiguracoes', label: 'Configurações do Sistema' },
+            { key: 'verConfiguracoes', editKey: 'editarConfiguracoes', label: 'Configurações' },
         ],
     },
 ]
 
-const ALL_PERM_KEYS = PERMISSION_GROUPS.flatMap(g => g.items.map(i => i.key))
+const ALL_PERM_KEYS = PERMISSION_GROUPS.flatMap(g => g.items.flatMap(i => i.editKey ? [i.key, i.editKey] : [i.key]))
 
 // Permissões padrão por role
+const DIRETOR_FULL = Object.fromEntries(ALL_PERM_KEYS.map(k => [k, true]))
 const DEFAULT_PERMS: Record<string, Record<string, boolean>> = {
-    diretor: Object.fromEntries(ALL_PERM_KEYS.map(k => [k, true])),
-    admin: Object.fromEntries(ALL_PERM_KEYS.map(k => [k, true])),
+    diretor: DIRETOR_FULL,
+    admin: DIRETOR_FULL,
     engenheiro: Object.fromEntries(ALL_PERM_KEYS.map(k => [k, [
         'verConcretagem', 'verTerraplanagem', 'verEquipamentos', 'verCaminhoes',
         'verRDO', 'verInspecoes', 'verIT', 'verProjetos', 'verDocumentos',
@@ -75,7 +76,7 @@ interface Perfil {
 }
 
 const ROLES = [
-    { value: 'diretor', label: 'Diretor', desc: 'Acesso total — vê todas as obras' },
+    { value: 'diretor', label: 'Diretor', desc: 'Acesso total — vê todas as obras (múltiplos permitidos)' },
     { value: 'engenheiro', label: 'Engenheiro', desc: 'Acesso operacional por obras vinculadas' },
 ]
 
@@ -397,8 +398,8 @@ export default function UsuariosPage() {
                                             </div>
                                         </div>
 
-                                        {/* Checkboxes */}
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16, marginBottom: 16 }}>
+                                        {/* Checkboxes com ver + editar */}
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, marginBottom: 16 }}>
                                             {PERMISSION_GROUPS.map(group => (
                                                 <div key={group.label}>
                                                     <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 8, letterSpacing: '0.3px' }}>
@@ -406,25 +407,46 @@ export default function UsuariosPage() {
                                                     </div>
                                                     <div style={{ display: 'grid', gap: 5 }}>
                                                         {group.items.map(item => {
-                                                            const checked = perms[item.key] ?? false
+                                                            const canView = perms[item.key] ?? false
+                                                            const canEdit = item.editKey ? (perms[item.editKey] ?? false) : null
                                                             return (
-                                                                <label key={item.key} style={{
-                                                                    display: 'flex', alignItems: 'center', gap: 10,
-                                                                    padding: '7px 10px', borderRadius: 6, cursor: 'pointer',
-                                                                    background: checked ? 'rgba(127,166,83,0.08)' : 'rgba(255,255,255,0.03)',
-                                                                    border: `1px solid ${checked ? 'rgba(127,166,83,0.25)' : 'var(--border-subtle)'}`,
-                                                                    transition: 'all 0.15s',
+                                                                <div key={item.key} style={{
+                                                                    padding: '7px 10px', borderRadius: 6,
+                                                                    background: canView ? 'rgba(127,166,83,0.06)' : 'rgba(255,255,255,0.03)',
+                                                                    border: `1px solid ${canView ? 'rgba(127,166,83,0.2)' : 'var(--border-subtle)'}`,
                                                                 }}>
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        checked={checked}
-                                                                        onChange={() => togglePerm(p.id, item.key)}
-                                                                        style={{ accentColor: 'var(--green-primary)', width: 14, height: 14, flexShrink: 0, cursor: 'pointer' }}
-                                                                    />
-                                                                    <span style={{ fontSize: 12, color: checked ? 'var(--text-primary)' : 'var(--text-secondary)', fontWeight: checked ? 600 : 400 }}>
-                                                                        {item.label}
-                                                                    </span>
-                                                                </label>
+                                                                    <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 6 }}>{item.label}</div>
+                                                                    <div style={{ display: 'flex', gap: 8 }}>
+                                                                        {/* Ver */}
+                                                                        <label style={{
+                                                                            display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', flex: 1,
+                                                                            padding: '4px 8px', borderRadius: 4,
+                                                                            background: canView ? 'rgba(52,152,219,0.12)' : 'rgba(255,255,255,0.04)',
+                                                                            border: `1px solid ${canView ? 'rgba(52,152,219,0.3)' : 'var(--border-subtle)'}`,
+                                                                        }}>
+                                                                            <input type="checkbox" checked={canView}
+                                                                                onChange={() => togglePerm(p.id, item.key)}
+                                                                                style={{ accentColor: '#3498DB', width: 12, height: 12, cursor: 'pointer' }} />
+                                                                            <span style={{ fontSize: 11, color: canView ? '#3498DB' : 'var(--text-muted)', fontWeight: canView ? 700 : 400 }}>Visualizar</span>
+                                                                        </label>
+                                                                        {/* Editar */}
+                                                                        {item.editKey && (
+                                                                            <label style={{
+                                                                                display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', flex: 1,
+                                                                                padding: '4px 8px', borderRadius: 4,
+                                                                                background: canEdit ? 'rgba(230,126,34,0.12)' : 'rgba(255,255,255,0.04)',
+                                                                                border: `1px solid ${canEdit ? 'rgba(230,126,34,0.3)' : 'var(--border-subtle)'}`,
+                                                                                opacity: canView ? 1 : 0.4,
+                                                                                pointerEvents: canView ? 'auto' : 'none',
+                                                                            }}>
+                                                                                <input type="checkbox" checked={canEdit ?? false}
+                                                                                    onChange={() => item.editKey && togglePerm(p.id, item.editKey)}
+                                                                                    style={{ accentColor: '#E67E22', width: 12, height: 12, cursor: 'pointer' }} />
+                                                                                <span style={{ fontSize: 11, color: canEdit ? '#E67E22' : 'var(--text-muted)', fontWeight: canEdit ? 700 : 400 }}>Editar</span>
+                                                                            </label>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
                                                             )
                                                         })}
                                                     </div>

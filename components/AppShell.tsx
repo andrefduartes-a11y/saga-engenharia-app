@@ -115,46 +115,8 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
                         }}>{title}</div>
                     </div>
 
-                    {/* Center: Obra pill — only for engineers (director sees all obras) */}
-                    {roleFetched && role !== 'diretor' && role !== 'admin' && (
-                        obra ? (
-                            <Link
-                                href="/selecionar-obra"
-                                style={{
-                                    display: 'flex', alignItems: 'center', gap: 5,
-                                    padding: '4px 10px', borderRadius: 20,
-                                    background: 'rgba(82,168,123,0.12)',
-                                    border: '1px solid rgba(82,168,123,0.25)',
-                                    textDecoration: 'none',
-                                    maxWidth: 160, overflow: 'hidden',
-                                }}
-                            >
-                                <MapPin size={11} style={{ color: 'var(--green-primary)', flexShrink: 0 }} />
-                                <span style={{
-                                    fontSize: 11, fontWeight: 600, color: 'var(--green-primary)',
-                                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                                }}>
-                                    {obra.nome}
-                                </span>
-                                <ChevronDown size={10} style={{ color: 'var(--green-primary)', flexShrink: 0 }} />
-                            </Link>
-                        ) : (
-                            <Link
-                                href="/selecionar-obra"
-                                style={{
-                                    display: 'flex', alignItems: 'center', gap: 5,
-                                    padding: '4px 10px', borderRadius: 20,
-                                    background: 'rgba(239,68,68,0.1)',
-                                    border: '1px solid rgba(239,68,68,0.2)',
-                                    textDecoration: 'none',
-                                }}
-                            >
-                                <MapPin size={11} style={{ color: '#EF4444' }} />
-                                <span style={{ fontSize: 11, fontWeight: 600, color: '#EF4444' }}>Selecionar obra</span>
-                                <ChevronRight size={10} style={{ color: '#EF4444' }} />
-                            </Link>
-                        )
-                    )}
+
+
 
                     {/* Right actions */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>

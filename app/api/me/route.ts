@@ -14,7 +14,7 @@ export async function GET() {
         )
         const { data: perfil } = await admin
             .from('perfis')
-            .select('nome, role, active, permissions')
+            .select('nome, role, active, permissions, obras_ids')
             .eq('id', user.id)
             .single()
 
@@ -25,6 +25,7 @@ export async function GET() {
             role: perfil?.role || 'engenheiro',
             active: perfil?.active !== false,
             permissions: perfil?.permissions || {},
+            obras_ids: perfil?.obras_ids || [],
         })
     } catch {
         return NextResponse.json({
