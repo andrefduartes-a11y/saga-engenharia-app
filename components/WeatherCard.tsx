@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CloudRain, Sun, Cloud, CloudDrizzle, Zap, CloudSnow, AlertTriangle } from 'lucide-react'
+import { CloudRain, Sun, Cloud, CloudDrizzle, Zap, CloudSnow, AlertTriangle, CloudOff } from 'lucide-react'
 
 // ─── WMO Weather Code → icon + label ──────────────────────────────────────────
 function getWeatherInfo(code: number): { icon: React.ReactNode; label: string; isRain: boolean } {
@@ -19,9 +19,8 @@ interface AgendamentoBasic { data_agendada: string }
 
 interface WeatherCardProps {
     cidade: string | null | undefined
-    obraNome?: string
     agendamentos?: AgendamentoBasic[]
-    compact?: boolean // for diretor grid view
+    compact?: boolean
 }
 
 interface DayForecast {
@@ -36,79 +35,98 @@ interface WeatherData {
     days: DayForecast[]
 }
 
-export default function WeatherCard({ cidade, obraNome, agendamentos = [], compact = false }: WeatherCardProps) {
+async function fetchWeather(cidade: string): Promise<WeatherData> {
+    // Step 1: Geocode city name → lat/lon
+    const geoRes = await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json`,
+        { cache: 'no-store' }
+    )
+    if (!geoRes.ok) throw new Error(`Geocoding error: ${geoRes.status}`)
+    const geo = await geoRes.json()
+    if (!geo.results?.length) throw new Error(`Cidade "${cidade}" não encontrada`)
+
+    const { latitude, longitude } = geo.results[0]
+
+    // Step 2: Get 5-day forecast
+    const fcRes = await fetch(
+        `https://api.open-meteo.com/v1/forecast` +
+        `?latitude=${latitude}&longitude=${longitude}` +
+        `&daily=weathercode,precipitation_probability_max,temperature_2m_max,temperature_2m_min` +
+        `&timezone=America%2FSao_Paulo&forecast_days=5`,
+        { cache: 'no-store' }
+    )
+    if (!fcRes.ok) throw new Error(`Forecast error: ${fcRes.status}`)
+    const fc = await fcRes.json()
+
+    const days: DayForecast[] = fc.daily.time.map((d: string, i: number) => ({
+        date: d,
+        weathercode: fc.daily.weathercode[i] ?? 0,
+        tempMax: Math.round(fc.daily.temperature_2m_max[i] ?? 0),
+        tempMin: Math.round(fc.daily.temperature_2m_min[i] ?? 0),
+        rainProb: fc.daily.precipitation_probability_max[i] ?? 0,
+    }))
+    return { days }
+}
+
+export default function WeatherCard({ cidade, agendamentos = [], compact = false }: WeatherCardProps) {
     const [weather, setWeather] = useState<WeatherData | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
     useEffect(() => {
-        if (!cidade) { setLoading(false); setError('Cidade não cadastrada'); return }
-        setLoading(true); setError('')
-
-        // Step 1: Geocode city
-        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cidade)}&count=1&language=pt&format=json`)
-            .then(r => r.json())
-            .then(geo => {
-                if (!geo.results?.length) throw new Error('Cidade não encontrada')
-                const { latitude, longitude } = geo.results[0]
-                // Step 2: Fetch 5-day forecast
-                return fetch(
-                    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}` +
-                    `&daily=weathercode,precipitation_probability_max,temperature_2m_max,temperature_2m_min` +
-                    `&timezone=America%2FSao_Paulo&forecast_days=5`
-                )
-            })
-            .then(r => r.json())
-            .then(fc => {
-                const days: DayForecast[] = fc.daily.time.map((d: string, i: number) => ({
-                    date: d,
-                    weathercode: fc.daily.weathercode[i],
-                    tempMax: Math.round(fc.daily.temperature_2m_max[i]),
-                    tempMin: Math.round(fc.daily.temperature_2m_min[i]),
-                    rainProb: fc.daily.precipitation_probability_max[i] ?? 0,
-                }))
-                setWeather({ days })
-                setLoading(false)
-            })
-            .catch(e => { setError('Erro ao buscar clima'); setLoading(false) })
+        if (!cidade?.trim()) {
+            setError('Cidade não configurada')
+            setLoading(false)
+            return
+        }
+        setLoading(true)
+        setError('')
+        fetchWeather(cidade.trim())
+            .then(data => { setWeather(data); setLoading(false) })
+            .catch(err => { setError(err.message || 'Erro ao buscar clima'); setLoading(false) })
     }, [cidade])
 
-    // Check alerts: agendamento days with rain forecast
+    // Rain alerts: scheduled concretagem days that have rain forecast
     const alerts = agendamentos.filter(ag => {
         const day = weather?.days.find(d => d.date === ag.data_agendada)
         return day && (day.rainProb >= 50 || getWeatherInfo(day.weathercode).isRain)
     })
 
-    const fmt = (d: string) => {
-        const dt = new Date(d + 'T12:00:00')
-        return dt.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' })
+    const boxStyle: React.CSSProperties = {
+        background: alerts.length > 0 ? 'rgba(239,68,68,0.04)' : 'rgba(255,255,255,0.025)',
+        borderRadius: 14,
+        border: alerts.length > 0 ? '1px solid rgba(239,68,68,0.3)' : '1px solid var(--border-subtle)',
+        padding: compact ? '12px 14px' : '16px 18px',
     }
 
-    // Loading state
+    // ── Loading ──
     if (loading) {
         return (
-            <div style={{
-                background: 'rgba(255,255,255,0.03)', borderRadius: 14, border: '1px solid var(--border-subtle)',
-                padding: compact ? '14px' : '18px', minWidth: compact ? 180 : 'auto',
-            }}>
-                {obraNome && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 8 }}>{obraNome}</div>}
-                <div style={{ display: 'flex', gap: 8 }}>
-                    {[1, 2, 3].map(i => <div key={i} style={{ flex: 1, height: 60, borderRadius: 8, background: 'rgba(255,255,255,0.05)', animation: 'pulse 1.5s infinite' }} />)}
+            <div style={boxStyle}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 10 }}>
+                    📍 {cidade}
+                </div>
+                <div style={{ display: 'flex', gap: 6 }}>
+                    {[1, 2, 3, 4, 5].slice(0, compact ? 3 : 5).map(i => (
+                        <div key={i} style={{ flex: 1, height: 72, borderRadius: 8, background: 'rgba(255,255,255,0.05)' }} />
+                    ))}
                 </div>
             </div>
         )
     }
 
-    // Error: no city
+    // ── Error / no city ──
     if (error || !weather) {
         return (
-            <div style={{
-                background: 'rgba(255,255,255,0.02)', borderRadius: 14, border: '1px solid var(--border-subtle)',
-                padding: compact ? '12px 14px' : '16px 18px', minWidth: compact ? 160 : 'auto',
-            }}>
-                {obraNome && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 6 }}>{obraNome}</div>}
-                <div style={{ fontSize: 11, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <Cloud size={13} /> {error || 'Cidade não configurada'}
+            <div style={{ ...boxStyle, border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 6 }}>
+                    📍 {cidade || 'Sem cidade'}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-muted)' }}>
+                    <CloudOff size={13} />
+                    {error === 'Cidade não configurada'
+                        ? 'Cadastre a cidade da obra para ver o clima'
+                        : `Não foi possível carregar o clima — ${error}`}
                 </div>
             </div>
         )
@@ -117,17 +135,11 @@ export default function WeatherCard({ cidade, obraNome, agendamentos = [], compa
     const daysToShow = compact ? 3 : 5
 
     return (
-        <div style={{
-            background: 'rgba(255,255,255,0.025)', borderRadius: 14,
-            border: alerts.length > 0 ? '1px solid rgba(239,68,68,0.35)' : '1px solid var(--border-subtle)',
-            padding: compact ? '12px 14px' : '16px 18px',
-            minWidth: compact ? 180 : 'auto',
-        }}>
+        <div style={boxStyle}>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                <div>
-                    {obraNome && <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 1 }}>{obraNome}</div>}
-                    {cidade && <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>📍 {cidade}</div>}
+                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)' }}>
+                    📍 {cidade}
                 </div>
                 {alerts.length > 0 && (
                     <div style={{
@@ -153,7 +165,7 @@ export default function WeatherCard({ cidade, obraNome, agendamentos = [], compa
             )}
 
             {/* Days row */}
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 5 }}>
                 {weather.days.slice(0, daysToShow).map(day => {
                     const info = getWeatherInfo(day.weathercode)
                     const isScheduled = agendamentos.some(a => a.data_agendada === day.date)
@@ -175,7 +187,7 @@ export default function WeatherCard({ cidade, obraNome, agendamentos = [], compa
                                     : '1px solid transparent',
                             position: 'relative',
                         }}>
-                            {/* Scheduled concretagem indicator */}
+                            {/* Concretagem indicator dot */}
                             {isScheduled && (
                                 <div style={{
                                     position: 'absolute', top: 4, right: 4,
@@ -183,15 +195,15 @@ export default function WeatherCard({ cidade, obraNome, agendamentos = [], compa
                                     background: hasAlert ? '#EF4444' : '#7FA653',
                                 }} title="Concretagem agendada" />
                             )}
-                            <div style={{ fontSize: 9, color: 'var(--text-muted)', textTransform: 'capitalize' }}>
-                                {new Date(day.date + 'T12:00').toLocaleDateString('pt-BR', { weekday: 'short' })}
+                            <div style={{ fontSize: 9, color: 'var(--text-muted)', textTransform: 'capitalize', textAlign: 'center' }}>
+                                {new Date(day.date + 'T12:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit' })}
                             </div>
                             {info.icon}
-                            <div style={{ fontSize: 9, fontWeight: 700, color: 'var(--text-primary)' }}>
-                                {day.tempMax}° / {day.tempMin}°
+                            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-primary)', textAlign: 'center' }}>
+                                {day.tempMax}°/{day.tempMin}°
                             </div>
                             <div style={{
-                                fontSize: 9, fontWeight: 600,
+                                fontSize: 9, fontWeight: 600, textAlign: 'center',
                                 color: day.rainProb >= 60 ? '#60A5FA' : day.rainProb >= 40 ? '#93C5FD' : 'var(--text-muted)',
                             }}>
                                 💧{day.rainProb}%

@@ -51,31 +51,63 @@ const SECTIONS = [
 interface Obra { id: string; nome: string; endereco?: string; cidade?: string }
 interface Agendamento { id: string; obra_id: string; data_agendada: string; elemento?: string; volume_estimado?: number; fck_previsto?: number }
 
-// ─── Seção de previsão do tempo ───────────────────────────────────────────────
+// ─── Seção de previsão do tempo (agrupada por cidade única) ──────────────────
 function WeatherSection({ obras, agendamentos }: { obras: Obra[]; agendamentos: Agendamento[] }) {
-    if (obras.length === 0) return null
+    // Build a map: cidade → array of obra IDs (only obras that have a cidade)
+    const cidadeMap = new Map<string, string[]>()
+    obras.forEach(o => {
+        if (!o.cidade?.trim()) return
+        const key = o.cidade.trim().toLowerCase()
+        if (!cidadeMap.has(key)) cidadeMap.set(key, [])
+        cidadeMap.get(key)!.push(o.id)
+    })
+
+    // Unique cities with their canonical name (from first obra) and merged agendamentos
+    const uniqueCidades = Array.from(cidadeMap.entries()).map(([, obraIds]) => {
+        const firstObra = obras.find(o => obraIds.includes(o.id))!
+        const cidadeAgendamentos = agendamentos.filter(a => obraIds.includes(a.obra_id))
+        return { cidade: firstObra.cidade!, agendamentos: cidadeAgendamentos }
+    })
+
+    const obrasWithoutCity = obras.filter(o => !o.cidade?.trim())
+
+    if (uniqueCidades.length === 0 && obrasWithoutCity.length === 0) return null
+
     return (
         <div style={{ marginBottom: 28 }}>
             <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>
                 🌤️ PREVISÃO DO TEMPO — PRÓXIMOS 5 DIAS
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 10 }}>
-                {obras.map(obra => {
-                    const obraAgs = agendamentos.filter(a => a.obra_id === obra.id)
-                    return (
-                        <WeatherCard
-                            key={obra.id}
-                            cidade={obra.cidade}
-                            obraNome={obra.nome}
-                            agendamentos={obraAgs}
-                            compact={obras.length > 1}
-                        />
-                    )
-                })}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
+                {uniqueCidades.map(({ cidade, agendamentos: ags }) => (
+                    <WeatherCard
+                        key={cidade}
+                        cidade={cidade}
+                        agendamentos={ags}
+                        compact={uniqueCidades.length > 1}
+                    />
+                ))}
+                {/* Obras sem cidade cadastrada */}
+                {obrasWithoutCity.length > 0 && (
+                    <div style={{
+                        padding: '12px 16px', borderRadius: 14,
+                        background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.08)',
+                        fontSize: 11, color: 'var(--text-muted)',
+                    }}>
+                        <span style={{ fontWeight: 600 }}>
+                            {obrasWithoutCity.length} obra{obrasWithoutCity.length > 1 ? 's' : ''} sem cidade cadastrada:
+                        </span>
+                        {' '}{obrasWithoutCity.map(o => o.nome).join(', ')}
+                        <div style={{ marginTop: 4, color: 'var(--text-muted)', fontSize: 10 }}>
+                            Edite a obra e adicione a cidade para ver o clima
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
 }
+
 
 // ─── Seção de próximas concretagens ──────────────────────────────────────────
 function ProximasConcretagens({ agendamentos, obrasMap }: { agendamentos: Agendamento[]; obrasMap: Map<string, Obra> }) {
