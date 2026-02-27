@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { useObra } from '@/lib/obra-context'
 import Link from 'next/link'
 import {
     ArrowLeft, Building2, ClipboardList, HardHat,
@@ -25,6 +26,8 @@ interface Obra {
 export default function ObraDetailPage({ params }: { params: { id: string } }) {
     const router = useRouter()
     const supabase = createClient()
+    const { role } = useObra()
+    const canEdit = role === 'diretor' || role === 'admin'
     const [obra, setObra] = useState<Obra | null>(null)
     const [loading, setLoading] = useState(true)
     const [editing, setEditing] = useState(false)
@@ -34,6 +37,7 @@ export default function ObraDetailPage({ params }: { params: { id: string } }) {
     const [form, setForm] = useState<Partial<Obra>>({})
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
+
 
     useEffect(() => {
         supabase.from('obras').select('*').eq('id', params.id).single()
@@ -101,27 +105,29 @@ export default function ObraDetailPage({ params }: { params: { id: string } }) {
                         {obra.cidade && <span className="text-xs" style={{ color: 'var(--text-muted)' }}>📍 {obra.cidade}</span>}
                     </div>
                 </div>
-                {/* Action buttons */}
-                <div className="flex gap-2 flex-shrink-0">
-                    <button onClick={() => { setEditing(v => !v); setError(''); setForm(obra) }}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8,
-                            background: editing ? 'rgba(255,255,255,0.06)' : 'rgba(127,166,83,0.12)',
-                            border: `1px solid ${editing ? 'var(--border-subtle)' : 'rgba(127,166,83,0.3)'}`,
-                            color: editing ? 'var(--text-muted)' : 'var(--green-primary)',
-                            fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                        }}>
-                        {editing ? <><X size={14} /> Cancelar</> : <><Pencil size={14} /> Editar</>}
-                    </button>
-                    <button onClick={() => setConfirmDelete(true)}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8,
-                            background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)',
-                            color: '#EF4444', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                        }}>
-                        <Trash2 size={14} />
-                    </button>
-                </div>
+                {/* Action buttons — directors only */}
+                {canEdit && (
+                    <div className="flex gap-2 flex-shrink-0">
+                        <button onClick={() => { setEditing(v => !v); setError(''); setForm(obra) }}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8,
+                                background: editing ? 'rgba(255,255,255,0.06)' : 'rgba(127,166,83,0.12)',
+                                border: `1px solid ${editing ? 'var(--border-subtle)' : 'rgba(127,166,83,0.3)'}`,
+                                color: editing ? 'var(--text-muted)' : 'var(--green-primary)',
+                                fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                            }}>
+                            {editing ? <><X size={14} /> Cancelar</> : <><Pencil size={14} /> Editar</>}
+                        </button>
+                        <button onClick={() => setConfirmDelete(true)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8,
+                                background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)',
+                                color: '#EF4444', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                            }}>
+                            <Trash2 size={14} />
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Alerts */}
