@@ -23,6 +23,9 @@ export default function NovaObraPage() {
             nome: data.nome,
             spe_id: data.spe_id || null,
             status: data.status,
+            cidade: data.cidade || null,
+            endereco: data.endereco || null,
+            responsavel_tecnico: data.responsavel_tecnico || null,
             data_inicio: data.data_inicio || null,
             data_previsao_fim: data.data_previsao_fim || null,
         })
@@ -51,6 +54,20 @@ export default function NovaObraPage() {
                     <div>
                         <label className="label">Nome da Obra *</label>
                         <input name="nome" type="text" className="input" placeholder="Ex: Residencial Bela Vista" required />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div>
+                            <label className="label">Cidade *</label>
+                            <input name="cidade" type="text" className="input" placeholder="Ex: Belo Horizonte" required />
+                        </div>
+                        <div>
+                            <label className="label">Bairro / Endereço</label>
+                            <input name="endereco" type="text" className="input" placeholder="Ex: Savassi" />
+                        </div>
+                    </div>
+                    <div>
+                        <label className="label">Responsável Técnico</label>
+                        <input name="responsavel_tecnico" type="text" className="input" placeholder="Ex: João Silva - CREA 12345" />
                     </div>
                     <div>
                         <label className="label">SPE / ID</label>
