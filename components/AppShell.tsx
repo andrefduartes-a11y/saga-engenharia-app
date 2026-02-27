@@ -3,8 +3,8 @@
 // Sidebar (fixed left) + Header (sticky top) + Content + Mobile Bottom Nav
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { LogOut, MapPin, ChevronDown, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { LogOut, MapPin, ChevronDown, ChevronRight, Bell, Settings, X } from 'lucide-react';
 import Link from 'next/link';
 import Sidebar, { SidebarToggle } from './Sidebar';
 import { useObra } from '@/lib/obra-context';
@@ -33,6 +33,10 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
 
     const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [role, setRole] = useState('');
+    const [roleFetched, setRoleFetched] = useState(false);
+    const [showBell, setShowBell] = useState(false);
+    const bellRef = useRef<HTMLDivElement>(null);
 
     // Load collapse preference from localStorage
     useEffect(() => {
@@ -40,6 +44,23 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
             const saved = localStorage.getItem('saga_eng_sidebar_collapsed');
             if (saved === 'true') setSidebarCollapsed(true);
         } catch { }
+    }, []);
+
+    // Fetch user role
+    useEffect(() => {
+        fetch('/api/me')
+            .then(r => r.ok ? r.json() : null)
+            .then(d => { if (d?.role) setRole(d.role); setRoleFetched(true); })
+            .catch(() => setRoleFetched(true));
+    }, []);
+
+    // Close bell on outside click
+    useEffect(() => {
+        function onOut(e: MouseEvent) {
+            if (bellRef.current && !bellRef.current.contains(e.target as Node)) setShowBell(false);
+        }
+        document.addEventListener('mousedown', onOut);
+        return () => document.removeEventListener('mousedown', onOut);
     }, []);
 
     const toggleCollapse = () => {
@@ -135,17 +156,72 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
                     )}
 
                     {/* Right actions */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        {/* User initials */}
-                        <div style={{
-                            width: 30, height: 30, borderRadius: '50%',
-                            background: 'var(--saga-gray)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: 11, fontWeight: 700, color: '#fff',
-                            letterSpacing: '0.05em', flexShrink: 0,
-                        }}>
-                            {initials}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+
+                        {/* Bell */}
+                        <div ref={bellRef} style={{ position: 'relative' }}>
+                            <button onClick={() => setShowBell(v => !v)} style={{
+                                background: 'transparent', border: 'none', cursor: 'pointer',
+                                color: 'var(--text-secondary)', padding: 6, borderRadius: 8,
+                                display: 'flex', alignItems: 'center',
+                            }} title="Notificações">
+                                <Bell size={17} />
+                            </button>
+                            {showBell && (
+                                <div style={{
+                                    position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+                                    width: 280, background: 'rgba(22,26,24,0.99)',
+                                    backdropFilter: 'blur(16px)',
+                                    border: '1px solid var(--border-subtle)', borderRadius: 10,
+                                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)', zIndex: 200,
+                                }}>
+                                    <div style={{
+                                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                                        padding: '12px 16px', borderBottom: '1px solid var(--border-subtle)',
+                                    }}>
+                                        <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>Notificações</span>
+                                        <button onClick={() => setShowBell(false)} style={{
+                                            background: 'transparent', border: 'none', cursor: 'pointer',
+                                            color: 'var(--text-muted)', padding: 2,
+                                        }}><X size={14} /></button>
+                                    </div>
+                                    <div style={{ padding: '20px 16px', textAlign: 'center', color: 'var(--text-muted)', fontSize: 12 }}>
+                                        Nenhuma notificação no momento.
+                                    </div>
+                                </div>
+                            )}
                         </div>
+
+                        {/* Settings gear — admin only */}
+                        {roleFetched && role === 'admin' && (
+                            <button onClick={() => router.push('/configuracoes')} style={{
+                                background: 'transparent', border: 'none', cursor: 'pointer',
+                                color: 'var(--text-secondary)', padding: 6, borderRadius: 8,
+                                display: 'flex', alignItems: 'center',
+                            }} title="Configurações">
+                                <Settings size={16} />
+                            </button>
+                        )}
+
+                        {/* Role chip */}
+                        {roleFetched && role && (() => {
+                            const colors: Record<string, { bg: string; color: string; border: string }> = {
+                                admin: { bg: 'rgba(127,166,83,0.15)', color: 'var(--green-primary)', border: 'rgba(127,166,83,0.3)' },
+                                engenheiro: { bg: 'rgba(91,155,213,0.15)', color: '#5B9BD5', border: 'rgba(91,155,213,0.3)' },
+                                visualizador: { bg: 'rgba(156,163,175,0.12)', color: '#9CA3AF', border: 'rgba(156,163,175,0.25)' },
+                            };
+                            const labels: Record<string, string> = { admin: 'ADMIN', engenheiro: 'ENGENHEIRO', visualizador: 'VIEWER' };
+                            const c = colors[role] || colors.engenheiro;
+                            return (
+                                <span style={{
+                                    padding: '3px 9px', borderRadius: 4, fontSize: 10, fontWeight: 700,
+                                    background: c.bg, color: c.color, border: `1px solid ${c.border}`,
+                                    letterSpacing: '0.5px', textTransform: 'uppercase', whiteSpace: 'nowrap',
+                                }}>
+                                    {labels[role] || role}
+                                </span>
+                            );
+                        })()}
 
                         {/* Logout */}
                         <button onClick={handleLogout} style={{
@@ -157,6 +233,7 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
                         </button>
                     </div>
                 </header>
+
 
                 {/* ── Page Content ── */}
                 <main className="cockpit-content animate-fade-up">
