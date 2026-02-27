@@ -394,27 +394,36 @@ function DiretorDashboard() {
 
 // ─── Dashboard do Engenheiro ──────────────────────────────────────────────────
 function EngenheiroDashboard() {
-    const { obra } = useObra()
+    const { obra: obraCtx } = useObra()
+    const [obraFull, setObraFull] = useState<Obra | null>(null)
     const [agendamentos, setAgendamentos] = useState<Agendamento[]>([])
+    const [loadingObra, setLoadingObra] = useState(true)
     const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
 
     useEffect(() => {
-        if (!obra) return
-        const fetchAgs = async () => {
+        if (!obraCtx?.id) { setLoadingObra(false); return }
+        const load = async () => {
             const { createClient } = await import('@/lib/supabase/client')
             const sb = createClient()
+            // Fetch full obra with all fields
+            const { data: o } = await sb.from('obras')
+                .select('id, nome, cidade, endereco, status, data_inicio, data_previsao_fim')
+                .eq('id', obraCtx.id).single()
+            if (o) setObraFull(o as Obra)
+            // Fetch upcoming scheduled concretagens
             const todayStr = new Date().toISOString().split('T')[0]
-            const { data } = await sb.from('concretagens_agendadas')
+            const { data: ags } = await sb.from('concretagens_agendadas')
                 .select('id, obra_id, data_agendada, elemento, volume_estimado, fck_previsto')
-                .eq('obra_id', obra.id)
+                .eq('obra_id', obraCtx.id)
                 .gte('data_agendada', todayStr)
                 .order('data_agendada', { ascending: true })
-            setAgendamentos(data || [])
+            setAgendamentos(ags || [])
+            setLoadingObra(false)
         }
-        fetchAgs()
-    }, [obra])
+        load()
+    }, [obraCtx?.id])
 
-    if (!obra) {
+    if (!obraCtx) {
         return (
             <div style={{ maxWidth: 600 }}>
                 <div className="card" style={{ padding: '28px 24px', borderRadius: 16, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.06)', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
@@ -431,78 +440,151 @@ function EngenheiroDashboard() {
         )
     }
 
-    const obrasMap = new Map([[obra.id, obra as any]])
+    const obra = obraFull
+    const obrasMap = new Map(obra ? [[obra.id, obra]] : [])
+
+    // ── Progress calculations ──
+    const todayMs = new Date().setHours(0, 0, 0, 0)
+    const inicioMs = obra?.data_inicio ? new Date(obra.data_inicio + 'T00:00:00').getTime() : null
+    const fimMs = obra?.data_previsao_fim ? new Date(obra.data_previsao_fim + 'T00:00:00').getTime() : null
+    const decorridos = inicioMs ? Math.max(0, Math.round((todayMs - inicioMs) / 86400000)) : null
+    const faltantes = fimMs ? Math.max(0, Math.round((fimMs - todayMs) / 86400000)) : null
+    const totalDias = (inicioMs && fimMs) ? Math.round((fimMs - inicioMs) / 86400000) : null
+    const progresso = (totalDias && decorridos !== null) ? Math.min(100, Math.round((decorridos / totalDias) * 100)) : null
 
     return (
         <div style={{ maxWidth: 800 }}>
-            {/* Obra header */}
-            <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 4 }}>{today}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                    <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(127,166,83,0.15)', border: '1px solid rgba(127,166,83,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Building2 size={20} style={{ color: 'var(--green-primary)' }} />
+            {/* Header */}
+            <div style={{ marginBottom: 24 }}>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'capitalize', letterSpacing: '0.8px', marginBottom: 4 }}>{today}</div>
+                <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Raleway', sans-serif" }}>
+                    {obraCtx.nome}
+                </h1>
+                {obra?.cidade && (
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4, marginTop: 3 }}>
+                        <MapPin size={11} /> {obra.cidade}
                     </div>
-                    <div>
-                        <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Raleway', sans-serif" }}>{obra.nome}</h1>
-                        {(obra as any).cidade && <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4 }}><MapPin size={10} />{(obra as any).cidade}</div>}
-                    </div>
+                )}
+            </div>
+
+            {loadingObra ? (
+                <div style={{ display: 'grid', gap: 10 }}>
+                    {[1, 2, 3].map(i => <div key={i} style={{ height: 80, borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)' }} />)}
                 </div>
-            </div>
-
-            {/* ── Weather for this obra ── */}
-            <div style={{ marginBottom: 20 }}>
-                <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 10 }}>
-                    🌤️ PREVISÃO DO TEMPO — 5 DIAS
-                </h2>
-                <WeatherCard
-                    cidade={(obra as any).cidade}
-                    agendamentos={agendamentos}
-                />
-            </div>
-
-            {/* ── RDO reminder ── */}
-            <div className="card" style={{ padding: '14px 18px', borderRadius: 14, marginBottom: 16, border: '1px solid rgba(230,126,34,0.3)', background: 'rgba(230,126,34,0.06)', display: 'flex', alignItems: 'center', gap: 14 }}>
-                <ClipboardList size={20} style={{ color: '#E67E22', flexShrink: 0 }} />
-                <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>RDO de hoje</div>
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Registre o Relatório Diário de Obra</div>
-                </div>
-                <Link href="/rdo/novo" style={{ padding: '6px 14px', borderRadius: 8, background: '#E67E22', color: '#fff', textDecoration: 'none', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap' }}>
-                    Registrar →
-                </Link>
-            </div>
-
-            {/* ── Próximas Concretagens ── */}
-            <ProximasConcretagens agendamentos={agendamentos} obrasMap={obrasMap} />
-
-            {/* ── Module cards ── */}
-            <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>MÓDULOS</h2>
-            {SECTIONS.map(section => (
-                <div key={section.title} style={{ marginBottom: 16 }}>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8, fontWeight: 600 }}>{section.title}</div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 7 }}>
-                        {section.modules.map(mod => {
-                            const Icon = mod.icon
-                            return (
-                                <Link key={mod.href} href={mod.href} style={{ textDecoration: 'none' }}>
-                                    <div className="card" style={{ padding: '11px 12px', borderRadius: 12, cursor: 'pointer', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', gap: 10, transition: 'all 0.15s' }}
-                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = mod.color + '55'; (e.currentTarget as HTMLElement).style.background = mod.color + '0a' }}
-                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-subtle)'; (e.currentTarget as HTMLElement).style.background = '' }}
-                                    >
-                                        <div style={{ width: 30, height: 30, borderRadius: 8, background: mod.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                            <Icon size={14} style={{ color: mod.color }} />
+            ) : (
+                <>
+                    {/* ── Obra Card with progress ── */}
+                    {obra && (
+                        <div style={{ marginBottom: 20 }}>
+                            <Link href={`/obras/${obra.id}`} style={{ textDecoration: 'none' }}>
+                                <div style={{
+                                    padding: '16px 18px', borderRadius: 14, cursor: 'pointer',
+                                    background: 'rgba(255,255,255,0.025)',
+                                    border: '1px solid rgba(127,166,83,0.2)',
+                                    transition: 'all 0.2s',
+                                }}
+                                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(127,166,83,0.06)' }}
+                                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.025)' }}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: progresso !== null ? 10 : 0 }}>
+                                        <div>
+                                            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>{obra.nome}</div>
+                                            {obra.cidade && <div style={{ fontSize: 11, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4 }}><MapPin size={10} />{obra.cidade}</div>}
                                         </div>
-                                        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)' }}>{mod.label}</div>
+                                        <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20, background: 'rgba(127,166,83,0.15)', color: '#7FA653', border: '1px solid rgba(127,166,83,0.3)' }}>
+                                            Em andamento
+                                        </span>
                                     </div>
-                                </Link>
-                            )
-                        })}
+                                    {progresso !== null && (
+                                        <div style={{ marginBottom: 10 }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--text-muted)', marginBottom: 4 }}>
+                                                <span>Progresso</span>
+                                                <span style={{ fontWeight: 700, color: progresso >= 90 ? '#EF4444' : 'var(--text-secondary)' }}>{progresso}%</span>
+                                            </div>
+                                            <div style={{ height: 5, borderRadius: 3, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+                                                <div style={{ height: '100%', borderRadius: 3, background: progresso >= 90 ? '#EF4444' : progresso >= 70 ? '#D4A843' : '#7FA653', width: `${progresso}%`, transition: 'width 0.5s ease' }} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    {(decorridos !== null || faltantes !== null) && (
+                                        <div style={{ display: 'flex', gap: 10 }}>
+                                            {decorridos !== null && (
+                                                <div style={{ flex: 1, padding: '6px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', textAlign: 'center' }}>
+                                                    <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text-primary)' }}>{decorridos}</div>
+                                                    <div style={{ fontSize: 9, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.3px' }}>dias decorridos</div>
+                                                </div>
+                                            )}
+                                            {faltantes !== null && (
+                                                <div style={{ flex: 1, padding: '6px 10px', borderRadius: 8, background: faltantes <= 30 ? 'rgba(239,68,68,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${faltantes <= 30 ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.06)'}`, textAlign: 'center' }}>
+                                                    <div style={{ fontSize: 16, fontWeight: 800, color: faltantes <= 30 ? '#EF4444' : 'var(--text-primary)' }}>{faltantes}</div>
+                                                    <div style={{ fontSize: 9, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.3px' }}>dias restantes</div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </Link>
+                        </div>
+                    )}
+
+                    {/* ── Weather for this obra ── */}
+                    <div style={{ marginBottom: 20 }}>
+                        <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 10 }}>
+                            🌤️ PREVISÃO DO TEMPO — 5 DIAS
+                        </h2>
+                        <WeatherCard cidade={obra?.cidade} agendamentos={agendamentos} />
                     </div>
-                </div>
-            ))}
+
+                    {/* ── RDO reminder ── */}
+                    <div className="card" style={{ padding: '14px 18px', borderRadius: 14, marginBottom: 16, border: '1px solid rgba(230,126,34,0.3)', background: 'rgba(230,126,34,0.06)', display: 'flex', alignItems: 'center', gap: 14 }}>
+                        <ClipboardList size={20} style={{ color: '#E67E22', flexShrink: 0 }} />
+                        <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>RDO de hoje</div>
+                            <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Registre o Relatório Diário de Obra</div>
+                        </div>
+                        <Link href="/rdo/novo" style={{ padding: '6px 14px', borderRadius: 8, background: '#E67E22', color: '#fff', textDecoration: 'none', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap' }}>
+                            Registrar →
+                        </Link>
+                    </div>
+
+                    {/* ── Próximas Concretagens ── */}
+                    <ProximasConcretagens agendamentos={agendamentos} obrasMap={obrasMap} />
+
+                    {/* ── Module cards ── */}
+                    <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>MÓDULOS</h2>
+                    {SECTIONS.map(section => (
+                        <div key={section.title} style={{ marginBottom: 16 }}>
+                            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8, fontWeight: 600 }}>{section.title}</div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 7 }}>
+                                {section.modules.map(mod => {
+                                    const Icon = mod.icon
+                                    return (
+                                        <Link key={mod.href} href={mod.href} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                                            <div className="card" style={{ padding: '11px 12px', borderRadius: 12, cursor: 'pointer', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'flex-start', gap: 10, transition: 'all 0.15s', minHeight: 62, height: '100%', boxSizing: 'border-box' }}
+                                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = mod.color + '55'; (e.currentTarget as HTMLElement).style.background = mod.color + '0a' }}
+                                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-subtle)'; (e.currentTarget as HTMLElement).style.background = '' }}
+                                            >
+                                                <div style={{ width: 30, height: 30, borderRadius: 8, background: mod.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                    <Icon size={14} style={{ color: mod.color }} />
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>{mod.label}</div>
+                                                    <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{mod.desc}</div>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    ))}
+                </>
+            )}
         </div>
     )
 }
+
+
 
 // ─── Main: detecta role e renderiza ──────────────────────────────────────────
 export default function DashboardPage() {
