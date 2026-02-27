@@ -23,9 +23,7 @@ export default async function RdoListPage() {
                 <div className="card text-center py-12">
                     <ClipboardList size={48} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
                     <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Nenhum RDO lançado</p>
-                    <Link href="/rdo/novo" className="btn-primary mt-5 inline-flex">
-                        <Plus size={16} /> Novo RDO
-                    </Link>
+                    <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Use o botão acima para registrar o primeiro RDO</p>
                 </div>
             ) : (
                 <div className="space-y-3">

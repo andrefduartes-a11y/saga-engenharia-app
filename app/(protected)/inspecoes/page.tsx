@@ -74,8 +74,8 @@ export default function FVSPage() {
             ) : itens.length === 0 ? (
                 <div className="card text-center py-12">
                     <CheckSquare size={48} className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
-                    <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Nenhuma FVS</p>
-                    <Link href="/inspecoes/nova" className="btn-primary mt-5 inline-flex"><Plus size={16} /> Nova FVS</Link>
+                    <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>Nenhuma FVS registrada</p>
+                    <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Use o botão acima para registrar a primeira inspeção</p>
                 </div>
             ) : (
                 <div className="space-y-2">
