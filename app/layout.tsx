@@ -28,29 +28,20 @@ export const viewport: Viewport = {
   themeColor: '#1C2B1A',
 }
 
+// Script anti-flash como string separada (necessário para não escapar caracteres)
+const themeScript = `(function(){try{var s=localStorage.getItem('saga-theme');var p=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',s||p);}catch(e){}})();`
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        {/* Script anti-flash: aplica o tema antes da renderização */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('saga-theme');
-                  var preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-                  var theme = stored || preferred;
-                  document.documentElement.setAttribute('data-theme', theme);
-                } catch(e) {}
-              })();
-            `,
-          }}
-        />
+        {/* Script anti-flash: deve rodar antes de qualquer renderização */}
+        {/* eslint-disable-next-line @next/next/no-before-interactive-script-outside-document */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={inter.className}>
         <ThemeProvider>
