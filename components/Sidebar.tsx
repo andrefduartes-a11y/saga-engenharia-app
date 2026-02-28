@@ -60,7 +60,7 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
     const pathname = usePathname();
     const { theme } = useTheme();
     const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-        'Engenharia': true, 'Controle & Qualidade': true, 'Documentação': true, 'Suporte': false,
+        'Engenharia': true, 'Controle & Qualidade': true, 'Documentação': true, 'Suporte': true,
     });
 
     const toggle = (label: string) => setOpenGroups(p => ({ ...p, [label]: !p[label] }));
