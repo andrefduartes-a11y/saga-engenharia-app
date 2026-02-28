@@ -2,34 +2,46 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useObra } from '@/lib/obra-context'
-import { ArrowLeft, ChevronDown, Upload, Loader2, ClipboardList } from 'lucide-react'
+import { ArrowLeft, ChevronDown, Upload, Loader2, ClipboardList, Palette } from 'lucide-react'
 import Link from 'next/link'
 
 const CORES = ['#4A90D9', '#7FA653', '#E85D75', '#D4A843', '#9B59B6', '#E67E22', '#1ABC9C', '#E74C3C', '#3498DB', '#525F6B']
 
 export default function NovaRastreabilidadePage() {
     const router = useRouter()
+    const searchParams = useSearchParams()
     const { obra: obraCtx, role } = useObra()
     const isDirector = role === 'diretor' || role === 'admin'
     const supabase = createClient()
     const fileRef = useRef<HTMLInputElement>(null)
+    const colorInputRef = useRef<HTMLInputElement>(null)
+
+    // Query params vindos do agendamento
+    const agendamento_id = searchParams.get('agendamento_id') || null
+    const paramObraId = searchParams.get('obra_id') || null
+    const paramData = searchParams.get('data') || null
+    const fromAgendamento = !!agendamento_id
 
     const [allObras, setAllObras] = useState<{ id: string; nome: string }[]>([])
-    const [selectedObraId, setSelectedObraId] = useState('')
-    const obra = isDirector ? (allObras.find(o => o.id === selectedObraId) || null) : obraCtx
-    const obraId = obra?.id
+    const [selectedObraId, setSelectedObraId] = useState(paramObraId || '')
+    const [obranome, setObranom] = useState('')
+    const obra = isDirector
+        ? (allObras.find(o => o.id === selectedObraId) || null)
+        : obraCtx
+    const obraId = fromAgendamento ? paramObraId : obra?.id
 
     const today = new Date().toISOString().split('T')[0]
     const [form, setForm] = useState({
         identificacao_pecas: '',
         area_pavto: '',
-        data: today,
+        data: paramData || today,
         quantidade_m3: '',
         fck_projeto: '',
         usinado: true,
         nota_transporte: '',
+        placa_caminhao: '',
         horario_chegada: '',
         horario_inicio: '',
         horario_final: '',
@@ -50,10 +62,14 @@ export default function NovaRastreabilidadePage() {
     const [error, setError] = useState('')
 
     useEffect(() => {
-        if (!isDirector) return
-        supabase.from('obras').select('id, nome').order('nome')
-            .then(({ data }) => setAllObras(data || []))
-    }, [isDirector])
+        if (fromAgendamento && paramObraId) {
+            supabase.from('obras').select('nome').eq('id', paramObraId).single()
+                .then(({ data }) => { if (data) setObranom(data.nome) })
+        } else if (!fromAgendamento && isDirector) {
+            supabase.from('obras').select('id, nome').order('nome')
+                .then(({ data }) => setAllObras(data || []))
+        }
+    }, [isDirector, fromAgendamento, paramObraId])
 
     const set = (k: string, v: any) => setForm(p => ({ ...p, [k]: v }))
     const n = (v: string) => v !== '' ? parseFloat(v) : null
@@ -65,7 +81,6 @@ export default function NovaRastreabilidadePage() {
         setSaving(true)
         setError('')
 
-        // Upload relatório da usina se houver
         let relatorio_url: string | null = null
         let relatorio_nome: string | null = null
         if (relatorioFile) {
@@ -82,6 +97,7 @@ export default function NovaRastreabilidadePage() {
 
         const { error: dbErr } = await supabase.from('rastreabilidade_concreto').insert({
             obra_id: obraId,
+            agendamento_id: agendamento_id,
             identificacao_pecas: form.identificacao_pecas,
             area_pavto: form.area_pavto || null,
             data: form.data,
@@ -89,6 +105,7 @@ export default function NovaRastreabilidadePage() {
             fck_projeto: form.fck_projeto ? parseInt(form.fck_projeto) : null,
             usinado: form.usinado,
             nota_transporte: form.nota_transporte || null,
+            placa_caminhao: form.placa_caminhao || null,
             horario_chegada: form.horario_chegada || null,
             horario_inicio: form.horario_inicio || null,
             horario_final: form.horario_final || null,
@@ -107,9 +124,15 @@ export default function NovaRastreabilidadePage() {
         })
 
         if (dbErr) { setError(`Erro: ${dbErr.message}`); setSaving(false); return }
-        router.push('/concreto')
+
+        if (fromAgendamento) {
+            router.push(`/concreto/agendamento/${agendamento_id}`)
+        } else {
+            router.push('/concreto')
+        }
     }
 
+    const backHref = fromAgendamento ? `/concreto/agendamento/${agendamento_id}` : '/concreto'
     const inputStyle = { width: '100%', boxSizing: 'border-box' as const }
 
     return (
@@ -117,16 +140,18 @@ export default function NovaRastreabilidadePage() {
 
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-                <Link href="/concreto" style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', textDecoration: 'none', color: 'var(--text-muted)' }}>
+                <Link href={backHref} style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', textDecoration: 'none', color: 'var(--text-muted)' }}>
                     <ArrowLeft size={18} />
                 </Link>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(212,168,67,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <ClipboardList size={18} style={{ color: '#D4A843' }} />
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: `${form.cor_hex}22`, border: `2px solid ${form.cor_hex}88`, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
+                        <ClipboardList size={18} style={{ color: form.cor_hex }} />
                     </div>
                     <div>
                         <h1 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>Nova Rastreabilidade</h1>
-                        <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>Ficha de Rastreabilidade de Concreto — SAGA</p>
+                        <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                            {fromAgendamento && obranome ? `${obranome} · ${new Date(form.data + 'T12:00').toLocaleDateString('pt-BR')}` : 'Ficha de Rastreabilidade de Concreto'}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -136,16 +161,38 @@ export default function NovaRastreabilidadePage() {
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
                 {/* Cor de identificação */}
-                <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: `2px solid ${form.cor_hex}44`, transition: 'border-color 0.2s' }}>
-                    <p style={{ fontSize: 11, fontWeight: 700, color: form.cor_hex, textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12 }}>Cor de Identificação</p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: `2px solid ${form.cor_hex}55`, transition: 'border-color 0.2s' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+                        <div style={{ width: 24, height: 24, borderRadius: '50%', background: form.cor_hex, boxShadow: `0 0 12px ${form.cor_hex}88`, flexShrink: 0 }} />
+                        <p style={{ fontSize: 11, fontWeight: 700, color: form.cor_hex, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Cor de Identificação no Mapa</p>
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
                         {CORES.map(cor => (
                             <button key={cor} type="button" onClick={() => set('cor_hex', cor)}
-                                style={{ width: 32, height: 32, borderRadius: '50%', background: cor, border: 'none', cursor: 'pointer', transition: 'all 0.15s', boxShadow: form.cor_hex === cor ? `0 0 0 3px white, 0 0 0 5px ${cor}` : `0 2px 6px ${cor}44` }} />
+                                style={{
+                                    width: 32, height: 32, borderRadius: '50%', background: cor,
+                                    border: 'none', cursor: 'pointer', transition: 'all 0.15s', flexShrink: 0,
+                                    boxShadow: form.cor_hex === cor
+                                        ? `0 0 0 3px var(--bg-card), 0 0 0 5px ${cor}`
+                                        : `0 2px 6px ${cor}44`,
+                                    transform: form.cor_hex === cor ? 'scale(1.15)' : 'scale(1)',
+                                }} />
                         ))}
-                        <input type="color" value={form.cor_hex} onChange={e => set('cor_hex', e.target.value)}
-                            style={{ width: 32, height: 32, borderRadius: '50%', border: '2px solid var(--border-subtle)', cursor: 'pointer', background: 'none', padding: 1 }}
-                            title="Cor personalizada" />
+                        {/* Color picker customizado — sem bug de quadrado */}
+                        <div
+                            style={{ width: 32, height: 32, borderRadius: '50%', background: form.cor_hex, cursor: 'pointer', flexShrink: 0, overflow: 'hidden', position: 'relative', border: '2px dashed rgba(255,255,255,0.4)', boxShadow: `0 2px 6px ${form.cor_hex}44` }}
+                            onClick={() => colorInputRef.current?.click()}
+                            title="Cor personalizada"
+                        >
+                            <Palette size={14} style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', color: 'rgba(255,255,255,0.8)', pointerEvents: 'none' }} />
+                            <input
+                                ref={colorInputRef}
+                                type="color"
+                                value={form.cor_hex}
+                                onChange={e => set('cor_hex', e.target.value)}
+                                style={{ opacity: 0, position: 'absolute', inset: 0, width: '100%', height: '100%', cursor: 'pointer', border: 'none', padding: 0 }}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -154,7 +201,8 @@ export default function NovaRastreabilidadePage() {
                     <p style={{ fontSize: 11, fontWeight: 700, color: '#D4A843', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 14 }}>Identificação</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 
-                        {isDirector && (
+                        {/* Obra — só mostrar se não vier do agendamento */}
+                        {!fromAgendamento && isDirector && (
                             <div>
                                 <label className="form-label">Obra *</label>
                                 <div style={{ position: 'relative' }}>
@@ -167,26 +215,36 @@ export default function NovaRastreabilidadePage() {
                             </div>
                         )}
 
-                        <div>
-                            <label className="form-label">Identificação da(s) Peça(s) Concretada(s) *</label>
-                            <input className="input" style={inputStyle} placeholder="Ex: Pilares P1 a P8 — Bloco A" value={form.identificacao_pecas} onChange={e => set('identificacao_pecas', e.target.value)} required />
-                        </div>
+                        {/* Data — só mostra se não vier do agendamento */}
+                        {!fromAgendamento && (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                                <div>
+                                    <label className="form-label">Data *</label>
+                                    <input className="input" type="date" value={form.data} onChange={e => set('data', e.target.value)} required />
+                                </div>
+                                <div>
+                                    <label className="form-label">Área / Pavto</label>
+                                    <input className="input" style={inputStyle} placeholder="Ex: 2º Pavimento" value={form.area_pavto} onChange={e => set('area_pavto', e.target.value)} />
+                                </div>
+                            </div>
+                        )}
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                        {fromAgendamento && (
                             <div>
                                 <label className="form-label">Área / Pavto</label>
                                 <input className="input" style={inputStyle} placeholder="Ex: 2º Pavimento" value={form.area_pavto} onChange={e => set('area_pavto', e.target.value)} />
                             </div>
-                            <div>
-                                <label className="form-label">Data *</label>
-                                <input className="input" type="date" value={form.data} onChange={e => set('data', e.target.value)} required />
-                            </div>
+                        )}
+
+                        <div>
+                            <label className="form-label">Elemento / Peça Concretada *</label>
+                            <input className="input" style={inputStyle} placeholder="Ex: Laje 2º Pav — Eixos A-E" value={form.identificacao_pecas} onChange={e => set('identificacao_pecas', e.target.value)} required />
                         </div>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                             <div>
                                 <label className="form-label">Quantidade (m³)</label>
-                                <input className="input" style={inputStyle} type="number" step="0.1" placeholder="Ex: 18.5" value={form.quantidade_m3} onChange={e => set('quantidade_m3', e.target.value)} />
+                                <input className="input" style={inputStyle} type="number" step="0.1" placeholder="Ex: 8.5" value={form.quantidade_m3} onChange={e => set('quantidade_m3', e.target.value)} />
                             </div>
                             <div>
                                 <label className="form-label">FCK de Projeto (MPa)</label>
@@ -198,7 +256,7 @@ export default function NovaRastreabilidadePage() {
 
                 {/* Fornecimento */}
                 <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(74,144,217,0.2)' }}>
-                    <p style={{ fontSize: 11, fontWeight: 700, color: '#4A90D9', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 14 }}>Fornecimento</p>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: '#4A90D9', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 14 }}>Caminhão / Fornecimento</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                             <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>Usinado?</label>
@@ -211,9 +269,15 @@ export default function NovaRastreabilidadePage() {
                                 ))}
                             </div>
                         </div>
-                        <div>
-                            <label className="form-label">Nº da Nota / Conhecimento de Transporte</label>
-                            <input className="input" style={inputStyle} placeholder="Ex: NF 004521" value={form.nota_transporte} onChange={e => set('nota_transporte', e.target.value)} />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                            <div>
+                                <label className="form-label">Nº NF / Conhecimento</label>
+                                <input className="input" style={inputStyle} placeholder="Ex: NF 004521" value={form.nota_transporte} onChange={e => set('nota_transporte', e.target.value)} />
+                            </div>
+                            <div>
+                                <label className="form-label">Placa do Caminhão</label>
+                                <input className="input" style={inputStyle} placeholder="Ex: ABC-1234" value={form.placa_caminhao} onChange={e => set('placa_caminhao', e.target.value)} />
+                            </div>
                         </div>
                         <div>
                             <label className="form-label">Responsável pelo Preenchimento</label>
@@ -252,7 +316,7 @@ export default function NovaRastreabilidadePage() {
                 {/* Rompimentos */}
                 <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(245,158,11,0.2)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                        <p style={{ fontSize: 11, fontWeight: 700, color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Resultado dos Ensaios de Rompimento (MPa)</p>
+                        <p style={{ fontSize: 11, fontWeight: 700, color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Resultado dos Rompimentos (MPa)</p>
                         <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Pode preencher depois</span>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 10 }}>
@@ -263,7 +327,6 @@ export default function NovaRastreabilidadePage() {
                             </div>
                         ))}
                     </div>
-
                     <div style={{ marginTop: 12 }}>
                         <label className="form-label">Conforme?</label>
                         <div style={{ display: 'flex', gap: 8 }}>
@@ -283,16 +346,14 @@ export default function NovaRastreabilidadePage() {
                     <div
                         onClick={() => fileRef.current?.click()}
                         style={{ padding: '20px', borderRadius: 12, border: `2px dashed ${relatorioFile ? 'rgba(16,185,129,0.4)' : 'var(--border-subtle)'}`, textAlign: 'center', cursor: 'pointer', transition: 'all 0.15s', background: relatorioFile ? 'rgba(16,185,129,0.04)' : 'rgba(255,255,255,0.02)' }}
-                        onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(212,168,67,0.4)')}
-                        onMouseLeave={e => (e.currentTarget.style.borderColor = relatorioFile ? 'rgba(16,185,129,0.4)' : 'var(--border-subtle)')}
                     >
                         <Upload size={20} style={{ margin: '0 auto 8px', display: 'block', color: relatorioFile ? '#10B981' : 'var(--text-muted)' }} />
                         {relatorioFile ? (
                             <p style={{ fontSize: 12, fontWeight: 600, color: '#10B981' }}>📎 {relatorioFile.name}</p>
                         ) : (
                             <>
-                                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)' }}>Clique para anexar relatório</p>
-                                <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>PDF, imagem ou qualquer arquivo da usina</p>
+                                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)' }}>Clique para anexar relatório da usina</p>
+                                <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>PDF, imagem ou qualquer arquivo</p>
                             </>
                         )}
                     </div>
@@ -305,7 +366,7 @@ export default function NovaRastreabilidadePage() {
                     <textarea className="input" rows={3} placeholder="Anotações adicionais..." value={form.observacoes} onChange={e => set('observacoes', e.target.value)} />
                 </div>
 
-                <button type="submit" disabled={saving} style={{ padding: '12px', borderRadius: 12, background: 'linear-gradient(135deg, #D4A843, #c49130)', border: 'none', color: '#fff', fontSize: 14, fontWeight: 700, cursor: saving ? 'wait' : 'pointer', boxShadow: '0 4px 16px rgba(212,168,67,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                <button type="submit" disabled={saving} style={{ padding: '12px', borderRadius: 12, background: `linear-gradient(135deg, ${form.cor_hex}, ${form.cor_hex}cc)`, border: 'none', color: '#fff', fontSize: 14, fontWeight: 700, cursor: saving ? 'wait' : 'pointer', boxShadow: `0 4px 16px ${form.cor_hex}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s' }}>
                     {saving ? <><Loader2 size={16} className="animate-spin" /> Salvando...</> : '📋 Salvar Rastreabilidade'}
                 </button>
             </form>

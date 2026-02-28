@@ -139,7 +139,10 @@ export default function ConcretoPage() {
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
                         {agendamentos.map(ag => (
-                            <div key={ag.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: 'rgba(212,168,67,0.06)', border: '1px solid rgba(212,168,67,0.2)' }}>
+                            <div key={ag.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: 'rgba(212,168,67,0.06)', border: '1px solid rgba(212,168,67,0.2)', cursor: 'pointer', transition: 'all 0.15s' }}
+                                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(212,168,67,0.1)'; e.currentTarget.style.borderColor = 'rgba(212,168,67,0.4)' }}
+                                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(212,168,67,0.06)'; e.currentTarget.style.borderColor = 'rgba(212,168,67,0.2)' }}
+                                onClick={() => window.location.href = `/concreto/agendamento/${ag.id}`}>
                                 <div style={{ width: 34, height: 34, borderRadius: 9, flexShrink: 0, background: 'rgba(212,168,67,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <Calendar size={14} style={{ color: '#D4A843' }} />
                                 </div>
@@ -149,7 +152,7 @@ export default function ConcretoPage() {
                                         {[ag.elemento, ag.fck_previsto ? `FCK ${ag.fck_previsto} MPa` : null, ag.volume_estimado ? `${ag.volume_estimado} m³` : null].filter(Boolean).join(' • ') || 'Agendada'}
                                     </div>
                                 </div>
-                                <button onClick={() => deletarAgendamento(ag.id)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: 4 }}>
+                                <button onClick={e => { e.stopPropagation(); deletarAgendamento(ag.id) }} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: 4 }}>
                                     <Trash2 size={12} />
                                 </button>
                             </div>
@@ -204,7 +207,6 @@ export default function ConcretoPage() {
                     </div>
                 )
             ) : (
-                /* Rastreabilidade tab */
                 rastreabilidades.length === 0 ? (
                     <div style={{ padding: '52px 20px', borderRadius: 16, background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(212,168,67,0.2)', textAlign: 'center' }}>
                         <ClipboardList size={44} style={{ margin: '0 auto 12px', display: 'block', color: '#D4A843', opacity: 0.35 }} />
@@ -221,35 +223,21 @@ export default function ConcretoPage() {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: `1px solid ${pendingRomp ? 'rgba(245,158,11,0.2)' : conforme === false ? 'rgba(239,68,68,0.2)' : 'rgba(212,168,67,0.15)'}`, transition: 'all 0.15s', cursor: 'pointer' }}
                                         onMouseEnter={e => { e.currentTarget.style.background = 'rgba(212,168,67,0.06)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
                                         onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.025)'; e.currentTarget.style.transform = 'none' }}>
-                                        {/* Color dot */}
-                                        <div style={{ width: 40, height: 40, borderRadius: 10, flexShrink: 0, background: `${r.cor_hex || '#4A90D9'}22`, border: `2px solid ${r.cor_hex || '#4A90D9'}55`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 0 8px ${r.cor_hex || '#4A90D9'}33` }}>
-                                            <ClipboardList size={16} style={{ color: r.cor_hex || '#D4A843' }} />
-                                        </div>
+                                        <div style={{ width: 14, height: 40, borderRadius: 4, background: r.cor_hex || '#D4A843', flexShrink: 0, boxShadow: `0 0 8px ${r.cor_hex || '#D4A843'}66` }} />
                                         <div style={{ flex: 1, minWidth: 0 }}>
-                                            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                {r.identificacao_pecas}
-                                            </div>
+                                            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.identificacao_pecas}</div>
                                             <div style={{ fontSize: 11, color: 'var(--text-muted)', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                                                 <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Calendar size={9} />{fmt(r.data)}</span>
                                                 {r.fck_projeto && <span>FCK {r.fck_projeto} MPa</span>}
                                                 {r.quantidade_m3 && <span>{r.quantidade_m3} m³</span>}
-                                                {r.area_pavto && <span>{r.area_pavto}</span>}
                                                 {isDirector && obraName(r.obras) && <span style={{ color: '#D4A843', fontWeight: 600 }}>{obraName(r.obras)}</span>}
                                             </div>
                                         </div>
-                                        {/* Status */}
-                                        <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-                                            {pendingRomp ? (
-                                                <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: 'rgba(245,158,11,0.12)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)', whiteSpace: 'nowrap' }}>
-                                                    ⏳ Rompimentos
-                                                </span>
-                                            ) : conforme === true ? (
-                                                <CheckCircle size={18} style={{ color: '#10B981' }} />
-                                            ) : conforme === false ? (
-                                                <XCircle size={18} style={{ color: '#EF4444' }} />
-                                            ) : (
-                                                <Clock size={16} style={{ color: 'var(--text-muted)' }} />
-                                            )}
+                                        <div style={{ flexShrink: 0 }}>
+                                            {pendingRomp ? <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: 'rgba(245,158,11,0.12)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)' }}>⏳</span>
+                                                : conforme === true ? <CheckCircle size={16} style={{ color: '#10B981' }} />
+                                                    : conforme === false ? <XCircle size={16} style={{ color: '#EF4444' }} />
+                                                        : <Clock size={15} style={{ color: 'var(--text-muted)' }} />}
                                         </div>
                                         <ChevronRight size={14} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
                                     </div>
