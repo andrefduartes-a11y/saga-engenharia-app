@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useObra } from '@/lib/obra-context'
-import { Mountain, Plus, ChevronRight, X, Calendar, User, Building2, ChevronDown } from 'lucide-react'
+import { Mountain, Plus, ChevronRight, X, Calendar, User, Building2, ChevronDown, Pencil, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 
 interface Etapa {
@@ -70,6 +70,42 @@ export default function TerrapalagemPage() {
             setForm({ nome_etapa: '', data_inicio: '', responsavel: '' })
         }
         setSalvando(false)
+    }
+
+    // ── Edit etapa ──────────────────────────────────────────────────────────
+    const [editId, setEditId] = useState<string | null>(null)
+    const [editForm, setEditForm] = useState({ nome_etapa: '', data_inicio: '', responsavel: '' })
+    const [editSalvando, setEditSalvando] = useState(false)
+
+    function startEdit(e: Etapa) {
+        setEditId(e.id)
+        setEditForm({ nome_etapa: e.nome_etapa, data_inicio: e.data_inicio || '', responsavel: e.responsavel || '' })
+    }
+
+    async function salvarEdit() {
+        if (!editId || !editForm.nome_etapa) return
+        setEditSalvando(true)
+        const { data } = await supabase.from('terraplanagem_etapas').update({
+            nome_etapa: editForm.nome_etapa,
+            data_inicio: editForm.data_inicio || null,
+            responsavel: editForm.responsavel || null,
+        }).eq('id', editId).select().single()
+        if (data) setEtapas(p => p.map(x => x.id === editId ? data : x))
+        setEditId(null)
+        setEditSalvando(false)
+    }
+
+    // ── Delete etapa ─────────────────────────────────────────────────────────
+    const [deleteId, setDeleteId] = useState<string | null>(null)
+    const [deleting, setDeleting] = useState(false)
+
+    async function confirmarDelete() {
+        if (!deleteId) return
+        setDeleting(true)
+        await supabase.from('terraplanagem_etapas').delete().eq('id', deleteId)
+        setEtapas(p => p.filter(x => x.id !== deleteId))
+        setDeleteId(null)
+        setDeleting(false)
     }
 
     return (
@@ -272,29 +308,18 @@ export default function TerrapalagemPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {etapas.map(e => {
                         const finalizada = e.status === 'finalizada'
+                        const isEditing = editId === e.id
                         return (
-                            <Link
-                                key={e.id}
-                                href={`/terraplanagem/${e.id}`}
-                                style={{ textDecoration: 'none' }}
-                            >
+                            <div key={e.id}>
+                                {/* ── Card row ── */}
                                 <div
                                     style={{
                                         display: 'flex', alignItems: 'center', gap: 14,
-                                        padding: '14px 18px', borderRadius: 14,
+                                        padding: '14px 18px', borderRadius: isEditing ? '14px 14px 0 0' : 14,
                                         background: 'rgba(255,255,255,0.025)',
                                         border: `1px solid ${finalizada ? 'rgba(16,185,129,0.2)' : 'rgba(212,168,67,0.15)'}`,
-                                        transition: 'all 0.15s', cursor: 'pointer',
-                                    }}
-                                    onMouseEnter={e2 => {
-                                        e2.currentTarget.style.background = finalizada ? 'rgba(16,185,129,0.05)' : 'rgba(212,168,67,0.06)'
-                                        e2.currentTarget.style.borderColor = finalizada ? 'rgba(16,185,129,0.35)' : 'rgba(212,168,67,0.35)'
-                                        e2.currentTarget.style.transform = 'translateY(-1px)'
-                                    }}
-                                    onMouseLeave={e2 => {
-                                        e2.currentTarget.style.background = 'rgba(255,255,255,0.025)'
-                                        e2.currentTarget.style.borderColor = finalizada ? 'rgba(16,185,129,0.2)' : 'rgba(212,168,67,0.15)'
-                                        e2.currentTarget.style.transform = 'none'
+                                        transition: 'all 0.15s',
+                                        borderBottom: isEditing ? 'none' : undefined,
                                     }}
                                 >
                                     {/* Icon */}
@@ -302,41 +327,93 @@ export default function TerrapalagemPage() {
                                         <Mountain size={20} style={{ color: finalizada ? '#10B981' : '#D4A843' }} />
                                     </div>
 
-                                    {/* Info */}
-                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                    {/* Info — navigates to detail */}
+                                    <Link href={`/terraplanagem/${e.id}`} style={{ flex: 1, minWidth: 0, textDecoration: 'none' }}>
                                         <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                             {e.nome_etapa}
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: 'var(--text-muted)' }}>
-                                            {e.data_inicio && (
-                                                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                                                    <Calendar size={10} /> {fmt(e.data_inicio)}
-                                                </span>
-                                            )}
-                                            {e.responsavel && (
-                                                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                                                    <User size={10} /> {e.responsavel}
-                                                </span>
-                                            )}
+                                            {e.data_inicio && <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Calendar size={10} /> {fmt(e.data_inicio)}</span>}
+                                            {e.responsavel && <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><User size={10} /> {e.responsavel}</span>}
                                         </div>
-                                    </div>
+                                    </Link>
 
                                     {/* Status badge */}
-                                    <span style={{
-                                        fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 20, flexShrink: 0,
-                                        background: finalizada ? 'rgba(16,185,129,0.12)' : 'rgba(212,168,67,0.12)',
-                                        color: finalizada ? '#10B981' : '#D4A843',
-                                        border: `1px solid ${finalizada ? 'rgba(16,185,129,0.25)' : 'rgba(212,168,67,0.25)'}`
-                                    }}>
+                                    <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 20, flexShrink: 0, background: finalizada ? 'rgba(16,185,129,0.12)' : 'rgba(212,168,67,0.12)', color: finalizada ? '#10B981' : '#D4A843', border: `1px solid ${finalizada ? 'rgba(16,185,129,0.25)' : 'rgba(212,168,67,0.25)'}` }}>
                                         {finalizada ? '✅ Finalizada' : '🔨 Em andamento'}
                                     </span>
 
-                                    <ChevronRight size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                                    {/* Action buttons */}
+                                    <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                                        <button
+                                            onClick={() => isEditing ? setEditId(null) : startEdit(e)}
+                                            title="Editar etapa"
+                                            style={{ padding: '6px 10px', borderRadius: 8, background: isEditing ? 'rgba(255,255,255,0.08)' : 'rgba(212,168,67,0.1)', border: `1px solid ${isEditing ? 'rgba(255,255,255,0.12)' : 'rgba(212,168,67,0.25)'}`, color: isEditing ? 'var(--text-muted)' : '#D4A843', cursor: 'pointer', fontSize: 11, fontWeight: 700 }}
+                                        >
+                                            {isEditing ? <X size={13} /> : <Pencil size={13} />}
+                                        </button>
+                                        <button
+                                            onClick={() => setDeleteId(e.id)}
+                                            title="Apagar etapa"
+                                            style={{ padding: '6px 8px', borderRadius: 8, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#EF4444', cursor: 'pointer' }}
+                                        >
+                                            <Trash2 size={13} />
+                                        </button>
+                                    </div>
                                 </div>
-                            </Link>
+
+                                {/* ── Inline edit form ── */}
+                                {isEditing && (
+                                    <div style={{ padding: '16px 18px', background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.15)', borderTop: 'none', borderRadius: '0 0 14px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                        <div>
+                                            <label className="form-label">Nome da Etapa *</label>
+                                            <input value={editForm.nome_etapa} onChange={ev => setEditForm(p => ({ ...p, nome_etapa: ev.target.value }))} className="input" style={{ minHeight: 'unset', padding: '9px 12px', fontSize: 13 }} />
+                                        </div>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                                            <div>
+                                                <label className="form-label">Data Início</label>
+                                                <input type="date" value={editForm.data_inicio} onChange={ev => setEditForm(p => ({ ...p, data_inicio: ev.target.value }))} className="input" style={{ minHeight: 'unset', padding: '9px 12px', fontSize: 13 }} />
+                                            </div>
+                                            <div>
+                                                <label className="form-label">Responsável</label>
+                                                <input value={editForm.responsavel} onChange={ev => setEditForm(p => ({ ...p, responsavel: ev.target.value }))} className="input" style={{ minHeight: 'unset', padding: '9px 12px', fontSize: 13 }} placeholder="Encarregado" />
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: 8 }}>
+                                            <button onClick={() => setEditId(null)} style={{ flex: 1, padding: '8px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Cancelar</button>
+                                            <button onClick={salvarEdit} disabled={editSalvando || !editForm.nome_etapa} style={{ flex: 2, padding: '8px', borderRadius: 8, background: 'linear-gradient(135deg,#D4A843,#c49130)', border: 'none', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                                                {editSalvando ? 'Salvando...' : '✓ Salvar'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         )
                     })}
                 </div>
+            )}
+
+            {/* ── Delete confirm overlay ── */}
+            {deleteId && (
+                <>
+                    <div onClick={() => setDeleteId(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 200 }} />
+                    <div style={{
+                        position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+                        width: 'min(380px, 92vw)', background: 'var(--bg-card)',
+                        border: '1px solid rgba(239,68,68,0.3)', borderRadius: 16, padding: '24px', zIndex: 201,
+                    }}>
+                        <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary)', marginBottom: 8 }}>⚠️ Apagar etapa?</div>
+                        <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20 }}>
+                            Todos os registros de viagens e horas desta etapa serão apagados permanentemente.
+                        </div>
+                        <div style={{ display: 'flex', gap: 10 }}>
+                            <button onClick={() => setDeleteId(null)} style={{ flex: 1, padding: '10px', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Cancelar</button>
+                            <button onClick={confirmarDelete} disabled={deleting} style={{ flex: 1, padding: '10px', borderRadius: 10, background: '#EF4444', border: 'none', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                                {deleting ? 'Apagando...' : 'Confirmar'}
+                            </button>
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     )

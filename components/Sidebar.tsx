@@ -5,7 +5,7 @@ import { useState } from 'react';
 import {
     HardHat, Mountain, ClipboardList, CheckSquare, BookOpen,
     FolderOpen, FileText, ShoppingCart, Bot, GraduationCap,
-    HelpCircle, Truck, Settings2,
+    HelpCircle, Settings2,
     ChevronDown, ChevronLeft, ChevronRight, Menu,
 } from 'lucide-react';
 
@@ -16,13 +16,7 @@ const NAV_GROUPS = [
         icon: '🏗️',
         items: [
             { href: '/concreto', icon: <HardHat size={15} />, label: 'Concretagem' },
-            {
-                href: '/terraplanagem', icon: <Mountain size={15} />, label: 'Terraplanagem',
-                subItems: [
-                    { href: '/equipamentos', icon: <Settings2 size={13} />, label: 'Equipamentos' },
-                    { href: '/caminhoes', icon: <Truck size={13} />, label: 'Caminhões' },
-                ]
-            },
+            { href: '/terraplanagem', icon: <Mountain size={15} />, label: 'Terraplanagem' },
         ],
     },
     {
@@ -140,11 +134,8 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
                                 <div>
                                     {group.items.map(item => {
                                         const active = isActive(item.href);
-                                        const hasSubItems = 'subItems' in item && Array.isArray(item.subItems);
-                                        const subActive = hasSubItems && item.subItems!.some(s => isActive(s.href));
                                         return (
                                             <div key={item.href}>
-                                                {/* Main item */}
                                                 <a
                                                     href={item.href}
                                                     onClick={isMobile ? onMobileClose : undefined}
@@ -170,51 +161,6 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
                                                     </span>
                                                     {(!collapsed || isMobile) && item.label}
                                                 </a>
-
-                                                {/* Sub-items (e.g. Equipamentos, Caminhões under Terraplanagem) */}
-                                                {hasSubItems && (!collapsed || isMobile) && (active || subActive) && item.subItems!.map(sub => {
-                                                    const subIsActive = isActive(sub.href);
-                                                    return (
-                                                        <a
-                                                            key={sub.href}
-                                                            href={sub.href}
-                                                            onClick={isMobile ? onMobileClose : undefined}
-                                                            style={{
-                                                                display: 'flex', alignItems: 'center', gap: 8,
-                                                                padding: '5px 14px 5px 44px',
-                                                                textDecoration: 'none',
-                                                                color: subIsActive ? '#fff' : 'var(--text-muted)',
-                                                                fontSize: 12, fontWeight: subIsActive ? 600 : 400,
-                                                                borderLeft: subIsActive ? '2px solid rgba(82,95,107,0.5)' : '2px solid transparent',
-                                                                background: subIsActive ? 'rgba(82,95,107,0.1)' : 'transparent',
-                                                                transition: 'all 0.15s',
-                                                            }}
-                                                            onMouseEnter={e => { if (!subIsActive) { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.03)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)'; } }}
-                                                            onMouseLeave={e => { if (!subIsActive) { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)'; } }}
-                                                        >
-                                                            <span style={{ opacity: subIsActive ? 1 : 0.5, flexShrink: 0 }}>{sub.icon}</span>
-                                                            {sub.label}
-                                                        </a>
-                                                    );
-                                                })}
-
-                                                {/* Collapsed: show sub-items as icons too */}
-                                                {hasSubItems && collapsed && !isMobile && item.subItems!.map(sub => {
-                                                    const subIsActive = isActive(sub.href);
-                                                    return (
-                                                        <a key={sub.href} href={sub.href} title={sub.label}
-                                                            style={{
-                                                                display: 'flex', justifyContent: 'center', padding: '6px 0',
-                                                                textDecoration: 'none',
-                                                                color: subIsActive ? '#fff' : 'var(--text-muted)',
-                                                                background: subIsActive ? 'rgba(82,95,107,0.12)' : 'transparent',
-                                                                transition: 'all 0.15s',
-                                                                borderRight: subIsActive ? '2px solid var(--saga-gray-light)' : 'none',
-                                                            }}>
-                                                            <span style={{ opacity: subIsActive ? 1 : 0.45 }}>{sub.icon}</span>
-                                                        </a>
-                                                    );
-                                                })}
                                             </div>
                                         );
                                     })}
