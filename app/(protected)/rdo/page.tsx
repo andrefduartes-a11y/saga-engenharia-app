@@ -43,7 +43,13 @@ export default function RdoListPage() {
 
     async function handleDelete(id: string) {
         setDeletingId(id)
-        await supabase.from('rdos').delete().eq('id', id)
+        const { error: delErr } = await supabase.from('rdos').delete().eq('id', id)
+        if (delErr) {
+            alert(`Erro ao apagar: ${delErr.message}`)
+            setDeletingId(null)
+            setConfirmId(null)
+            return
+        }
         setRdos(p => p.filter(r => r.id !== id))
         setDeletingId(null)
         setConfirmId(null)

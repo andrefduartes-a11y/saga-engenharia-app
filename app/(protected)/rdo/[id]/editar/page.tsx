@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, ClipboardList, Loader2, Camera, X, Users, Settings, CheckSquare, ChevronDown, Save } from 'lucide-react'
+import { ArrowLeft, ClipboardList, Loader2, Camera, X, Users, ChevronDown, Save, HardHat } from 'lucide-react'
 import Link from 'next/link'
 
 const FUNCOES = ['Engenheiro', 'Supervisor', 'Encarregado', 'Pedreiro', 'Carpinteiro', 'Armador', 'Meio-Oficial', 'Ajudante']
@@ -26,6 +26,7 @@ export default function EditarRdoPage() {
         clima: '',
         descricao_atividades: '',
         ocorrencias: '',
+        empreiteiros: '',
     })
     const [equipe, setEquipe] = useState<MembroEquipe[]>([])
     const [fotosExistentes, setFotosExistentes] = useState<string[]>([])
@@ -49,6 +50,7 @@ export default function EditarRdoPage() {
                     clima: data.clima || '',
                     descricao_atividades: data.descricao_atividades || '',
                     ocorrencias: data.ocorrencias || '',
+                    empreiteiros: data.empreiteiros_quantidade != null ? String(data.empreiteiros_quantidade) : '',
                 })
                 setEquipe(data.equipe_json || [])
                 setFotosExistentes(data.fotos_url || [])
@@ -93,6 +95,7 @@ export default function EditarRdoPage() {
             ocorrencias: form.ocorrencias || null,
             equipe_json: equipeValida,
             equipe_presente: equipeValida.length,
+            empreiteiros_quantidade: form.empreiteiros ? parseInt(form.empreiteiros) : null,
             fotos_url: fotosFinais,
         }).eq('id', id)
 
@@ -193,6 +196,16 @@ export default function EditarRdoPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+
+                {/* Empreiteiros */}
+                <div style={{ padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+                        <HardHat size={14} style={{ color: 'var(--text-muted)' }} />
+                        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Empreiteiros</p>
+                    </div>
+                    <label className="form-label">Quantidade de empreiteiros presentes</label>
+                    <input className="input" type="number" min="0" placeholder="0" value={form.empreiteiros} onChange={e => set('empreiteiros', e.target.value)} style={{ maxWidth: 160 }} />
                 </div>
 
                 {/* Atividades */}

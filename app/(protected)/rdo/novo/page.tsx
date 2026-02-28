@@ -101,6 +101,7 @@ export default function NovoRdoPage() {
             clima: form.clima || null,
             equipe_presente: equipeFinal.length,
             equipe_json: equipeFinal,
+            empreiteiros_quantidade: form.empreiteiros ? parseInt(form.empreiteiros) : null,
             descricao_atividades: form.descricao_atividades || null,
             ocorrencias: form.ocorrencias || null,
             fotos_url: fotosUrls,
@@ -241,6 +242,18 @@ export default function NovoRdoPage() {
                             ))}
                         </div>
                     )}
+                </div>
+
+                {/* Empreiteiros */}
+                <div style={{ padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+                        <HardHat size={14} style={{ color: 'var(--text-muted)' }} />
+                        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Empreiteiros</p>
+                    </div>
+                    <div>
+                        <label className="form-label">Quantidade de empreiteiros presentes</label>
+                        <input className="input" type="number" min="0" placeholder="0" value={form.empreiteiros} onChange={e => set('empreiteiros', e.target.value)} style={{ maxWidth: 160 }} />
+                    </div>
                 </div>
 
                 {/* Atividades */}
