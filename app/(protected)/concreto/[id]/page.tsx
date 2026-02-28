@@ -17,7 +17,7 @@ interface Rompimento {
 
 interface Concretagem {
     id: string
-    data_concretagem: string
+    data: string
     fck: number
     volume_m3: number
     elementos_concretados: string[]
@@ -118,7 +118,7 @@ export default function ConcretoDetalhePage({ params }: { params: { id: string }
                             <h1 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
                                 FCK {c.fck} MPa — {c.volume_m3} m³
                             </h1>
-                            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{fmt(c.data_concretagem)}</p>
+                            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{fmt(c.data)}</p>
                         </div>
                     </div>
 
