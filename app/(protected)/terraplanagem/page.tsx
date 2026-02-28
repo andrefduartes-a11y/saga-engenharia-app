@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useObra } from '@/lib/obra-context'
-import { Mountain, Plus, ChevronRight, X, Calendar, User } from 'lucide-react'
+import { Mountain, Plus, ChevronRight, X, Calendar, User, Building2, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 
 interface Etapa {
@@ -14,25 +14,46 @@ interface Etapa {
     status: string
 }
 
+interface ObraSimples { id: string; nome: string; cidade?: string }
+
 const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('pt-BR')
 
 export default function TerrapalagemPage() {
-    const { obra } = useObra()
+    const { obra: obraCtx, role } = useObra()
+    const isDirector = role === 'diretor' || role === 'admin'
     const supabase = createClient()
+
+    // Directors pick obra in-page; engineers have it auto-set
+    const [allObras, setAllObras] = useState<ObraSimples[]>([])
+    const [selectedObraId, setSelectedObraId] = useState<string>('')
+    const obra = isDirector
+        ? (allObras.find(o => o.id === selectedObraId) || null)
+        : obraCtx
+
     const [etapas, setEtapas] = useState<Etapa[]>([])
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [novaEtapa, setNovaEtapa] = useState(false)
     const [form, setForm] = useState({ nome_etapa: '', data_inicio: '', responsavel: '' })
     const [salvando, setSalvando] = useState(false)
 
+    // Load all obras for directors
     useEffect(() => {
-        if (!obra) { setLoading(false); return }
+        if (!isDirector) return
+        supabase.from('obras').select('id, nome, cidade').order('nome')
+            .then(({ data }) => setAllObras(data || []))
+    }, [isDirector])
+
+    // Load etapas when obra changes
+    useEffect(() => {
+        if (!obra) { setEtapas([]); return }
+        setLoading(true)
         supabase.from('terraplanagem_etapas')
             .select('*')
             .eq('obra_id', obra.id)
             .order('created_at', { ascending: false })
             .then(({ data }) => { setEtapas(data || []); setLoading(false) })
-    }, [obra])
+    }, [obra?.id])
+
 
     async function criarEtapa() {
         if (!obra || !form.nome_etapa) return
@@ -54,7 +75,7 @@ export default function TerrapalagemPage() {
     return (
         <div style={{ padding: '20px', maxWidth: 860 }}>
             {/* ── Page Header ── */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(212,168,67,0.15)', border: '1px solid rgba(212,168,67,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Mountain size={20} style={{ color: '#D4A843' }} />
@@ -66,20 +87,52 @@ export default function TerrapalagemPage() {
                 </div>
                 <button
                     onClick={() => setNovaEtapa(true)}
+                    disabled={!obra}
                     style={{
                         display: 'flex', alignItems: 'center', gap: 8,
                         padding: '9px 18px', borderRadius: 10,
-                        background: 'linear-gradient(135deg, #D4A843, #c49130)',
-                        border: 'none', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                        boxShadow: '0 4px 14px rgba(212,168,67,0.35)',
+                        background: obra ? 'linear-gradient(135deg, #D4A843, #c49130)' : 'rgba(255,255,255,0.06)',
+                        border: 'none', color: obra ? '#fff' : 'var(--text-muted)',
+                        fontSize: 13, fontWeight: 700, cursor: obra ? 'pointer' : 'not-allowed',
+                        boxShadow: obra ? '0 4px 14px rgba(212,168,67,0.35)' : 'none',
                         transition: 'all 0.2s',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseEnter={e => obra && (e.currentTarget.style.transform = 'translateY(-1px)')}
                     onMouseLeave={e => (e.currentTarget.style.transform = 'none')}
                 >
                     <Plus size={15} /> Nova Etapa
                 </button>
             </div>
+
+            {/* ── Director: obra selector ── */}
+            {isDirector && (
+                <div style={{ marginBottom: 20 }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px', display: 'flex', alignItems: 'center', gap: 5, marginBottom: 8 }}>
+                        <Building2 size={11} /> Obra
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                        <select
+                            value={selectedObraId}
+                            onChange={e => { setSelectedObraId(e.target.value); setNovaEtapa(false) }}
+                            style={{
+                                width: '100%', boxSizing: 'border-box', appearance: 'none',
+                                padding: '11px 40px 11px 14px', borderRadius: 10,
+                                background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)',
+                                color: selectedObraId ? 'var(--text-primary)' : 'var(--text-muted)',
+                                fontSize: 13, outline: 'none', cursor: 'pointer',
+                            }}
+                            onFocus={e => (e.target.style.borderColor = 'rgba(212,168,67,0.5)')}
+                            onBlur={e => (e.target.style.borderColor = 'var(--border-subtle)')}
+                        >
+                            <option value="">Selecione uma obra para visualizar...</option>
+                            {allObras.map(o => (
+                                <option key={o.id} value={o.id}>{o.nome}{o.cidade ? ` — ${o.cidade}` : ''}</option>
+                            ))}
+                        </select>
+                        <ChevronDown size={14} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                    </div>
+                </div>
+            )}
 
             {/* ── New Etapa form ── */}
             {novaEtapa && (
