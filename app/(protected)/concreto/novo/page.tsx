@@ -24,7 +24,7 @@ export default function ConcretoNovoPage() {
     const obraId = obra?.id
 
     const [form, setForm] = useState({
-        data_concretagem: new Date().toISOString().split('T')[0],
+        data: new Date().toISOString().split('T')[0],
         fck: 25,
         volume_m3: '',
         elementos_concretados: [] as string[],
@@ -47,7 +47,7 @@ export default function ConcretoNovoPage() {
         setSalvando(true)
         const { error: dbErr } = await supabase.from('concretagens').insert({
             obra_id: obraId,
-            data_concretagem: form.data_concretagem,
+            data: form.data,
             fck: Number(form.fck),
             volume_m3: Number(form.volume_m3),
             elementos_concretados: form.elementos_concretados,
@@ -100,7 +100,7 @@ export default function ConcretoNovoPage() {
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                             <div>
                                 <label className="form-label"><Calendar size={10} style={{ display: 'inline', marginRight: 4 }} />Data *</label>
-                                <input className="input" type="date" required value={form.data_concretagem} onChange={e => setForm(p => ({ ...p, data_concretagem: e.target.value }))} />
+                                <input className="input" type="date" required value={form.data} onChange={e => setForm(p => ({ ...p, data: e.target.value }))} />
                             </div>
                             <div>
                                 <label className="form-label">FCK (MPa) *</label>

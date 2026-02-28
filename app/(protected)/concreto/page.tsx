@@ -11,7 +11,7 @@ import {
 
 interface Concretagem {
     id: string
-    data_concretagem: string
+    data: string
     fck: number
     volume_m3: number
     elementos_concretados: string[]
@@ -60,8 +60,8 @@ export default function ConcretoPage() {
         const today = new Date().toISOString().split('T')[0]
 
         let qC = supabase.from('concretagens')
-            .select('id, data_concretagem, fck, volume_m3, elementos_concretados, obras(nome)')
-            .order('data_concretagem', { ascending: false }).limit(50)
+            .select('id, data, fck, volume_m3, elementos_concretados, obras(nome)')
+            .order('data', { ascending: false }).limit(50)
 
         let qR = supabase.from('rastreabilidade_concreto')
             .select('id, data, identificacao_pecas, area_pavto, fck_projeto, quantidade_m3, cor_hex, conforme, rompimento_28a, rompimento_28b, obras(nome)')
@@ -192,7 +192,7 @@ export default function ConcretoPage() {
                                     <div style={{ flex: 1, minWidth: 0 }}>
                                         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>FCK {c.fck} MPa — {c.volume_m3} m³</div>
                                         <div style={{ fontSize: 11, color: 'var(--text-muted)', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Calendar size={9} />{fmt(c.data_concretagem)}</span>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Calendar size={9} />{fmt(c.data)}</span>
                                             {isDirector && obraName(c.obras) && <span style={{ color: '#4A90D9', fontWeight: 600 }}>{obraName(c.obras)}</span>}
                                             {c.elementos_concretados?.length > 0 && <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.elementos_concretados.join(', ')}</span>}
                                         </div>
