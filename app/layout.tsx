@@ -2,21 +2,28 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/lib/theme-context'
+import PwaInstallBanner from '@/components/PwaInstallBanner'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Saga Engenharia',
+  title: 'SAGA Engenharia',
   description: 'Apoio técnico ao engenheiro de obra no canteiro',
   manifest: '/manifest.json',
   icons: {
-    icon: '/ico-cinza.png',
-    apple: '/ico-cinza.png',
+    icon: [{ url: '/ico-cinza.png', sizes: '192x192', type: 'image/png' }],
+    apple: [{ url: '/ico-branco.png', sizes: '192x192', type: 'image/png' }],
+    shortcut: '/ico-cinza.png',
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Saga Engenharia',
+    title: 'SAGA Engenharia',
+    startupImage: '/ico-branco.png',
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+    'application-name': 'SAGA Engenharia',
   },
 }
 
@@ -46,6 +53,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           {children}
+          <PwaInstallBanner />
         </ThemeProvider>
       </body>
     </html>
