@@ -14,6 +14,7 @@ interface Obra {
 interface ObraContextType {
     obra: Obra | null
     role: string
+    contextLoading: boolean
     setObra: (obra: Obra) => void
     clearObra: () => void
 }
@@ -21,13 +22,21 @@ interface ObraContextType {
 const ObraContext = createContext<ObraContextType>({
     obra: null,
     role: '',
+    contextLoading: true,
     setObra: () => { },
     clearObra: () => { },
 })
 
 export function ObraProvider({ children }: { children: ReactNode }) {
-    const [obra, setObraState] = useState<Obra | null>(null)
+    // Carrega imediatamente do localStorage (síncrono) para evitar flash de tela
+    const [obra, setObraState] = useState<Obra | null>(() => {
+        if (typeof window === 'undefined') return null
+        const saved = localStorage.getItem('saga_obra_selecionada')
+        if (saved) { try { return JSON.parse(saved) } catch { return null } }
+        return null
+    })
     const [role, setRole] = useState('')
+    const [contextLoading, setContextLoading] = useState(true)
 
     useEffect(() => {
         // Fetch user role + assigned obras from API
@@ -59,6 +68,7 @@ export function ObraProvider({ children }: { children: ReactNode }) {
                         setObraState(data as Obra)
                         // Also persist to localStorage as cache
                         localStorage.setItem('saga_obra_selecionada', JSON.stringify(data))
+                        setContextLoading(false)
                         return
                     }
                 }
@@ -70,6 +80,7 @@ export function ObraProvider({ children }: { children: ReactNode }) {
                         localStorage.removeItem('saga_obra_selecionada')
                     }
                 }
+                setContextLoading(false)
             })
             .catch(() => {
                 // Offline fallback
@@ -77,6 +88,7 @@ export function ObraProvider({ children }: { children: ReactNode }) {
                 if (saved) {
                     try { setObraState(JSON.parse(saved)) } catch { /* ignore */ }
                 }
+                setContextLoading(false)
             })
     }, [])
 
@@ -91,7 +103,7 @@ export function ObraProvider({ children }: { children: ReactNode }) {
     }
 
     return (
-        <ObraContext.Provider value={{ obra, role, setObra, clearObra }}>
+        <ObraContext.Provider value={{ obra, role, contextLoading, setObra, clearObra }}>
             {children}
         </ObraContext.Provider>
     )

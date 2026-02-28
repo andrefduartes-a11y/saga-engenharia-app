@@ -372,7 +372,7 @@ function DiretorDashboard() {
 
 // ─── Dashboard do Engenheiro ──────────────────────────────────────────────────
 function EngenheiroDashboard() {
-    const { obra: obraCtx } = useObra()
+    const { obra: obraCtx, contextLoading } = useObra()
     const [obraFull, setObraFull] = useState<Obra | null>(null)
     const [agendamentos, setAgendamentos] = useState<Agendamento[]>([])
     const [loadingObra, setLoadingObra] = useState(true)
@@ -400,6 +400,16 @@ function EngenheiroDashboard() {
         }
         load()
     }, [obraCtx?.id])
+
+    // Enquanto o contexto ainda está carregando a obra do backend, mostra spinner
+    if (contextLoading) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200, gap: 12 }}>
+                <div style={{ width: 20, height: 20, border: '2px solid rgba(82,168,123,0.3)', borderTop: '2px solid #52A87B', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>Carregando...</span>
+            </div>
+        )
+    }
 
     if (!obraCtx) {
         return (
