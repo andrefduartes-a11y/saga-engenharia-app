@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useObra } from '@/lib/obra-context'
 import {
-    FolderOpen, Folder, Plus, Download, ChevronRight, ChevronDown,
-    Upload, X, Loader2, FileText, Star, FolderPlus, Pencil, Trash2
+    FolderOpen, Download, ChevronRight, ChevronDown,
+    Upload, X, Loader2, FileText, FolderPlus, Trash2
 } from 'lucide-react'
 
 // ── 13 disciplinas predefinidas ──────────────────────────────────────────────
@@ -41,12 +41,10 @@ export default function ProjetosPage() {
     const [projetos, setProjetos] = useState<Projeto[]>([])
     const [loading, setLoading] = useState(true)
     const [expandidos, setExpandidos] = useState<Record<string, boolean>>({})
-    const [showForm, setShowForm] = useState(false)
     const [showNovasPasta, setShowNovaPasta] = useState(false)
+    const [showForm] = useState(false) // mantido para evitar erro de ref — não usado na UI
     const [novaPastaNome, setNovaPastaNome] = useState('')
     const [pastasExtras, setPastasExtras] = useState<string[]>([])
-    const [form, setForm] = useState({ disciplina: DISCIPLINAS_DEFAULT[0].nome, nome: '', revisao: 'R00', download_url: '' })
-    const [salvando, setSalvando] = useState(false)
     const [uploading, setUploading] = useState(false)
     const fileRef = useRef<HTMLInputElement>(null)
 
@@ -66,25 +64,6 @@ export default function ProjetosPage() {
 
     function togglePasta(nome: string) {
         setExpandidos(p => ({ ...p, [nome]: !p[nome] }))
-    }
-
-    async function salvar() {
-        if (!obra) return
-        setSalvando(true)
-        const { data } = await supabase.from('projetos').insert({
-            obra_id: obra.id,
-            disciplina: form.disciplina,
-            nome: form.nome,
-            revisao: form.revisao,
-            vigente: true,
-            download_url: form.download_url || null,
-        }).select().single()
-        if (data) {
-            setProjetos(p => [...p, data])
-            setExpandidos(p => ({ ...p, [form.disciplina]: true }))
-        }
-        setShowForm(false)
-        setSalvando(false)
     }
 
     async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>, disciplina: string) {
@@ -148,12 +127,6 @@ export default function ProjetosPage() {
                     >
                         <FolderPlus size={13} /> Nova Pasta
                     </button>
-                    <button
-                        onClick={() => setShowForm(p => !p)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 18px', borderRadius: 10, background: 'linear-gradient(135deg, #9B59B6, #7D3C98)', border: 'none', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(155,89,182,0.3)' }}
-                    >
-                        <Plus size={15} /> Novo Projeto
-                    </button>
                 </div>
             </div>
 
@@ -174,40 +147,6 @@ export default function ProjetosPage() {
                 </div>
             )}
 
-            {/* ── Form novo projeto ── */}
-            {showForm && (
-                <div style={{ marginBottom: 14, padding: '16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(155,89,182,0.25)' }}>
-                    <p style={{ fontSize: 12, fontWeight: 700, color: '#9B59B6', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12 }}>Novo Projeto</p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                            <div>
-                                <label className="form-label">Disciplina</label>
-                                <select className="input" value={form.disciplina} onChange={e => setForm(p => ({ ...p, disciplina: e.target.value }))}>
-                                    {todasDisciplinas.map(d => <option key={d} value={d}>{d}</option>)}
-                                </select>
-                            </div>
-                            <div>
-                                <label className="form-label">Revisão</label>
-                                <input className="input" placeholder="R00" value={form.revisao} onChange={e => setForm(p => ({ ...p, revisao: e.target.value }))} />
-                            </div>
-                        </div>
-                        <div>
-                            <label className="form-label">Nome / Descrição *</label>
-                            <input className="input" placeholder="Ex: Planta Baixa Térreo" value={form.nome} onChange={e => setForm(p => ({ ...p, nome: e.target.value }))} />
-                        </div>
-                        <div>
-                            <label className="form-label">Link de Download (opcional)</label>
-                            <input className="input" placeholder="https://..." value={form.download_url} onChange={e => setForm(p => ({ ...p, download_url: e.target.value }))} />
-                        </div>
-                        <div style={{ display: 'flex', gap: 8 }}>
-                            <button onClick={() => setShowForm(false)} style={{ flex: 1, padding: '10px', borderRadius: 10, border: '1px solid var(--border-subtle)', background: 'transparent', color: 'var(--text-muted)', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Cancelar</button>
-                            <button onClick={salvar} disabled={salvando || !form.nome} style={{ flex: 1, padding: '10px', borderRadius: 10, background: '#9B59B6', border: 'none', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', opacity: !form.nome ? 0.5 : 1 }}>
-                                {salvando ? 'Salvando...' : 'Salvar'}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {!obra ? (
                 <div style={{ padding: '60px 20px', textAlign: 'center', borderRadius: 16, border: '1px dashed rgba(155,89,182,0.2)' }}>
