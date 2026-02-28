@@ -52,6 +52,7 @@ function AddControlModal({
     const [aba, setAba] = useState<'caminhao' | 'equipamento'>('caminhao')
     const [salvando, setSalvando] = useState(false)
     const today = new Date().toISOString().split('T')[0]
+    const [saveError, setSaveError] = useState('')
 
     // Caminhão form
     const [vForm, setVForm] = useState({
@@ -84,24 +85,26 @@ function AddControlModal({
 
     async function salvar() {
         setSalvando(true)
+        setSaveError('')
         if (aba === 'caminhao') {
-            const { data } = await supabase.from('controle_viagens_caminhao').insert({
+            const { data, error } = await supabase.from('controle_viagens_caminhao').insert({
                 etapa_id: etapaId,
                 data: vForm.data,
-                caminhao_id: vForm.caminhao_id || null,
+                caminhao_id: vForm.caminhao_id && vForm.caminhao_id !== '__manual' ? vForm.caminhao_id : null,
                 tipo_caminhao: vForm.tipo_caminhao || null,
                 placa: vForm.placa || null,
                 quantidade_viagens: Number(vForm.quantidade_viagens),
                 valor_por_viagem: vForm.valor_por_viagem ? Number(vForm.valor_por_viagem) : null,
                 observacoes: vForm.observacoes || null,
             }).select().single()
-            if (data) onSave(data as Viagem, undefined)
+            if (error) { setSaveError(`Erro ao salvar: ${error.message}`); setSalvando(false); return }
+            if (data) { onSave(data as Viagem, undefined); return }
         } else {
             const hCalc = calcHoras(eForm.hora_inicio, eForm.hora_fim)
-            const { data } = await supabase.from('controle_horas_equipamento').insert({
+            const { data, error } = await supabase.from('controle_horas_equipamento').insert({
                 etapa_id: etapaId,
                 data: eForm.data,
-                equipamento_id: eForm.equipamento_id || null,
+                equipamento_id: eForm.equipamento_id && eForm.equipamento_id !== '__manual' ? eForm.equipamento_id : null,
                 nome_equipamento: eForm.nome_equipamento || null,
                 hora_inicio: eForm.hora_inicio,
                 hora_fim: eForm.hora_fim,
@@ -109,10 +112,10 @@ function AddControlModal({
                 valor_por_hora: eForm.valor_por_hora ? Number(eForm.valor_por_hora) : null,
                 observacoes: eForm.observacoes || null,
             }).select().single()
-            if (data) onSave(undefined, data as HoraEquip)
+            if (error) { setSaveError(`Erro ao salvar: ${error.message}`); setSalvando(false); return }
+            if (data) { onSave(undefined, data as HoraEquip); return }
         }
         setSalvando(false)
-        onClose()
     }
 
     return (
@@ -273,6 +276,12 @@ function AddControlModal({
                             <label className="form-label">Observações</label>
                             <textarea className="input" rows={2} placeholder="Opcional..." value={eForm.observacoes} onChange={e => setEForm(p => ({ ...p, observacoes: e.target.value }))} />
                         </div>
+                    </div>
+                )}
+
+                {saveError && (
+                    <div style={{ marginTop: 12, padding: '10px 14px', borderRadius: 8, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#EF4444', fontSize: 12, fontWeight: 600 }}>
+                        ⚠️ {saveError}
                     </div>
                 )}
 
