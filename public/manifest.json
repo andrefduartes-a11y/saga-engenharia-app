@@ -5,7 +5,7 @@
     "start_url": "/dashboard",
     "display": "standalone",
     "orientation": "portrait-primary",
-    "background_color": "#1C2B1A",
+    "background_color": "#000000",
     "theme_color": "#1C2B1A",
     "lang": "pt-BR",
     "scope": "/",
@@ -16,21 +16,27 @@
     "icons": [
         {
             "src": "/icon",
-            "sizes": "192x192",
+            "sizes": "32x32",
             "type": "image/png",
             "purpose": "any"
-        },
-        {
-            "src": "/icon",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "maskable"
         },
         {
             "src": "/apple-icon",
             "sizes": "180x180",
             "type": "image/png",
             "purpose": "any"
+        },
+        {
+            "src": "/api/icon512",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/api/icon512",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ],
     "shortcuts": [
@@ -40,8 +46,8 @@
             "url": "/rdo/novo",
             "icons": [
                 {
-                    "src": "/icon",
-                    "sizes": "192x192"
+                    "src": "/api/icon512",
+                    "sizes": "512x512"
                 }
             ]
         },
@@ -51,8 +57,8 @@
             "url": "/dashboard",
             "icons": [
                 {
-                    "src": "/icon",
-                    "sizes": "192x192"
+                    "src": "/api/icon512",
+                    "sizes": "512x512"
                 }
             ]
         }
