@@ -4,16 +4,12 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useObra } from '@/lib/obra-context'
-import { ArrowLeft, ChevronDown } from 'lucide-react'
+import { ArrowLeft, ChevronDown, Droplets, Calendar } from 'lucide-react'
+import Link from 'next/link'
 
 const ELEMENTOS = [
-    'Sapata', 'Bloco', 'Pilar', 'Viga', 'Laje', 'Escada', 'Muro de Contenção',
-    'Radier', 'Fundação', 'Parede Estrutural', 'Reservatório', 'Piso'
-]
-
-const CORES = [
-    '#7FA653', '#4A90D9', '#E85D75', '#D4A843', '#9B59B6',
-    '#E67E22', '#1ABC9C', '#E74C3C', '#3498DB', '#525F6B'
+    'Sapata', 'Bloco', 'Pilar', 'Viga', 'Laje', 'Escada',
+    'Muro de Contenção', 'Radier', 'Fundação', 'Parede Estrutural', 'Reservatório', 'Piso'
 ]
 
 export default function ConcretoNovoPage() {
@@ -25,192 +21,118 @@ export default function ConcretoNovoPage() {
     const [allObras, setAllObras] = useState<{ id: string; nome: string }[]>([])
     const [selectedObraId, setSelectedObraId] = useState('')
     const obra = isDirector ? (allObras.find(o => o.id === selectedObraId) || null) : obraCtx
-
-    useEffect(() => {
-        if (!isDirector) return
-        supabase.from('obras').select('id, nome').eq('status', 'ativa').order('nome')
-            .then(({ data }) => setAllObras(data || []))
-    }, [isDirector])
+    const obraId = obra?.id
 
     const [form, setForm] = useState({
         data_concretagem: new Date().toISOString().split('T')[0],
         fck: 25,
         volume_m3: '',
         elementos_concretados: [] as string[],
-        fornecedor: '',
-        caminhao: '',
-        nota_fiscal: '',
-        responsavel: '',
-        cor_hex: '#7FA653',
     })
     const [salvando, setSalvando] = useState(false)
+    const [error, setError] = useState('')
 
-    const toggleElemento = (el: string) => {
-        setForm(p => ({
-            ...p,
-            elementos_concretados: p.elementos_concretados.includes(el)
-                ? p.elementos_concretados.filter(e => e !== el)
-                : [...p.elementos_concretados, el]
-        }))
-    }
+    useEffect(() => {
+        if (!isDirector) return
+        supabase.from('obras').select('id, nome').order('nome')
+            .then(({ data }) => setAllObras(data || []))
+    }, [isDirector])
+
+    const toggleElemento = (el: string) =>
+        setForm(p => ({ ...p, elementos_concretados: p.elementos_concretados.includes(el) ? p.elementos_concretados.filter(e => e !== el) : [...p.elementos_concretados, el] }))
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
-        if (!obra) return alert('Selecione uma obra primeiro')
+        if (!obraId) { setError('Selecione uma obra.'); return }
         setSalvando(true)
-        const { error } = await supabase.from('concretagens').insert({
-            obra_id: obra.id,
+        const { error: dbErr } = await supabase.from('concretagens').insert({
+            obra_id: obraId,
             data_concretagem: form.data_concretagem,
             fck: Number(form.fck),
             volume_m3: Number(form.volume_m3),
             elementos_concretados: form.elementos_concretados,
-            fornecedor: form.fornecedor || null,
-            caminhao: form.caminhao || null,
-            nota_fiscal: form.nota_fiscal || null,
-            responsavel: form.responsavel || null,
-            cor_hex: form.cor_hex,
         })
-        if (!error) router.push('/concreto')
-        else { alert('Erro ao salvar'); setSalvando(false) }
+        if (dbErr) { setError(`Erro: ${dbErr.message}`); setSalvando(false) }
+        else router.push('/concreto')
     }
 
     return (
-        <div className="px-4 py-4 space-y-5 animate-fade-up">
-            <div className="flex items-center gap-3">
-                <button onClick={() => router.back()} style={{ color: 'var(--text-muted)' }}>
-                    <ArrowLeft size={20} />
-                </button>
-                <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Nova Concretagem</h1>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginTop: 4, marginBottom: 0 }}>
-                    {obra && !isDirector && <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{obra.nome}</p>}
+        <div style={{ padding: '20px', maxWidth: 600 }}>
+
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+                <Link href="/concreto" style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', textDecoration: 'none', color: 'var(--text-muted)' }}>
+                    <ArrowLeft size={18} />
+                </Link>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(74,144,217,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Droplets size={18} style={{ color: '#4A90D9' }} />
+                    </div>
+                    <div>
+                        <h1 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)' }}>Marcar Concretagem</h1>
+                        {obra && !isDirector && <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>{obra.nome}</p>}
+                    </div>
                 </div>
             </div>
 
-            {(!obra && !isDirector) && (
-                <div className="card text-center py-6">
-                    <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Nenhuma obra vinculada ao seu perfil.</p>
-                </div>
-            )}
+            {error && <div style={{ marginBottom: 14, padding: '10px 14px', borderRadius: 10, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#EF4444', fontSize: 13 }}>{error}</div>}
 
-            {(obra || isDirector) && (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="card space-y-4">
-                        <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>DADOS PRINCIPAIS</p>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-                        {/* Director: obra selector as first field inside the form */}
-                        {isDirector && (
-                            <div>
-                                <label className="form-label">Obra *</label>
-                                <div style={{ position: 'relative' }}>
-                                    <select
-                                        className="input"
-                                        value={selectedObraId}
-                                        onChange={e => setSelectedObraId(e.target.value)}
-                                        style={{ appearance: 'none', paddingRight: 40 }}
-                                        required
-                                    >
-                                        <option value="">Selecione a obra...</option>
-                                        {allObras.map(o => <option key={o.id} value={o.id}>{o.nome}</option>)}
-                                    </select>
-                                    <ChevronDown size={14} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <div>
-                                <label className="form-label">Data</label>
-                                <input className="input" type="date" required
-                                    value={form.data_concretagem}
-                                    onChange={e => setForm(p => ({ ...p, data_concretagem: e.target.value }))} />
-                            </div>
-                            <div>
-                                <label className="form-label">FCK (MPa)</label>
-                                <input className="input" type="number" required min={1}
-                                    value={form.fck}
-                                    onChange={e => setForm(p => ({ ...p, fck: Number(e.target.value) }))} />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="form-label">Volume (m³)</label>
-                            <input className="input" type="number" step="0.1" required placeholder="Ex: 12.5"
-                                value={form.volume_m3}
-                                onChange={e => setForm(p => ({ ...p, volume_m3: e.target.value }))} />
+                {/* Obra (directors) */}
+                {isDirector && (
+                    <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(74,144,217,0.2)' }}>
+                        <label className="form-label">Obra *</label>
+                        <div style={{ position: 'relative' }}>
+                            <select className="input" value={selectedObraId} onChange={e => setSelectedObraId(e.target.value)} style={{ appearance: 'none', paddingRight: 40 }} required>
+                                <option value="">Selecione a obra...</option>
+                                {allObras.map(o => <option key={o.id} value={o.id}>{o.nome}</option>)}
+                            </select>
+                            <ChevronDown size={14} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
                         </div>
                     </div>
+                )}
 
-                    {/* Elementos */}
-                    <div className="card space-y-3">
-                        <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>ELEMENTOS CONCRETADOS</p>
-                        <div className="flex flex-wrap gap-2">
-                            {ELEMENTOS.map(el => (
-                                <button key={el} type="button"
-                                    onClick={() => toggleElemento(el)}
-                                    className="text-xs px-3 py-1.5 rounded-full font-medium transition-all"
-                                    style={{
-                                        background: form.elementos_concretados.includes(el) ? 'var(--green-primary)' : 'var(--bg-card)',
-                                        color: form.elementos_concretados.includes(el) ? '#fff' : 'var(--text-secondary)',
-                                        border: `1px solid ${form.elementos_concretados.includes(el) ? 'var(--green-primary)' : 'var(--border-subtle)'}`,
-                                    }}>
+                {/* Dados principais */}
+                <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(74,144,217,0.2)' }}>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: '#4A90D9', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12 }}>Dados da Concretagem</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                            <div>
+                                <label className="form-label"><Calendar size={10} style={{ display: 'inline', marginRight: 4 }} />Data *</label>
+                                <input className="input" type="date" required value={form.data_concretagem} onChange={e => setForm(p => ({ ...p, data_concretagem: e.target.value }))} />
+                            </div>
+                            <div>
+                                <label className="form-label">FCK (MPa) *</label>
+                                <input className="input" type="number" required min={1} value={form.fck} onChange={e => setForm(p => ({ ...p, fck: Number(e.target.value) }))} />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="form-label">Volume (m³) *</label>
+                            <input className="input" type="number" step="0.1" required placeholder="Ex: 12.5" value={form.volume_m3} onChange={e => setForm(p => ({ ...p, volume_m3: e.target.value }))} />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Elementos */}
+                <div style={{ padding: '16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(74,144,217,0.15)' }}>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: '#4A90D9', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12 }}>Elementos Concretados</p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {ELEMENTOS.map(el => {
+                            const sel = form.elementos_concretados.includes(el)
+                            return (
+                                <button key={el} type="button" onClick={() => toggleElemento(el)} style={{ padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s', background: sel ? 'rgba(74,144,217,0.2)' : 'rgba(255,255,255,0.04)', color: sel ? '#4A90D9' : 'var(--text-muted)', border: `1px solid ${sel ? 'rgba(74,144,217,0.5)' : 'var(--border-subtle)'}` }}>
                                     {el}
                                 </button>
-                            ))}
-                        </div>
+                            )
+                        })}
                     </div>
+                </div>
 
-                    {/* Cor de identificação */}
-                    <div className="card space-y-3">
-                        <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>COR DE IDENTIFICAÇÃO</p>
-                        <div className="flex flex-wrap gap-3">
-                            {CORES.map(cor => (
-                                <button key={cor} type="button"
-                                    onClick={() => setForm(p => ({ ...p, cor_hex: cor }))}
-                                    className="w-8 h-8 rounded-full transition-all"
-                                    style={{
-                                        background: cor,
-                                        boxShadow: form.cor_hex === cor ? `0 0 0 3px white, 0 0 0 5px ${cor}` : 'none'
-                                    }} />
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Dados adicionais */}
-                    <div className="card space-y-3">
-                        <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>INFORMAÇÕES ADICIONAIS</p>
-                        <div>
-                            <label className="form-label">Fornecedor / Concreteira</label>
-                            <input className="input" placeholder="Nome da concreteira"
-                                value={form.fornecedor}
-                                onChange={e => setForm(p => ({ ...p, fornecedor: e.target.value }))} />
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div>
-                                <label className="form-label">Betoneira / Caminhão</label>
-                                <input className="input" placeholder="Placa ou nº"
-                                    value={form.caminhao}
-                                    onChange={e => setForm(p => ({ ...p, caminhao: e.target.value }))} />
-                            </div>
-                            <div>
-                                <label className="form-label">Nota Fiscal</label>
-                                <input className="input" placeholder="Nº da NF"
-                                    value={form.nota_fiscal}
-                                    onChange={e => setForm(p => ({ ...p, nota_fiscal: e.target.value }))} />
-                            </div>
-                        </div>
-                        <div>
-                            <label className="form-label">Responsável Técnico</label>
-                            <input className="input" placeholder="Eng. responsável"
-                                value={form.responsavel}
-                                onChange={e => setForm(p => ({ ...p, responsavel: e.target.value }))} />
-                        </div>
-                    </div>
-
-                    <button type="submit" disabled={salvando} className="btn-primary w-full">
-                        {salvando ? 'Salvando...' : 'Registrar Concretagem'}
-                    </button>
-                </form>
-            )}
+                <button type="submit" disabled={salvando} style={{ padding: '12px', borderRadius: 12, background: 'linear-gradient(135deg, #4A90D9, #3a72b0)', border: 'none', color: '#fff', fontSize: 14, fontWeight: 700, cursor: salvando ? 'wait' : 'pointer', boxShadow: '0 4px 16px rgba(74,144,217,0.3)' }}>
+                    {salvando ? 'Salvando...' : '💧 Registrar Concretagem'}
+                </button>
+            </form>
         </div>
     )
 }
