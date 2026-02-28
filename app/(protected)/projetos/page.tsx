@@ -4,113 +4,178 @@ import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useObra } from '@/lib/obra-context'
 import {
-    FolderOpen, Download, ChevronRight, ChevronDown,
-    Upload, X, Loader2, FileText, FolderPlus, Trash2
+    FolderOpen, FolderPlus, ChevronRight, ChevronDown,
+    Upload, Loader2, FileText, Trash2, Download, Plus, X
 } from 'lucide-react'
 
-// ── 13 disciplinas predefinidas ──────────────────────────────────────────────
+// ── 14 disciplinas com numeração exata ──────────────────────────────────────
 const DISCIPLINAS_DEFAULT = [
-    { nome: 'Arquitetura', emoji: '🏛️', cor: '#9B59B6' },
-    { nome: 'Estrutural', emoji: '🏗️', cor: '#E67E22' },
-    { nome: 'Fundações', emoji: '⚙️', cor: '#795548' },
-    { nome: 'Elétrica', emoji: '⚡', cor: '#F1C40F' },
-    { nome: 'Hidrossanitária', emoji: '💧', cor: '#3498DB' },
-    { nome: 'AVAC', emoji: '❄️', cor: '#1ABC9C' },
-    { nome: 'Prevenção de Incêndio', emoji: '🔥', cor: '#E74C3C' },
-    { nome: 'Impermeabilização', emoji: '🛡️', cor: '#607D8B' },
-    { nome: 'Paisagismo', emoji: '🌿', cor: '#27AE60' },
-    { nome: 'Topografia', emoji: '📐', cor: '#F39C12' },
-    { nome: 'Geotécnica', emoji: '🪨', cor: '#8D6E63' },
-    { nome: 'Ambiental', emoji: '🌱', cor: '#52A87B' },
-    { nome: 'Aprovação / Habite-se', emoji: '📋', cor: '#4A90D9' },
+    { num: '01', nome: 'ARQUITETURA', cor: '#9B59B6', emoji: '🏛️' },
+    { num: '02', nome: 'CONTENÇÃO', cor: '#E67E22', emoji: '⚒️' },
+    { num: '03', nome: 'FUNDAÇÃO', cor: '#795548', emoji: '🏗️' },
+    { num: '04', nome: 'ESTRUTURA', cor: '#607D8B', emoji: '🔩' },
+    { num: '05', nome: 'HIDRÁULICA', cor: '#2196F3', emoji: '💧' },
+    { num: '06', nome: 'ELÉTRICA', cor: '#F1C40F', emoji: '⚡' },
+    { num: '07', nome: 'SPDA', cor: '#FF5722', emoji: '⚡' },
+    { num: '08', nome: 'TELECOM', cor: '#00BCD4', emoji: '📡' },
+    { num: '09', nome: 'AQUECIMENTO', cor: '#FF7043', emoji: '🔥' },
+    { num: '10', nome: 'PROTEÇÃO E COMBATE À INCÊNDIO (PCI)', cor: '#E53935', emoji: '🚒' },
+    { num: '11', nome: 'GÁS', cor: '#26A69A', emoji: '🔵' },
+    { num: '12', nome: 'AR CONDICIONADO', cor: '#42A5F5', emoji: '❄️' },
+    { num: '14', nome: 'INTERIORES', cor: '#AB47BC', emoji: '🛋️' },
+    { num: '15', nome: 'IMAGENS', cor: '#66BB6A', emoji: '🖼️' },
 ]
 
-interface Projeto {
+type Arquivo = {
     id: string
-    disciplina: string
     nome: string
     revisao: string
+    download_url: string | null
+    disciplina: string
+    subpasta: string | null
     vigente: boolean
-    data?: string
-    download_url?: string
 }
 
 export default function ProjetosPage() {
     const { obra } = useObra()
     const supabase = createClient()
-    const [projetos, setProjetos] = useState<Projeto[]>([])
-    const [loading, setLoading] = useState(true)
-    const [expandidos, setExpandidos] = useState<Record<string, boolean>>({})
-    const [showNovasPasta, setShowNovaPasta] = useState(false)
-    const [showForm] = useState(false) // mantido para evitar erro de ref — não usado na UI
-    const [novaPastaNome, setNovaPastaNome] = useState('')
-    const [pastasExtras, setPastasExtras] = useState<string[]>([])
+
+    const [arquivos, setArquivos] = useState<Arquivo[]>([])
+    const [loading, setLoading] = useState(false)
     const [uploading, setUploading] = useState(false)
+
+    // Expansão de pastas e subpastas
+    const [abertas, setAbertas] = useState<Record<string, boolean>>({})
+    const [abertasSub, setAbertasSub] = useState<Record<string, boolean>>({})
+
+    // Pastas extras (disciplinas customizadas)
+    const [pastasExtras, setPastasExtras] = useState<{ num: string; nome: string; cor: string; emoji: string }[]>([])
+    const [showNovaPasta, setShowNovaPasta] = useState(false)
+    const [novaPastaNome, setNovaPastaNome] = useState('')
+
+    // Subpastas extras por disciplina (incluindo as vazias criadas pelo usuário)
+    // chave: `${num}-${nome_disciplina}`, valor: lista de nomes de subpastas
+    const [subpastasExtras, setSubpastasExtras] = useState<Record<string, string[]>>({})
+    const [showNovaSubpasta, setShowNovaSubpasta] = useState<string | null>(null)
+    const [novaSubpastaNome, setNovaSubpastaNome] = useState('')
+
+    // Selecionar subpasta no upload
+    const [uploadTarget, setUploadTarget] = useState<{ disc: string; sub: string | null } | null>(null)
     const fileRef = useRef<HTMLInputElement>(null)
 
+    useEffect(() => {
+        if (!obra) { setArquivos([]); return }
+        setLoading(true)
+        supabase.from('projetos')
+            .select('id, nome, revisao, download_url, disciplina, subpasta, vigente')
+            .eq('obra_id', obra.id)
+            .order('disciplina')
+            .then(({ data }) => { setArquivos(data || []); setLoading(false) })
+    }, [obra?.id])
+
     const todasDisciplinas = [
-        ...DISCIPLINAS_DEFAULT.map(d => d.nome),
+        ...DISCIPLINAS_DEFAULT,
         ...pastasExtras,
     ]
 
-    useEffect(() => {
-        if (!obra) { setLoading(false); return }
-        supabase.from('projetos')
-            .select('id, disciplina, nome, revisao, vigente, data, download_url')
-            .eq('obra_id', obra.id)
-            .order('disciplina')
-            .then(({ data }) => { setProjetos(data || []); setLoading(false) })
-    }, [obra])
-
-    function togglePasta(nome: string) {
-        setExpandidos(p => ({ ...p, [nome]: !p[nome] }))
+    // ── helpers ──────────────────────────────────────────────────────────────
+    function discKey(disc: { num: string; nome: string }) {
+        return `${disc.num}-${disc.nome}`
     }
 
-    async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>, disciplina: string) {
+    function togglePasta(key: string) {
+        setAbertas(p => ({ ...p, [key]: !p[key] }))
+    }
+
+    function toggleSub(key: string) {
+        setAbertasSub(p => ({ ...p, [key]: !p[key] }))
+    }
+
+    // arquivos desta disciplina, opcionalmente filtrados por subpasta
+    function arquivosDe(discNome: string, sub: string | null) {
+        return arquivos.filter(a =>
+            a.disciplina === discNome &&
+            (sub === null ? !a.subpasta : a.subpasta === sub)
+        )
+    }
+
+    // subpastas existentes nos arquivos desta disciplina + extras criadas
+    function subpastasDisc(key: string, discNome: string) {
+        const dasDB = Array.from(new Set(
+            arquivos
+                .filter(a => a.disciplina === discNome && a.subpasta)
+                .map(a => a.subpasta as string)
+        ))
+        const extras = subpastasExtras[key] || []
+        return Array.from(new Set([...dasDB, ...extras]))
+    }
+
+    // ── upload ───────────────────────────────────────────────────────────────
+    function triggerUpload(disc: string, sub: string | null) {
+        setUploadTarget({ disc, sub })
+        fileRef.current?.click()
+    }
+
+    async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
         const files = Array.from(e.target.files || [])
-        if (!files.length || !obra) return
+        if (!files.length || !obra || !uploadTarget) return
         setUploading(true)
         for (const file of files) {
-            const path = `${obra.id}/projetos/${disciplina}/${Date.now()}-${file.name}`
-            const { data: uploaded } = await supabase.storage.from('saga-engenharia').upload(path, file, { cacheControl: '3600' })
+            const subPath = uploadTarget.sub ? `/${uploadTarget.sub}` : ''
+            const path = `${obra.id}/projetos/${uploadTarget.disc}${subPath}/${Date.now()}-${file.name}`
+            const { data: uploaded } = await supabase.storage
+                .from('saga-engenharia').upload(path, file, { cacheControl: '3600' })
             if (uploaded) {
                 const { data: { publicUrl } } = supabase.storage.from('saga-engenharia').getPublicUrl(path)
                 const { data } = await supabase.from('projetos').insert({
-                    obra_id: obra.id, disciplina,
+                    obra_id: obra.id,
+                    disciplina: uploadTarget.disc,
+                    subpasta: uploadTarget.sub || null,
                     nome: file.name.replace(/\.[^.]+$/, ''),
                     revisao: 'R00', vigente: true, download_url: publicUrl,
                 }).select().single()
-                if (data) {
-                    setProjetos(p => [...p, data])
-                    setExpandidos(p => ({ ...p, [disciplina]: true }))
-                }
+                if (data) setArquivos(p => [...p, data])
             }
         }
         setUploading(false)
+        setUploadTarget(null)
         e.target.value = ''
     }
 
-
-    async function deleteProjeto(id: string) {
+    // ── delete ────────────────────────────────────────────────────────────────
+    async function deleteArquivo(id: string) {
         await supabase.from('projetos').delete().eq('id', id)
-        setProjetos(p => p.filter(x => x.id !== id))
+        setArquivos(p => p.filter(a => a.id !== id))
     }
 
+    // ── nova pasta ────────────────────────────────────────────────────────────
     function adicionarPasta() {
-        const nome = novaPastaNome.trim()
-        if (!nome || todasDisciplinas.includes(nome)) return
-        setPastasExtras(p => [...p, nome])
-        setExpandidos(p => ({ ...p, [nome]: true }))
+        const nome = novaPastaNome.trim().toUpperCase()
+        if (!nome) return
+        const num = String(DISCIPLINAS_DEFAULT.length + pastasExtras.length + 1).padStart(2, '0')
+        setPastasExtras(p => [...p, { num, nome, cor: '#78909C', emoji: '📁' }])
         setNovaPastaNome('')
         setShowNovaPasta(false)
     }
 
-    const porDisciplina = (disc: string) => projetos.filter(p => p.disciplina === disc)
-    const total = projetos.length
-    const discComProjetos = new Set(projetos.map(p => p.disciplina)).size
+    // ── nova subpasta ─────────────────────────────────────────────────────────
+    function adicionarSubpasta(key: string) {
+        const nome = novaSubpastaNome.trim()
+        if (!nome) return
+        setSubpastasExtras(p => ({ ...p, [key]: [...(p[key] || []), nome] }))
+        setAbertasSub(p => ({ ...p, [`${key}::${nome}`]: false }))
+        setNovaSubpastaNome('')
+        setShowNovaSubpasta(null)
+    }
+
+    const total = arquivos.length
 
     return (
-        <div style={{ padding: '20px', maxWidth: 800 }}>
+        <div style={{ padding: '20px', maxWidth: 840 }}>
+            {/* Hidden file input */}
+            <input ref={fileRef} type="file" multiple style={{ display: 'none' }}
+                accept=".pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.rvt,.ifc"
+                onChange={handleFileUpload} />
 
             {/* ── Header ── */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
@@ -120,36 +185,32 @@ export default function ProjetosPage() {
                     </div>
                     <div>
                         <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)' }}>Projetos</h1>
-                        {obra && <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>{obra.nome} · {total} arquivo{total !== 1 ? 's' : ''} em {discComProjetos} disciplina{discComProjetos !== 1 ? 's' : ''}</p>}
+                        {obra && <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>{obra.nome} · {total} arquivo{total !== 1 ? 's' : ''}</p>}
                     </div>
                 </div>
-                <div style={{ display: 'flex', gap: 8 }}>
-                    <button
-                        onClick={() => setShowNovaPasta(p => !p)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 10, background: 'rgba(155,89,182,0.1)', border: '1px solid rgba(155,89,182,0.25)', color: '#9B59B6', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
-                    >
-                        <FolderPlus size={13} /> Nova Pasta
-                    </button>
-                </div>
+                <button
+                    onClick={() => setShowNovaPasta(p => !p)}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 10, background: 'rgba(155,89,182,0.1)', border: '1px solid rgba(155,89,182,0.25)', color: '#9B59B6', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                >
+                    <FolderPlus size={13} /> Nova Pasta
+                </button>
             </div>
 
             {/* ── Form nova pasta ── */}
-            {showNovasPasta && (
-                <div style={{ marginBottom: 14, padding: '14px 16px', borderRadius: 14, background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.2)', display: 'flex', gap: 8 }}>
+            {showNovaPasta && (
+                <div style={{ marginBottom: 14, padding: '12px 16px', borderRadius: 14, background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.2)', display: 'flex', gap: 8 }}>
                     <input
-                        autoFocus
-                        className="input"
-                        style={{ flex: 1 }}
-                        placeholder="Nome da nova pasta / disciplina"
+                        autoFocus className="input"
+                        placeholder="Nome da pasta (ex: SINALIZAÇÃO)"
                         value={novaPastaNome}
                         onChange={e => setNovaPastaNome(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && adicionarPasta()}
+                        style={{ flex: 1 }}
                     />
-                    <button onClick={adicionarPasta} disabled={!novaPastaNome.trim()} style={{ padding: '0 16px', borderRadius: 10, background: '#9B59B6', border: 'none', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>Criar</button>
-                    <button onClick={() => setShowNovaPasta(false)} style={{ width: 36, height: 36, borderRadius: 10, border: '1px solid var(--border-subtle)', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}><X size={14} /></button>
+                    <button onClick={adicionarPasta} style={{ padding: '8px 14px', borderRadius: 10, background: '#9B59B6', border: 'none', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Criar</button>
+                    <button onClick={() => { setShowNovaPasta(false); setNovaPastaNome('') }} style={{ padding: '8px 10px', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={14} /></button>
                 </div>
             )}
-
 
             {!obra ? (
                 <div style={{ padding: '60px 20px', textAlign: 'center', borderRadius: 16, border: '1px dashed rgba(155,89,182,0.2)' }}>
@@ -160,75 +221,106 @@ export default function ProjetosPage() {
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {todasDisciplinas.map(disc => {
-                        const itens = porDisciplina(disc)
-                        const meta = DISCIPLINAS_DEFAULT.find(d => d.nome === disc)
-                        const cor = meta?.cor || '#9B59B6'
-                        const emoji = meta?.emoji || '📁'
-                        const aberto = !!expandidos[disc]
-                        const isCustom = !DISCIPLINAS_DEFAULT.find(d => d.nome === disc)
+                        const key = discKey(disc)
+                        const aberta = !!abertas[key]
+                        const subs = subpastasDisc(key, disc.nome)
+                        const arquivosRaiz = arquivosDe(disc.nome, null)
+                        const totalDisc = arquivos.filter(a => a.disciplina === disc.nome).length
 
                         return (
-                            <div key={disc} style={{ borderRadius: 14, border: `1px solid ${aberto ? `${cor}33` : 'var(--border-subtle)'}`, overflow: 'hidden', background: aberto ? `${cor}08` : 'rgba(255,255,255,0.02)', transition: 'all 0.2s' }}>
-                                {/* Cabeçalho da pasta */}
+                            <div key={key} style={{ borderRadius: 14, border: `1px solid ${aberta ? `${disc.cor}33` : 'var(--border-subtle)'}`, overflow: 'hidden', background: aberta ? `${disc.cor}06` : 'rgba(255,255,255,0.02)', transition: 'all 0.2s' }}>
+
+                                {/* ── Cabeçalho da pasta principal ── */}
                                 <div
-                                    onClick={() => togglePasta(disc)}
+                                    onClick={() => togglePasta(key)}
                                     style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', cursor: 'pointer', userSelect: 'none' }}
                                 >
-                                    <span style={{ fontSize: 16, flexShrink: 0 }}>{emoji}</span>
+                                    <span style={{ fontSize: 18, flexShrink: 0 }}>{disc.emoji}</span>
                                     <div style={{ flex: 1, minWidth: 0 }}>
-                                        <span style={{ fontSize: 13, fontWeight: 700, color: aberto ? cor : 'var(--text-primary)' }}>{disc}</span>
-                                        {isCustom && <span style={{ marginLeft: 6, fontSize: 9, padding: '1px 6px', borderRadius: 99, background: 'rgba(255,255,255,0.08)', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Custom</span>}
+                                        <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                            <span style={{ color: disc.cor, marginRight: 6, fontSize: 11 }}>{disc.num}</span>
+                                            {disc.nome}
+                                        </p>
+                                        {totalDisc > 0 && <p style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 1 }}>{totalDisc} arquivo{totalDisc !== 1 ? 's' : ''}{subs.length > 0 ? ` · ${subs.length} subpasta${subs.length !== 1 ? 's' : ''}` : ''}</p>}
                                     </div>
-                                    <span style={{ fontSize: 11, color: 'var(--text-muted)', marginRight: 8 }}>
-                                        {itens.length > 0 ? `${itens.length} arquivo${itens.length !== 1 ? 's' : ''}` : 'vazia'}
-                                    </span>
-                                    {/* Botão upload rápido na pasta */}
-                                    <label
-                                        title="Enviar arquivo para esta pasta"
-                                        onClick={e => e.stopPropagation()}
-                                        style={{ width: 28, height: 28, borderRadius: 8, border: `1px solid ${cor}33`, background: `${cor}11`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
-                                    >
-                                        {uploading ? <Loader2 size={12} className="animate-spin" style={{ color: cor }} /> : <Upload size={12} style={{ color: cor }} />}
-                                        <input type="file" multiple style={{ display: 'none' }} accept=".pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx,.png,.jpg" onChange={e => handleFileUpload(e, disc)} />
-                                    </label>
-                                    {aberto ? <ChevronDown size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} /> : <ChevronRight size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />}
+                                    {/* Botão upload na raiz da pasta */}
+                                    <div onClick={e => e.stopPropagation()} style={{ display: 'flex', gap: 4 }}>
+                                        {uploading && uploadTarget?.disc === disc.nome && !uploadTarget.sub
+                                            ? <Loader2 size={14} style={{ color: disc.cor, animation: 'spin 1s linear infinite' }} />
+                                            : <button onClick={() => triggerUpload(disc.nome, null)} title="Enviar para raiz" style={{ padding: '4px 8px', borderRadius: 7, background: `${disc.cor}15`, border: `1px solid ${disc.cor}33`, color: disc.cor, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600 }}>
+                                                <Upload size={11} /> Enviar
+                                            </button>
+                                        }
+                                        <button onClick={() => { setShowNovaSubpasta(key); setNovaSubpastaNome(''); setAbertas(p => ({ ...p, [key]: true })) }} title="Nova subpasta" style={{ padding: '4px 7px', borderRadius: 7, background: `${disc.cor}15`, border: `1px solid ${disc.cor}33`, color: disc.cor, cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                                            <FolderPlus size={11} />
+                                        </button>
+                                    </div>
+                                    {aberta ? <ChevronDown size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} /> : <ChevronRight size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />}
                                 </div>
 
-                                {/* Conteúdo da pasta */}
-                                {aberto && (
-                                    <div style={{ borderTop: `1px solid ${cor}20`, padding: '8px 8px 8px 12px' }}>
-                                        {itens.length === 0 ? (
-                                            <div style={{ padding: '16px 8px', textAlign: 'center' }}>
-                                                <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Pasta vazia — toque no ⬆️ para enviar arquivos (múltiplos permitidos)</p>
+                                {/* ── Conteúdo da pasta ── */}
+                                {aberta && (
+                                    <div style={{ borderTop: `1px solid ${disc.cor}20`, padding: '8px 12px 12px' }}>
+
+                                        {/* Form nova subpasta */}
+                                        {showNovaSubpasta === key && (
+                                            <div style={{ marginBottom: 10, display: 'flex', gap: 6, alignItems: 'center' }}>
+                                                <input
+                                                    autoFocus className="input"
+                                                    placeholder="Nome da subpasta"
+                                                    value={novaSubpastaNome}
+                                                    onChange={e => setNovaSubpastaNome(e.target.value)}
+                                                    onKeyDown={e => e.key === 'Enter' && adicionarSubpasta(key)}
+                                                    style={{ flex: 1, height: 34, fontSize: 12 }}
+                                                />
+                                                <button onClick={() => adicionarSubpasta(key)} style={{ padding: '6px 12px', borderRadius: 8, background: disc.cor, border: 'none', color: '#fff', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Criar</button>
+                                                <button onClick={() => setShowNovaSubpasta(null)} style={{ padding: '6px 8px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={12} /></button>
                                             </div>
-                                        ) : (
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                                                {itens.map(p => (
-                                                    <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 10, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)', transition: 'all 0.15s' }}>
-                                                        <div style={{ width: 34, height: 34, borderRadius: 9, background: `${cor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                            <FileText size={16} style={{ color: cor }} />
-                                                        </div>
-                                                        <div style={{ flex: 1, minWidth: 0 }}>
-                                                            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.nome}</p>
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
-                                                                <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 99, background: `${cor}18`, color: cor, fontWeight: 700 }}>{p.revisao}</span>
-                                                                {!p.vigente && <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>arquivado</span>}
-                                                                {p.vigente && <span style={{ fontSize: 9, color: '#52A87B', fontWeight: 600 }}>● vigente</span>}
-                                                            </div>
-                                                        </div>
-                                                        <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-                                                            {p.download_url && (
-                                                                <a href={p.download_url} target="_blank" rel="noopener noreferrer" style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4A90D9' }}>
-                                                                    <Download size={14} />
-                                                                </a>
-                                                            )}
-                                                            <button onClick={() => deleteProjeto(p.id)} style={{ width: 30, height: 30, borderRadius: 8, background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#EF4444' }}>
-                                                                <Trash2 size={12} />
+                                        )}
+
+                                        {/* ── Subpastas ── */}
+                                        {subs.map(sub => {
+                                            const subKey = `${key}::${sub}`
+                                            const subAberta = !!abertasSub[subKey]
+                                            const arquivosSub = arquivosDe(disc.nome, sub)
+                                            return (
+                                                <div key={sub} style={{ marginBottom: 4, borderRadius: 10, border: `1px solid ${disc.cor}20`, overflow: 'hidden', background: subAberta ? `${disc.cor}04` : 'transparent' }}>
+                                                    <div
+                                                        onClick={() => toggleSub(subKey)}
+                                                        style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', cursor: 'pointer', userSelect: 'none' }}
+                                                    >
+                                                        <span style={{ fontSize: 13 }}>📂</span>
+                                                        <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>{sub}</span>
+                                                        {arquivosSub.length > 0 && <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{arquivosSub.length} arq.</span>}
+                                                        <div onClick={e => e.stopPropagation()}>
+                                                            <button onClick={() => triggerUpload(disc.nome, sub)} title="Enviar para esta subpasta" style={{ padding: '3px 8px', borderRadius: 6, background: `${disc.cor}15`, border: `1px solid ${disc.cor}33`, color: disc.cor, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600 }}>
+                                                                {uploading && uploadTarget?.disc === disc.nome && uploadTarget.sub === sub ? <Loader2 size={10} style={{ animation: 'spin 1s linear infinite' }} /> : <Upload size={10} />} Enviar
                                                             </button>
                                                         </div>
+                                                        {subAberta ? <ChevronDown size={13} style={{ color: 'var(--text-muted)' }} /> : <ChevronRight size={13} style={{ color: 'var(--text-muted)' }} />}
                                                     </div>
-                                                ))}
+                                                    {subAberta && (
+                                                        <div style={{ borderTop: `1px solid ${disc.cor}15`, padding: '6px 10px' }}>
+                                                            <ArquivosList arquivos={arquivosSub} cor={disc.cor} onDelete={deleteArquivo} />
+                                                            {arquivosSub.length === 0 && <p style={{ fontSize: 11, color: 'var(--text-muted)', padding: '8px 4px' }}>Subpasta vazia — toque em Enviar acima</p>}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )
+                                        })}
+
+                                        {/* ── Arquivos na raiz da disciplina ── */}
+                                        {arquivosRaiz.length > 0 && (
+                                            <div style={{ marginTop: subs.length > 0 ? 8 : 0 }}>
+                                                {subs.length > 0 && <p style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 4, paddingLeft: 4 }}>Raiz</p>}
+                                                <ArquivosList arquivos={arquivosRaiz} cor={disc.cor} onDelete={deleteArquivo} />
                                             </div>
+                                        )}
+
+                                        {subs.length === 0 && arquivosRaiz.length === 0 && (
+                                            <p style={{ fontSize: 12, color: 'var(--text-muted)', padding: '12px 4px', textAlign: 'center' }}>
+                                                Pasta vazia — envie arquivos ou crie subpastas com 📁+
+                                            </p>
                                         )}
                                     </div>
                                 )}
@@ -237,6 +329,38 @@ export default function ProjetosPage() {
                     })}
                 </div>
             )}
+        </div>
+    )
+}
+
+// ── Componente de lista de arquivos ─────────────────────────────────────────
+function ArquivosList({ arquivos, cor, onDelete }: { arquivos: Arquivo[]; cor: string; onDelete: (id: string) => void }) {
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            {arquivos.map(a => (
+                <div key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 9, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                    <div style={{ width: 30, height: 30, borderRadius: 8, background: `${cor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <FileText size={14} style={{ color: cor }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.nome}</p>
+                        <div style={{ display: 'flex', gap: 5, marginTop: 1 }}>
+                            <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 99, background: `${cor}18`, color: cor, fontWeight: 700 }}>{a.revisao}</span>
+                            {a.vigente && <span style={{ fontSize: 9, color: '#52A87B', fontWeight: 600 }}>● vigente</span>}
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 3, flexShrink: 0 }}>
+                        {a.download_url && (
+                            <a href={a.download_url} target="_blank" rel="noopener noreferrer" style={{ width: 28, height: 28, borderRadius: 7, background: 'rgba(74,144,217,0.12)', border: '1px solid rgba(74,144,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4A90D9' }}>
+                                <Download size={12} />
+                            </a>
+                        )}
+                        <button onClick={() => onDelete(a.id)} style={{ width: 28, height: 28, borderRadius: 7, background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#EF4444' }}>
+                            <Trash2 size={11} />
+                        </button>
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }
