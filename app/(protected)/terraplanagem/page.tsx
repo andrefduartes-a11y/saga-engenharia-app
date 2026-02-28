@@ -107,7 +107,12 @@ export default function TerrapalagemPage() {
     async function confirmarDelete() {
         if (!deleteId) return
         setDeleting(true)
-        await supabase.from('terraplanagem_etapas').delete().eq('id', deleteId)
+        const { error } = await supabase.from('terraplanagem_etapas').delete().eq('id', deleteId)
+        if (error) {
+            alert('Erro ao apagar. Verifique as permissões no Supabase:\nCREATE POLICY "delete terraplanagem" ON terraplanagem_etapas FOR DELETE TO authenticated USING (true);')
+            setDeleting(false)
+            return
+        }
         setEtapas(p => p.filter(x => x.id !== deleteId))
         setDeleteId(null)
         setDeleting(false)
