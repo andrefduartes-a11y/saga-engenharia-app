@@ -109,21 +109,13 @@ export default function ObraDetailPage({ params }: { params: { id: string } }) {
                 {canEdit && (
                     <div className="flex gap-2 flex-shrink-0">
                         <button onClick={() => { setEditing(v => !v); setError(''); setForm(obra) }}
-                            style={{
-                                display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8,
-                                background: editing ? 'rgba(255,255,255,0.06)' : 'rgba(127,166,83,0.12)',
-                                border: `1px solid ${editing ? 'var(--border-subtle)' : 'rgba(127,166,83,0.3)'}`,
-                                color: editing ? 'var(--text-muted)' : 'var(--green-primary)',
-                                fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                            }}>
+                            className="btn-secondary"
+                            style={{ minHeight: 38, padding: '7px 14px', borderRadius: 10, fontSize: 13, gap: 6 }}>
                             {editing ? <><X size={14} /> Cancelar</> : <><Pencil size={14} /> Editar</>}
                         </button>
                         <button onClick={() => setConfirmDelete(true)}
-                            style={{
-                                display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8,
-                                background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)',
-                                color: '#EF4444', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                            }}>
+                            className="btn-secondary"
+                            style={{ minHeight: 38, padding: '7px 12px', borderRadius: 10, color: 'var(--danger)', borderColor: 'rgba(217,82,82,0.3)', background: 'rgba(217,82,82,0.08)' }}>
                             <Trash2 size={14} />
                         </button>
                     </div>
