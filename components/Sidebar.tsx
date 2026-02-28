@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { useTheme } from '@/lib/theme-context';
 import {
     HardHat, Mountain, ClipboardList, CheckSquare, BookOpen,
     FolderOpen, FileText, ShoppingCart, Bot, GraduationCap,
@@ -57,6 +58,7 @@ interface SidebarProps {
 
 export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggleCollapse }: SidebarProps) {
     const pathname = usePathname();
+    const { theme } = useTheme();
     const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
         'Engenharia': true, 'Controle & Qualidade': true, 'Documentação': true, 'Suporte': false,
     });
@@ -87,7 +89,7 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
                 justifyContent: collapsed && !isMobile ? 'center' : 'flex-start',
             }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/ico-branco.png" alt="SAGA" style={{ height: 26, width: 'auto', flexShrink: 0 }} />
+                <img src={theme === 'light' ? '/ico-cinza.png' : '/ico-branco.png'} alt="SAGA" style={{ height: 26, width: 'auto', flexShrink: 0 }} />
                 {(!collapsed || isMobile) && (
                     <div style={{ overflow: 'hidden' }}>
                         <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Raleway', sans-serif", letterSpacing: '1.5px' }}>SAGA</div>

@@ -112,7 +112,7 @@ export default function WeatherCard({ cidade, agendamentos = [], compact = false
                     📍 {cidade}
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
-                    {[1, 2, 3, 4, 5].slice(0, compact ? 3 : 5).map(i => (
+                    {[1, 2, 3, 4, 5].map(i => (
                         <div key={i} style={{ flex: 1, height: 72, borderRadius: 8, background: 'rgba(255,255,255,0.05)' }} />
                     ))}
                 </div>
@@ -137,7 +137,7 @@ export default function WeatherCard({ cidade, agendamentos = [], compact = false
         )
     }
 
-    const daysToShow = compact ? 3 : 5
+    const daysToShow = 5
 
     return (
         <div style={boxStyle}>
