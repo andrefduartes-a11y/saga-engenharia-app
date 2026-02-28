@@ -152,7 +152,7 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
                                                         fontSize: 13, fontWeight: active ? 600 : 400,
                                                         borderLeft: collapsed && !isMobile ? 'none' : (active ? '2px solid var(--saga-gray-light)' : '2px solid transparent'),
                                                         borderRight: collapsed && !isMobile && active ? '2px solid var(--saga-gray-light)' : 'none',
-                                                        background: active ? 'rgba(82,95,107,0.15)' : 'transparent',
+                                                        background: active ? 'rgba(60,70,80,0.45)' : 'transparent',
                                                         transition: 'all 0.15s',
                                                     }}
                                                     onMouseEnter={e => { if (!active) { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-primary)'; } }}
