@@ -1,5 +1,7 @@
 -- ─────────────────────────────────────────────────────────────────────────────
--- Rastreabilidade de Concreto (SAGA Construtora)
+-- Criação completa da tabela rastreabilidade_concreto
+-- Execute no SQL Editor do Supabase (Dashboard → SQL Editor → New query)
+-- Seguro para rodar mesmo se a tabela já existir (IF NOT EXISTS)
 -- ─────────────────────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS rastreabilidade_concreto (
@@ -10,41 +12,41 @@ CREATE TABLE IF NOT EXISTS rastreabilidade_concreto (
   updated_at            timestamptz NOT NULL DEFAULT now(),
 
   -- Identificação
-  identificacao_pecas   text NOT NULL,          -- "Identificação da(s) peça(s) concretada(s)"
-  area_pavto            text,                   -- "Área / Pavto"
-  cor_hex               text DEFAULT '#4A90D9', -- Color picker for row identification
+  identificacao_pecas   text NOT NULL,
+  area_pavto            text,
+  cor_hex               text DEFAULT '#4A90D9',
 
   -- Data e volume
   data                  date NOT NULL DEFAULT CURRENT_DATE,
   quantidade_m3         numeric(8,2),
 
   -- Concreto
-  fck_projeto           integer,                -- FCK de Projeto (MPa)
-  usinado               boolean DEFAULT true,   -- Usinado? Sim/Não
-  nota_transporte       text,                   -- Nº da Nota ou Conhecimento de Transporte
+  fck_projeto           integer,
+  usinado               boolean DEFAULT true,
+  nota_transporte       text,
 
   -- Horários
-  horario_chegada       time,                   -- Chegada do Caminhão à Obra
-  horario_inicio        time,                   -- Início do Lançamento
-  horario_final         time,                   -- Final do Lançamento
-  horario_moldagem_cp   time,                   -- Moldagem do Corpo de Prova
+  horario_chegada       time,
+  horario_inicio        time,
+  horario_final         time,
+  horario_moldagem_cp   time,
 
   -- Ensaio
-  slump                 numeric(5,1),           -- Slump (cm)
+  slump                 numeric(5,1),
 
-  -- Rompimentos (preenchidos depois)
-  rompimento_3          numeric(6,1),           -- Resultado 3 dias (MPa)
-  rompimento_7          numeric(6,1),           -- Resultado 7 dias (MPa)
-  rompimento_28a        numeric(6,1),           -- Resultado 28 dias - 1º CP
-  rompimento_28b        numeric(6,1),           -- Resultado 28 dias - 2º CP
+  -- Rompimentos
+  rompimento_3          numeric(6,1),
+  rompimento_7          numeric(6,1),
+  rompimento_28a        numeric(6,1),
+  rompimento_28b        numeric(6,1),
 
   -- Conformidade e responsável
-  conforme              boolean,                -- Conforme? (null = ainda não avaliado)
-  responsavel           text,                   -- Responsável pelo preenchimento
+  conforme              boolean,
+  responsavel           text,
 
   -- Anexo relatório da usina
-  relatorio_url         text,                   -- URL do relatório da usina (Supabase Storage)
-  relatorio_nome        text,                   -- Nome original do arquivo
+  relatorio_url         text,
+  relatorio_nome        text,
 
   -- Observações
   observacoes           text
@@ -53,16 +55,63 @@ CREATE TABLE IF NOT EXISTS rastreabilidade_concreto (
 -- RLS
 ALTER TABLE rastreabilidade_concreto ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "auth_full_access" ON rastreabilidade_concreto
-  FOR ALL USING (auth.uid() IS NOT NULL);
+-- Política: qualquer usuário autenticado tem acesso total
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'rastreabilidade_concreto'
+    AND policyname = 'auth_full_access'
+  ) THEN
+    CREATE POLICY "auth_full_access" ON rastreabilidade_concreto
+      FOR ALL USING (auth.uid() IS NOT NULL);
+  END IF;
+END
+$$;
 
--- Updated_at trigger
-CREATE OR REPLACE FUNCTION update_updated_at()
+-- Trigger updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER LANGUAGE plpgsql AS $$
-BEGIN NEW.updated_at = now(); RETURN NEW; END;
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
 $$;
 
 DROP TRIGGER IF EXISTS trg_rastreabilidade_updated_at ON rastreabilidade_concreto;
 CREATE TRIGGER trg_rastreabilidade_updated_at
   BEFORE UPDATE ON rastreabilidade_concreto
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Bucket de Storage para relatórios da usina
+-- ─────────────────────────────────────────────────────────────────────────────
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('saga-engenharia', 'saga-engenharia', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Política: usuários autenticados podem fazer upload
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage'
+    AND tablename = 'objects'
+    AND policyname = 'saga_engenharia_auth_upload'
+  ) THEN
+    CREATE POLICY "saga_engenharia_auth_upload" ON storage.objects
+      FOR INSERT TO authenticated
+      WITH CHECK (bucket_id = 'saga-engenharia');
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage'
+    AND tablename = 'objects'
+    AND policyname = 'saga_engenharia_public_read'
+  ) THEN
+    CREATE POLICY "saga_engenharia_public_read" ON storage.objects
+      FOR SELECT USING (bucket_id = 'saga-engenharia');
+  END IF;
+END
+$$;
