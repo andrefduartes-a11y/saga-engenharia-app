@@ -14,6 +14,7 @@ interface Rdo {
     data: string
     clima?: string
     equipe_presente?: number
+    equipe_json?: { nome: string; funcao: string }[]
     descricao_atividades?: string
     ocorrencias?: string
     fotos_url?: string[]
@@ -170,6 +171,28 @@ export default function RdoDetailPage() {
                         )}
                     </div>
                 </div>
+
+                {/* ── Card: Equipe ── */}
+                {((rdo.equipe_json && rdo.equipe_json.length > 0) || (rdo.equipe_presente != null && rdo.equipe_presente > 0)) && (
+                    <div style={{ padding: '16px 20px', borderRadius: 16, background: 'rgba(255,255,255,0.025)', border: '1px solid var(--border-subtle)', marginBottom: 14 }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: 10 }}>
+                            👷 Equipe Presente ({rdo.equipe_presente || rdo.equipe_json?.length || 0} pessoas)
+                        </div>
+                        {rdo.equipe_json && rdo.equipe_json.length > 0 ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                {rdo.equipe_json.map((m, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 12px', borderRadius: 10, background: 'rgba(82,168,123,0.06)', border: '1px solid rgba(82,168,123,0.15)' }}>
+                                        <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#52A87B', flexShrink: 0 }} />
+                                        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', flex: 1 }}>{m.nome}</span>
+                                        <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: 'rgba(82,168,123,0.12)', color: '#52A87B', fontWeight: 600 }}>{m.funcao}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>{rdo.equipe_presente} pessoa{rdo.equipe_presente !== 1 ? 's' : ''} presentes</p>
+                        )}
+                    </div>
+                )}
 
                 {/* ── Card: Atividades ── */}
                 {rdo.descricao_atividades && (

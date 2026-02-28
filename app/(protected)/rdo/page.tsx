@@ -51,22 +51,20 @@ export default function RdoListPage() {
                         {obra && !isDirector && <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 1 }}>{obra.nome}</p>}
                     </div>
                 </div>
-                <Link
-                    href="/rdo/novo"
-                    style={{
-                        display: 'flex', alignItems: 'center', gap: 8,
-                        padding: '9px 18px', borderRadius: 10,
-                        background: 'linear-gradient(135deg, #52A87B, #3d8460)',
-                        textDecoration: 'none', color: '#fff',
-                        fontSize: 13, fontWeight: 700,
-                        boxShadow: '0 4px 14px rgba(82,168,123,0.3)',
-                        transition: 'all 0.2s',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
-                >
-                    <Plus size={15} /> Novo RDO
-                </Link>
+                <div style={{ display: 'flex', gap: 8 }}>
+                    <Link
+                        href="/rdo/equipe"
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 10, background: 'rgba(82,168,123,0.1)', border: '1px solid rgba(82,168,123,0.25)', textDecoration: 'none', color: '#52A87B', fontSize: 12, fontWeight: 700 }}
+                    >
+                        <Users size={13} /> Equipe
+                    </Link>
+                    <Link
+                        href="/rdo/novo"
+                        style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 18px', borderRadius: 10, background: 'linear-gradient(135deg, #52A87B, #3d8460)', textDecoration: 'none', color: '#fff', fontSize: 13, fontWeight: 700, boxShadow: '0 4px 14px rgba(82,168,123,0.3)' }}
+                    >
+                        <Plus size={15} /> Novo RDO
+                    </Link>
+                </div>
             </div>
 
             {/* Content */}
