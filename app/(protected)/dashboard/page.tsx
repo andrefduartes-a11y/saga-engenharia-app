@@ -9,6 +9,7 @@ import {
     FolderOpen, FileText, ShoppingCart, Bot, GraduationCap,
     HelpCircle, Building2, ChevronRight, MapPin, AlertTriangle, Calendar,
 } from 'lucide-react'
+import DraggableModuleGrid from '@/components/DraggableModuleGrid'
 
 // WeatherCard is client-only (calls browser fetch to open-meteo)
 const WeatherCard = dynamic(() => import('@/components/WeatherCard'), { ssr: false })
@@ -47,6 +48,9 @@ const SECTIONS = [
         ]
     }
 ]
+
+// Flat list for DraggableModuleGrid
+const FLAT_MODULES = SECTIONS.flatMap(s => s.modules)
 
 interface Obra { id: string; nome: string; endereco?: string; cidade?: string; status: string; data_inicio?: string; data_previsao_fim?: string }
 interface Agendamento { id: string; obra_id: string; data_agendada: string; elemento?: string; volume_estimado?: number; fck_previsto?: number }
@@ -358,34 +362,8 @@ function DiretorDashboard() {
                         )}
                     </div>
 
-                    {/* ── All modules ── */}
-                    <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>MÓDULOS DO SISTEMA</h2>
-                    {SECTIONS.map(section => (
-                        <div key={section.title} style={{ marginBottom: 20 }}>
-                            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8, fontWeight: 600 }}>{section.title}</div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
-                                {section.modules.map(mod => {
-                                    const Icon = mod.icon
-                                    return (
-                                        <Link key={mod.href} href={mod.href} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
-                                            <div className="card" style={{ padding: '12px 14px', borderRadius: 12, cursor: 'pointer', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'flex-start', gap: 10, transition: 'all 0.15s', minHeight: 68, height: '100%', boxSizing: 'border-box' }}
-                                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = mod.color + '55'; (e.currentTarget as HTMLElement).style.background = mod.color + '0a' }}
-                                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-subtle)'; (e.currentTarget as HTMLElement).style.background = '' }}
-                                            >
-                                                <div style={{ width: 32, height: 32, borderRadius: 8, background: mod.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                    <Icon size={15} style={{ color: mod.color }} />
-                                                </div>
-                                                <div>
-                                                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>{mod.label}</div>
-                                                    <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{mod.desc}</div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    )
-                                })}
-                            </div>
-                        </div>
-                    ))}
+                    {/* ── All modules — draggable ── */}
+                    <DraggableModuleGrid modules={FLAT_MODULES} compact={false} />
                 </>
             )}
         </div>
@@ -550,34 +528,8 @@ function EngenheiroDashboard() {
                     {/* ── Próximas Concretagens ── */}
                     <ProximasConcretagens agendamentos={agendamentos} obrasMap={obrasMap} />
 
-                    {/* ── Module cards ── */}
-                    <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>MÓDULOS</h2>
-                    {SECTIONS.map(section => (
-                        <div key={section.title} style={{ marginBottom: 16 }}>
-                            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8, fontWeight: 600 }}>{section.title}</div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 7 }}>
-                                {section.modules.map(mod => {
-                                    const Icon = mod.icon
-                                    return (
-                                        <Link key={mod.href} href={mod.href} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
-                                            <div className="card" style={{ padding: '11px 12px', borderRadius: 12, cursor: 'pointer', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'flex-start', gap: 10, transition: 'all 0.15s', minHeight: 62, height: '100%', boxSizing: 'border-box' }}
-                                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = mod.color + '55'; (e.currentTarget as HTMLElement).style.background = mod.color + '0a' }}
-                                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-subtle)'; (e.currentTarget as HTMLElement).style.background = '' }}
-                                            >
-                                                <div style={{ width: 30, height: 30, borderRadius: 8, background: mod.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                                    <Icon size={14} style={{ color: mod.color }} />
-                                                </div>
-                                                <div>
-                                                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)' }}>{mod.label}</div>
-                                                    <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>{mod.desc}</div>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    )
-                                })}
-                            </div>
-                        </div>
-                    ))}
+                    {/* ── Module cards — draggable ── */}
+                    <DraggableModuleGrid modules={FLAT_MODULES} compact={true} />
                 </>
             )}
         </div>
