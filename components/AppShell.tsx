@@ -4,13 +4,14 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
-import { LogOut, MapPin, ChevronDown, ChevronRight, Bell, Settings, X } from 'lucide-react';
+import { LogOut, MapPin, ChevronDown, ChevronRight, Bell, Settings, X, Sun, Moon } from 'lucide-react';
 import Link from 'next/link';
 import Sidebar, { SidebarToggle } from './Sidebar';
 import { useObra } from '@/lib/obra-context';
 import {
     LayoutDashboard, Building2, User,
 } from 'lucide-react';
+import { useTheme } from '@/lib/theme-context';
 
 // Mobile bottom nav items
 const MOBILE_NAV = [
@@ -33,6 +34,7 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
 
     const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const { theme, toggleTheme } = useTheme();
     const [role, setRole] = useState('');
     const [roleFetched, setRoleFetched] = useState(false);
     const [showBell, setShowBell] = useState(false);
@@ -155,6 +157,20 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
                             )}
                         </div>
 
+                        {/* Theme toggle */}
+                        <button
+                            onClick={toggleTheme}
+                            style={{
+                                background: 'transparent', border: 'none', cursor: 'pointer',
+                                color: 'var(--text-secondary)', padding: 6, borderRadius: 8,
+                                display: 'flex', alignItems: 'center',
+                                transition: 'color 0.2s',
+                            }}
+                            title={theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
+                        >
+                            {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+                        </button>
+
                         {/* Settings gear — diretor only */}
                         {roleFetched && (role === 'diretor' || role === 'admin') && (
                             <button onClick={() => router.push('/configuracoes')} style={{
@@ -206,7 +222,8 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
                 {/* ── Mobile Bottom Nav ── */}
                 <nav className="bottom-nav-mobile" style={{
                     position: 'fixed', bottom: 0, left: 0, right: 0,
-                    background: 'rgba(26,31,36,0.97)', backdropFilter: 'blur(12px)',
+                    background: theme === 'dark' ? 'rgba(26,31,36,0.97)' : 'rgba(255,255,255,0.97)',
+                    backdropFilter: 'blur(12px)',
                     borderTop: '1px solid var(--border-subtle)',
                     display: 'flex', justifyContent: 'space-around',
                     padding: '8px 0 14px', zIndex: 100,

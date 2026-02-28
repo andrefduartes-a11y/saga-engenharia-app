@@ -4,13 +4,15 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { LogOut, ChevronDown, MapPin, Settings, Bell, X } from 'lucide-react'
+import { LogOut, ChevronDown, MapPin, Settings, Bell, X, Sun, Moon } from 'lucide-react'
 import { useObra } from '@/lib/obra-context'
+import { useTheme } from '@/lib/theme-context'
 
 export default function TopBar({ user }: { user: { email?: string } | null }) {
     const router = useRouter()
     const supabase = createClient()
     const { obra } = useObra()
+    const { theme, toggleTheme } = useTheme()
     const [role, setRole] = useState('')
     const [roleFetched, setRoleFetched] = useState(false)
     const [showBell, setShowBell] = useState(false)
@@ -148,6 +150,20 @@ export default function TopBar({ user }: { user: { email?: string } | null }) {
                         </div>
                     )}
                 </div>
+
+                {/* Theme toggle */}
+                <button
+                    onClick={toggleTheme}
+                    style={{
+                        background: 'transparent', border: 'none', cursor: 'pointer',
+                        color: 'var(--text-secondary)', padding: 6, borderRadius: 8,
+                        display: 'flex', alignItems: 'center',
+                        transition: 'color 0.2s',
+                    }}
+                    title={theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
+                >
+                    {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+                </button>
 
                 {/* Settings gear — só admin */}
                 {roleFetched && role === 'admin' && (

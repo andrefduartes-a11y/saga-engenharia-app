@@ -11,7 +11,7 @@
   --saga-gray-dark: #3A444E;
   --saga-gray-light: #7A8A96;
 
-  /* Fundos */
+  /* Fundos — modo escuro (padrão) */
   --bg-primary: #1A1F24;
   --bg-card: #22292F;
   --bg-elevated: #2B3640;
@@ -53,6 +53,78 @@
   --sidebar-width: 220px;
   --sidebar-collapsed-width: 52px;
   --header-height: 56px;
+}
+
+/* ===================== MODO CLARO =================== */
+[data-theme="light"] {
+  /* Fundos */
+  --bg-primary: #F2F4F6;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #E8ECEF;
+  --bg-input: #F7F9FA;
+
+  /* Aliases */
+  --navy: #F2F4F6;
+  --navy-card: #FFFFFF;
+  --navy-light: #E8ECEF;
+  --sidebar-bg: #FFFFFF;
+
+  /* Texto */
+  --text-primary: #1A1F24;
+  --text-secondary: #4A5A66;
+  --text-muted: #8A9BAA;
+
+  /* Acento */
+  --accent: #525F6B;
+  --accent-hover: #3A444E;
+  --accent-light: rgba(82, 95, 107, 0.1);
+
+  /* Bordas */
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-focus: rgba(82, 95, 107, 0.5);
+
+  /* Status */
+  --green-ok: #3A9166;
+  --red-error: #C23B3B;
+  --yellow-warn: #B07820;
+  --info: #3B7FC4;
+
+  /* Legacy */
+  --green-primary: #3A9166;
+  --bg-surface: #FFFFFF;
+  --danger: #C23B3B;
+}
+
+[data-theme="light"] .cockpit-header {
+  background: rgba(242, 244, 246, 0.97);
+}
+
+[data-theme="light"] .topbar {
+  background: rgba(242, 244, 246, 0.97);
+}
+
+[data-theme="light"] .bottom-nav {
+  background: rgba(255, 255, 255, 0.97);
+}
+
+[data-theme="light"] select option {
+  background-color: #FFFFFF;
+  color: #1A1F24;
+}
+
+[data-theme="light"] select option:checked,
+[data-theme="light"] select option:hover {
+  background-color: #E8ECEF;
+  color: #1A1F24;
+}
+
+[data-theme="light"] .progress-bar-track {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
 }
 
 * {
