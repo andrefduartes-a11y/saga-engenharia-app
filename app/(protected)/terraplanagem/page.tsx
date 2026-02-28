@@ -56,10 +56,11 @@ export default function TerrapalagemPage() {
 
 
     async function criarEtapa() {
-        if (!obra || !form.nome_etapa) return
+        const obraId = obra?.id || selectedObraId
+        if (!obraId || !form.nome_etapa) return
         setSalvando(true)
         const { data } = await supabase.from('terraplanagem_etapas').insert({
-            obra_id: obra.id,
+            obra_id: obraId,
             nome_etapa: form.nome_etapa,
             data_inicio: form.data_inicio || null,
             responsavel: form.responsavel || null,
@@ -68,6 +69,10 @@ export default function TerrapalagemPage() {
             setEtapas(p => [data, ...p])
             setNovaEtapa(false)
             setForm({ nome_etapa: '', data_inicio: '', responsavel: '' })
+            // If director just created via modal, refresh list with the selected obra
+            if (!obra && selectedObraId) {
+                // list will now reflect selectedObraId since obra was derived from it
+            }
         }
         setSalvando(false)
     }
@@ -123,17 +128,16 @@ export default function TerrapalagemPage() {
                 </div>
                 <button
                     onClick={() => setNovaEtapa(true)}
-                    disabled={!obra}
                     style={{
                         display: 'flex', alignItems: 'center', gap: 8,
                         padding: '9px 18px', borderRadius: 10,
-                        background: obra ? 'linear-gradient(135deg, #D4A843, #c49130)' : 'rgba(255,255,255,0.06)',
-                        border: 'none', color: obra ? '#fff' : 'var(--text-muted)',
-                        fontSize: 13, fontWeight: 700, cursor: obra ? 'pointer' : 'not-allowed',
-                        boxShadow: obra ? '0 4px 14px rgba(212,168,67,0.35)' : 'none',
+                        background: 'linear-gradient(135deg, #D4A843, #c49130)',
+                        border: 'none', color: '#fff',
+                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                        boxShadow: '0 4px 14px rgba(212,168,67,0.35)',
                         transition: 'all 0.2s',
                     }}
-                    onMouseEnter={e => obra && (e.currentTarget.style.transform = 'translateY(-1px)')}
+                    onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-1px)')}
                     onMouseLeave={e => (e.currentTarget.style.transform = 'none')}
                 >
                     <Plus size={15} /> Nova Etapa
@@ -191,6 +195,27 @@ export default function TerrapalagemPage() {
 
                     {/* Form body */}
                     <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+                        {/* Director: obra selector inside modal */}
+                        {isDirector && (
+                            <div>
+                                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
+                                    <Building2 size={10} /> Obra *
+                                </label>
+                                <div style={{ position: 'relative' }}>
+                                    <select
+                                        value={selectedObraId}
+                                        onChange={e => setSelectedObraId(e.target.value)}
+                                        style={{ width: '100%', boxSizing: 'border-box', appearance: 'none', padding: '11px 40px 11px 14px', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(212,168,67,0.25)', color: selectedObraId ? 'var(--text-primary)' : 'var(--text-muted)', fontSize: 13, outline: 'none' }}
+                                    >
+                                        <option value="">Selecione a obra...</option>
+                                        {allObras.map(o => <option key={o.id} value={o.id}>{o.nome}{o.cidade ? ` — ${o.cidade}` : ''}</option>)}
+                                    </select>
+                                    <ChevronDown size={14} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                                </div>
+                            </div>
+                        )}
+
                         {/* Nome */}
                         <div>
                             <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 6, display: 'block' }}>

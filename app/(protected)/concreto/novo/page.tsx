@@ -86,36 +86,36 @@ export default function ConcretoNovoPage() {
                 </div>
             </div>
 
-            {/* Director obra selector */}
-            {isDirector && (
-                <div className="card" style={{ marginBottom: 8 }}>
-                    <label className="form-label">Obra *</label>
-                    <div style={{ position: 'relative' }}>
-                        <select
-                            className="input"
-                            value={selectedObraId}
-                            onChange={e => setSelectedObraId(e.target.value)}
-                            style={{ appearance: 'none', paddingRight: 40 }}
-                            required
-                        >
-                            <option value="">Selecione a obra...</option>
-                            {allObras.map(o => <option key={o.id} value={o.id}>{o.nome}</option>)}
-                        </select>
-                        <ChevronDown size={14} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
-                    </div>
-                </div>
-            )}
-
             {(!obra && !isDirector) && (
                 <div className="card text-center py-6">
                     <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Nenhuma obra vinculada ao seu perfil.</p>
                 </div>
             )}
 
-            {(obra || (isDirector && selectedObraId)) && (
+            {(obra || isDirector) && (
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="card space-y-4">
                         <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>DADOS PRINCIPAIS</p>
+
+                        {/* Director: obra selector as first field inside the form */}
+                        {isDirector && (
+                            <div>
+                                <label className="form-label">Obra *</label>
+                                <div style={{ position: 'relative' }}>
+                                    <select
+                                        className="input"
+                                        value={selectedObraId}
+                                        onChange={e => setSelectedObraId(e.target.value)}
+                                        style={{ appearance: 'none', paddingRight: 40 }}
+                                        required
+                                    >
+                                        <option value="">Selecione a obra...</option>
+                                        {allObras.map(o => <option key={o.id} value={o.id}>{o.nome}</option>)}
+                                    </select>
+                                    <ChevronDown size={14} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                                </div>
+                            </div>
+                        )}
 
                         <div className="grid grid-cols-2 gap-3">
                             <div>
