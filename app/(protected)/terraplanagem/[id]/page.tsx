@@ -90,7 +90,6 @@ function AddControlModal({
             const { data, error } = await supabase.from('controle_viagens_caminhao').insert({
                 etapa_id: etapaId,
                 data: vForm.data,
-                caminhao_id: vForm.caminhao_id && vForm.caminhao_id !== '__manual' ? vForm.caminhao_id : null,
                 tipo_caminhao: vForm.tipo_caminhao || null,
                 placa: vForm.placa || null,
                 quantidade_viagens: Number(vForm.quantidade_viagens),
@@ -104,7 +103,6 @@ function AddControlModal({
             const { data, error } = await supabase.from('controle_horas_equipamento').insert({
                 etapa_id: etapaId,
                 data: eForm.data,
-                equipamento_id: eForm.equipamento_id && eForm.equipamento_id !== '__manual' ? eForm.equipamento_id : null,
                 nome_equipamento: eForm.nome_equipamento || null,
                 hora_inicio: eForm.hora_inicio,
                 hora_fim: eForm.hora_fim,
