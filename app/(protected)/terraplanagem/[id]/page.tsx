@@ -155,33 +155,28 @@ function AddControlModal({
                             <input className="input" type="date" value={vForm.data} onChange={e => setVForm(p => ({ ...p, data: e.target.value }))} />
                         </div>
 
-                        {caminhoes.length > 0 ? (
+                        <div>
+                            <label className="form-label">Tipo de Caminhão *</label>
+                            <select className="input" value={vForm.tipo_caminhao} onChange={e => setVForm(p => ({ ...p, tipo_caminhao: e.target.value }))}>
+                                <option value="">Selecione o tipo...</option>
+                                <option>Caçamba — 6m³</option>
+                                <option>Caçamba — 10m³</option>
+                                <option>Caçamba — 14m³</option>
+                                <option>Basculante — 6m³</option>
+                                <option>Basculante — 10m³</option>
+                                <option>Basculante — 14m³</option>
+                                <option>Truck — 16m³</option>
+                                <option>Romeu e Julieta — 24m³</option>
+                                <option>Carreta — 30m³</option>
+                                <option>Carreta — 40m³</option>
+                                <option value="__outro">Outro (informar)</option>
+                            </select>
+                        </div>
+
+                        {vForm.tipo_caminhao === '__outro' && (
                             <div>
-                                <label className="form-label">Caminhão</label>
-                                <select className="input" value={vForm.caminhao_id} onChange={e => onSelectCaminhao(e.target.value)}>
-                                    <option value="">Selecionar caminhão cadastrado...</option>
-                                    {caminhoes.map(c => <option key={c.id} value={c.id}>{c.tipo} — {c.placa}</option>)}
-                                    <option value="__manual">+ Informar manualmente</option>
-                                </select>
-                            </div>
-                        ) : null}
-
-                        {(!vForm.caminhao_id || vForm.caminhao_id === '__manual') && (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                                <div>
-                                    <label className="form-label">Tipo de Caminhão</label>
-                                    <input className="input" placeholder="Ex: Caçamba, Basculante" value={vForm.tipo_caminhao} onChange={e => setVForm(p => ({ ...p, tipo_caminhao: e.target.value }))} />
-                                </div>
-                                <div>
-                                    <label className="form-label">Placa</label>
-                                    <input className="input" placeholder="ABC-1234" value={vForm.placa} onChange={e => setVForm(p => ({ ...p, placa: e.target.value.toUpperCase() }))} />
-                                </div>
-                            </div>
-                        )}
-
-                        {vForm.caminhao_id && vForm.caminhao_id !== '__manual' && (
-                            <div style={{ padding: '8px 12px', background: 'rgba(230,126,34,0.08)', borderRadius: 8, border: '1px solid rgba(230,126,34,0.2)', fontSize: 12, color: '#E67E22' }}>
-                                🚚 {vForm.tipo_caminhao} — {vForm.placa}
+                                <label className="form-label">Especificar tipo</label>
+                                <input className="input" placeholder="Ex: Poliguindaste" onChange={e => setVForm(p => ({ ...p, tipo_caminhao: e.target.value }))} />
                             </div>
                         )}
 
@@ -218,27 +213,39 @@ function AddControlModal({
                             <input className="input" type="date" value={eForm.data} onChange={e => setEForm(p => ({ ...p, data: e.target.value }))} />
                         </div>
 
-                        {equipamentos.length > 0 ? (
-                            <div>
-                                <label className="form-label">Equipamento</label>
-                                <select className="input" value={eForm.equipamento_id} onChange={e => onSelectEquip(e.target.value)}>
-                                    <option value="">Selecionar equipamento cadastrado...</option>
-                                    {equipamentos.map(eq => <option key={eq.id} value={eq.id}>{eq.nome}{eq.tipo ? ` (${eq.tipo})` : ''}</option>)}
-                                    <option value="__manual">+ Informar manualmente</option>
-                                </select>
-                            </div>
-                        ) : null}
+                        <div>
+                            <label className="form-label">Equipamento *</label>
+                            <select className="input" value={eForm.nome_equipamento} onChange={e => setEForm(p => ({ ...p, nome_equipamento: e.target.value }))}>
+                                <option value="">Selecione o equipamento...</option>
+                                <optgroup label="Escavação">
+                                    <option>Escavadeira Hidráulica</option>
+                                    <option>Retroescavadeira</option>
+                                    <option>Draga</option>
+                                </optgroup>
+                                <optgroup label="Compactação">
+                                    <option>Rolo Compactador Liso</option>
+                                    <option>Rolo Compactador Pé-de-Carneiro</option>
+                                    <option>Placa Vibratória</option>
+                                    <option>Soquete Mecânico</option>
+                                </optgroup>
+                                <optgroup label="Movimentação">
+                                    <option>Trator de Esteiras (Bulldozer)</option>
+                                    <option>Motoniveladora (Patrol)</option>
+                                    <option>Pá Carregadeira</option>
+                                    <option>Skid Steer (Bob-cat)</option>
+                                </optgroup>
+                                <optgroup label="Outros">
+                                    <option>Bomba de Rebaixamento</option>
+                                    <option>Compressor de Ar</option>
+                                    <option value="__outro">Outro (especificar)</option>
+                                </optgroup>
+                            </select>
+                        </div>
 
-                        {(!eForm.equipamento_id || eForm.equipamento_id === '__manual') && (
+                        {eForm.nome_equipamento === '__outro' && (
                             <div>
-                                <label className="form-label">Nome do Equipamento</label>
-                                <input className="input" placeholder="Ex: Escavadeira CAT 336" value={eForm.nome_equipamento} onChange={e => setEForm(p => ({ ...p, nome_equipamento: e.target.value }))} />
-                            </div>
-                        )}
-
-                        {eForm.equipamento_id && eForm.equipamento_id !== '__manual' && (
-                            <div style={{ padding: '8px 12px', background: 'rgba(52,152,219,0.08)', borderRadius: 8, border: '1px solid rgba(52,152,219,0.2)', fontSize: 12, color: '#3498DB' }}>
-                                🚜 {eForm.nome_equipamento}
+                                <label className="form-label">Especificar equipamento</label>
+                                <input className="input" placeholder="Ex: Miniescavadeira" onChange={e => setEForm(p => ({ ...p, nome_equipamento: e.target.value }))} />
                             </div>
                         )}
 

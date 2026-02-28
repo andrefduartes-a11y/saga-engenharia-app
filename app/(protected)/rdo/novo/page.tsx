@@ -44,10 +44,16 @@ export default function NovoRdoPage() {
         setError('')
         const form = e.currentTarget
         const formData = new FormData(form)
+        const obraId = formData.get('obra_id') as string
+
+        if (!obraId) {
+            setError('Selecione uma obra antes de salvar.')
+            setLoading(false)
+            return
+        }
 
         // Upload fotos
         const fotosUrls: string[] = []
-        const obraId = formData.get('obra_id') as string
 
         for (const foto of fotos) {
             const path = `${obraId}/rdos/${Date.now()}-${foto.name}`
@@ -77,7 +83,7 @@ export default function NovoRdoPage() {
         })
 
         if (dbError) {
-            setError('Erro ao salvar RDO. Tente novamente.')
+            setError(`Erro ao salvar RDO: ${dbError.message}`)
             setLoading(false)
             return
         }
@@ -159,13 +165,21 @@ export default function NovoRdoPage() {
                                         value={membro.nome}
                                         onChange={e => atualizarMembro(idx, 'nome', e.target.value)}
                                     />
-                                    <input
-                                        type="text"
+                                    <select
                                         className="input text-sm"
-                                        placeholder="Função (ex: Pedreiro)"
+                                        style={{ minHeight: 'unset', padding: '10px 12px' }}
                                         value={membro.funcao}
                                         onChange={e => atualizarMembro(idx, 'funcao', e.target.value)}
-                                    />
+                                    >
+                                        <option value="">Função</option>
+                                        <option>Encarregado</option>
+                                        <option>Engenheiro</option>
+                                        <option>Pedreiro</option>
+                                        <option>Carpinteiro</option>
+                                        <option>Armador</option>
+                                        <option>Meio-Oficial</option>
+                                        <option>Ajudante</option>
+                                    </select>
                                 </div>
                                 {equipe.length > 1 && (
                                     <button

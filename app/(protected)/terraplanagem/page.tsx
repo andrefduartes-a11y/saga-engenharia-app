@@ -314,8 +314,8 @@ export default function TerrapalagemPage() {
                                 {/* ── Card row ── */}
                                 <div
                                     style={{
-                                        display: 'flex', alignItems: 'center', gap: 14,
-                                        padding: '14px 18px', borderRadius: isEditing ? '14px 14px 0 0' : 14,
+                                        display: 'flex', alignItems: 'center', gap: 10,
+                                        padding: '12px 14px', borderRadius: isEditing ? '14px 14px 0 0' : 14,
                                         background: 'rgba(255,255,255,0.025)',
                                         border: `1px solid ${finalizada ? 'rgba(16,185,129,0.2)' : 'rgba(212,168,67,0.15)'}`,
                                         transition: 'all 0.15s',
@@ -323,41 +323,41 @@ export default function TerrapalagemPage() {
                                     }}
                                 >
                                     {/* Icon */}
-                                    <div style={{ width: 44, height: 44, borderRadius: 12, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: finalizada ? 'rgba(16,185,129,0.12)' : 'rgba(212,168,67,0.12)', border: `1px solid ${finalizada ? 'rgba(16,185,129,0.2)' : 'rgba(212,168,67,0.2)'}` }}>
-                                        <Mountain size={20} style={{ color: finalizada ? '#10B981' : '#D4A843' }} />
+                                    <div style={{ width: 40, height: 40, borderRadius: 10, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: finalizada ? 'rgba(16,185,129,0.12)' : 'rgba(212,168,67,0.12)', border: `1px solid ${finalizada ? 'rgba(16,185,129,0.2)' : 'rgba(212,168,67,0.2)'}` }}>
+                                        <Mountain size={18} style={{ color: finalizada ? '#10B981' : '#D4A843' }} />
                                     </div>
 
                                     {/* Info — navigates to detail */}
-                                    <Link href={`/terraplanagem/${e.id}`} style={{ flex: 1, minWidth: 0, textDecoration: 'none' }}>
-                                        <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    <Link href={`/terraplanagem/${e.id}`} style={{ flex: 1, minWidth: 0, textDecoration: 'none', overflow: 'hidden' }}>
+                                        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                             {e.nome_etapa}
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: 'var(--text-muted)' }}>
-                                            {e.data_inicio && <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Calendar size={10} /> {fmt(e.data_inicio)}</span>}
-                                            {e.responsavel && <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><User size={10} /> {e.responsavel}</span>}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, color: 'var(--text-muted)' }}>
+                                            {e.data_inicio && <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Calendar size={9} /> {fmt(e.data_inicio)}</span>}
+                                            {e.responsavel && <span style={{ display: 'flex', alignItems: 'center', gap: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}><User size={9} /> {e.responsavel}</span>}
                                         </div>
                                     </Link>
 
-                                    {/* Status badge */}
-                                    <span style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 20, flexShrink: 0, background: finalizada ? 'rgba(16,185,129,0.12)' : 'rgba(212,168,67,0.12)', color: finalizada ? '#10B981' : '#D4A843', border: `1px solid ${finalizada ? 'rgba(16,185,129,0.25)' : 'rgba(212,168,67,0.25)'}` }}>
-                                        {finalizada ? '✅ Finalizada' : '🔨 Em andamento'}
+                                    {/* Status dot badge — compact */}
+                                    <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20, flexShrink: 0, whiteSpace: 'nowrap', background: finalizada ? 'rgba(16,185,129,0.12)' : 'rgba(212,168,67,0.12)', color: finalizada ? '#10B981' : '#D4A843', border: `1px solid ${finalizada ? 'rgba(16,185,129,0.25)' : 'rgba(212,168,67,0.25)'}` }}>
+                                        {finalizada ? '✅' : '🔨'}
                                     </span>
 
                                     {/* Action buttons */}
-                                    <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                                    <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
                                         <button
                                             onClick={() => isEditing ? setEditId(null) : startEdit(e)}
                                             title="Editar etapa"
-                                            style={{ padding: '6px 10px', borderRadius: 8, background: isEditing ? 'rgba(255,255,255,0.08)' : 'rgba(212,168,67,0.1)', border: `1px solid ${isEditing ? 'rgba(255,255,255,0.12)' : 'rgba(212,168,67,0.25)'}`, color: isEditing ? 'var(--text-muted)' : '#D4A843', cursor: 'pointer', fontSize: 11, fontWeight: 700 }}
+                                            style={{ padding: '5px 8px', borderRadius: 8, background: isEditing ? 'rgba(255,255,255,0.08)' : 'rgba(212,168,67,0.1)', border: `1px solid ${isEditing ? 'rgba(255,255,255,0.12)' : 'rgba(212,168,67,0.25)'}`, color: isEditing ? 'var(--text-muted)' : '#D4A843', cursor: 'pointer' }}
                                         >
-                                            {isEditing ? <X size={13} /> : <Pencil size={13} />}
+                                            {isEditing ? <X size={12} /> : <Pencil size={12} />}
                                         </button>
                                         <button
                                             onClick={() => setDeleteId(e.id)}
                                             title="Apagar etapa"
-                                            style={{ padding: '6px 8px', borderRadius: 8, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#EF4444', cursor: 'pointer' }}
+                                            style={{ padding: '5px 7px', borderRadius: 8, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#EF4444', cursor: 'pointer' }}
                                         >
-                                            <Trash2 size={13} />
+                                            <Trash2 size={12} />
                                         </button>
                                     </div>
                                 </div>
