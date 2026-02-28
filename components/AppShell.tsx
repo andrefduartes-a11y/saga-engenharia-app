@@ -9,16 +9,9 @@ import Link from 'next/link';
 import Sidebar, { SidebarToggle } from './Sidebar';
 import { useObra } from '@/lib/obra-context';
 import {
-    LayoutDashboard, Building2, User,
+    LayoutDashboard, Building2,
 } from 'lucide-react';
 import { useTheme } from '@/lib/theme-context';
-
-// Mobile bottom nav items
-const MOBILE_NAV = [
-    { href: '/dashboard', icon: <LayoutDashboard size={22} />, label: 'Início' },
-    { href: '/obras', icon: <Building2 size={22} />, label: 'Obras' },
-    { href: '/perfil', icon: <User size={22} />, label: 'Perfil' },
-];
 
 interface AppShellProps {
     title: string;
@@ -219,31 +212,6 @@ export default function AppShell({ title, activeNav, user, onLogout, children }:
                     {children}
                 </main>
 
-                {/* ── Mobile Bottom Nav ── */}
-                <nav className="bottom-nav-mobile" style={{
-                    position: 'fixed', bottom: 0, left: 0, right: 0,
-                    background: theme === 'dark' ? 'rgba(26,31,36,0.97)' : 'rgba(255,255,255,0.97)',
-                    backdropFilter: 'blur(12px)',
-                    borderTop: '1px solid var(--border-subtle)',
-                    display: 'flex', justifyContent: 'space-around',
-                    padding: '8px 0 14px', zIndex: 100,
-                }}>
-                    {MOBILE_NAV.map(n => {
-                        const isActive = activeNav === n.href || activeNav.startsWith(n.href + '/');
-                        return (
-                            <Link key={n.href} href={n.href} style={{
-                                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
-                                textDecoration: 'none',
-                                color: isActive ? 'var(--saga-gray-light)' : 'var(--text-muted)',
-                                fontSize: 10, fontWeight: 600,
-                                padding: '4px 12px',
-                            }}>
-                                <span style={{ opacity: isActive ? 1 : 0.65 }}>{n.icon}</span>
-                                {n.label}
-                            </Link>
-                        );
-                    })}
-                </nav>
             </div>
         </div>
     );
