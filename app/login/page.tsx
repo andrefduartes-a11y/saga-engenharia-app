@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Loader2 } from 'lucide-react'
@@ -12,6 +12,18 @@ export default function LoginPage() {
     const [error, setError] = useState('')
     const router = useRouter()
     const supabase = createClient()
+
+    // Trava o scroll APENAS na página de login — remove ao sair
+    useEffect(() => {
+        const html = document.documentElement
+        const body = document.body
+        html.style.overflow = 'hidden'
+        body.style.overflow = 'hidden'
+        return () => {
+            html.style.overflow = ''
+            body.style.overflow = ''
+        }
+    }, [])
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -28,11 +40,8 @@ export default function LoginPage() {
 
     return (
         <>
-            {/* Trava html/body — sem isso o documento rola mesmo com container fixo */}
+            {/* Breakpoint para telas muito pequenas (< 680px de altura) */}
             <style>{`
-                html, body { height: 100%; overflow: hidden; margin: 0; padding: 0; }
-
-                /* Breakpoint para telas muito pequenas (< 680px de altura) */
                 @media (max-height: 680px) {
                     .login-top    { flex: 0 0 36% !important; }
                     .login-s-img  { width: 28% !important; max-width: 90px !important; }
