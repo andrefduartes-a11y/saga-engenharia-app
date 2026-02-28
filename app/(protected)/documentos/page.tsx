@@ -78,33 +78,35 @@ export default function DocumentosPage() {
     }, [obra?.id, isDirector])
 
     async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0]
-        if (!file) return
-        if (file.size > 50 * 1024 * 1024) { setError('Arquivo muito grande. Máximo 50MB.'); return }
+        const files = Array.from(e.target.files || [])
+        if (!files.length) return
+        const tooBig = files.find(f => f.size > 50 * 1024 * 1024)
+        if (tooBig) { setError(`"${tooBig.name}" excede 50 MB.`); return }
 
         setUploading(true); setError('')
         const { data: { user } } = await supabase.auth.getUser()
         const efetivObraId = obraFiltro || obra?.id || 'geral'
-        const path = `${efetivObraId}/documentos/${Date.now()}-${file.name}`
 
-        const { error: uploadError } = await supabase.storage.from('saga-engenharia').upload(path, file)
-        if (uploadError) { setError('Erro no upload: ' + uploadError.message); setUploading(false); return }
-
-        const { data: { publicUrl } } = supabase.storage.from('saga-engenharia').getPublicUrl(path)
-
-        await supabase.from('documentos_projeto').insert({
-            obra_id: efetivObraId !== 'geral' ? efetivObraId : null,
-            nome_arquivo: file.name,
-            tipo: tipoUpload,
-            url_storage: publicUrl,
-            tamanho_bytes: file.size,
-            uploaded_by: user?.id,
-        })
+        for (const file of files) {
+            const path = `${efetivObraId}/documentos/${Date.now()}-${file.name}`
+            const { error: uploadError } = await supabase.storage.from('saga-engenharia').upload(path, file)
+            if (uploadError) { setError('Erro: ' + uploadError.message); continue }
+            const { data: { publicUrl } } = supabase.storage.from('saga-engenharia').getPublicUrl(path)
+            await supabase.from('documentos_projeto').insert({
+                obra_id: efetivObraId !== 'geral' ? efetivObraId : null,
+                nome_arquivo: file.name,
+                tipo: tipoUpload,
+                url_storage: publicUrl,
+                tamanho_bytes: file.size,
+                uploaded_by: user?.id,
+            })
+        }
 
         await load(obraFiltro, tipoFiltro)
         setUploading(false)
         e.target.value = ''
     }
+
 
     async function handleDelete(id: string) {
         setDeletingId(id)
@@ -147,7 +149,7 @@ export default function DocumentosPage() {
                     </div>
                     <label style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 18px', borderRadius: 10, background: 'linear-gradient(135deg, #4A90D9, #2C6FAC)', border: 'none', color: '#fff', fontSize: 13, fontWeight: 700, cursor: uploading ? 'wait' : 'pointer', boxShadow: '0 4px 14px rgba(74,144,217,0.3)' }}>
                         {uploading ? <><Loader2 size={14} className="animate-spin" /> Enviando...</> : <><Upload size={14} /> Enviar</>}
-                        <input type="file" style={{ display: 'none' }} onChange={handleUpload} disabled={uploading} accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.dxf,.png,.jpg,.jpeg,.zip,.rar" />
+                        <input type="file" multiple style={{ display: 'none' }} onChange={handleUpload} disabled={uploading} accept=".pdf,.doc,.docx,.xls,.xlsx,.dwg,.dxf,.png,.jpg,.jpeg,.zip,.rar" />
                     </label>
                 </div>
             </div>

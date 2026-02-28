@@ -67,26 +67,29 @@ export default function ProjetosPage() {
     }
 
     async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>, disciplina: string) {
-        const file = e.target.files?.[0]
-        if (!file || !obra) return
+        const files = Array.from(e.target.files || [])
+        if (!files.length || !obra) return
         setUploading(true)
-        const path = `${obra.id}/projetos/${disciplina}/${Date.now()}-${file.name}`
-        const { data: uploaded } = await supabase.storage.from('saga-engenharia').upload(path, file, { cacheControl: '3600' })
-        if (uploaded) {
-            const { data: { publicUrl } } = supabase.storage.from('saga-engenharia').getPublicUrl(path)
-            const { data } = await supabase.from('projetos').insert({
-                obra_id: obra.id, disciplina,
-                nome: file.name.replace(/\.[^.]+$/, ''),
-                revisao: 'R00', vigente: true, download_url: publicUrl,
-            }).select().single()
-            if (data) {
-                setProjetos(p => [...p, data])
-                setExpandidos(p => ({ ...p, [disciplina]: true }))
+        for (const file of files) {
+            const path = `${obra.id}/projetos/${disciplina}/${Date.now()}-${file.name}`
+            const { data: uploaded } = await supabase.storage.from('saga-engenharia').upload(path, file, { cacheControl: '3600' })
+            if (uploaded) {
+                const { data: { publicUrl } } = supabase.storage.from('saga-engenharia').getPublicUrl(path)
+                const { data } = await supabase.from('projetos').insert({
+                    obra_id: obra.id, disciplina,
+                    nome: file.name.replace(/\.[^.]+$/, ''),
+                    revisao: 'R00', vigente: true, download_url: publicUrl,
+                }).select().single()
+                if (data) {
+                    setProjetos(p => [...p, data])
+                    setExpandidos(p => ({ ...p, [disciplina]: true }))
+                }
             }
         }
         setUploading(false)
         e.target.value = ''
     }
+
 
     async function deleteProjeto(id: string) {
         await supabase.from('projetos').delete().eq('id', id)
@@ -186,7 +189,7 @@ export default function ProjetosPage() {
                                         style={{ width: 28, height: 28, borderRadius: 8, border: `1px solid ${cor}33`, background: `${cor}11`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}
                                     >
                                         {uploading ? <Loader2 size={12} className="animate-spin" style={{ color: cor }} /> : <Upload size={12} style={{ color: cor }} />}
-                                        <input type="file" style={{ display: 'none' }} accept=".pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx,.png,.jpg" onChange={e => handleFileUpload(e, disc)} />
+                                        <input type="file" multiple style={{ display: 'none' }} accept=".pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx,.png,.jpg" onChange={e => handleFileUpload(e, disc)} />
                                     </label>
                                     {aberto ? <ChevronDown size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} /> : <ChevronRight size={15} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />}
                                 </div>
@@ -196,7 +199,7 @@ export default function ProjetosPage() {
                                     <div style={{ borderTop: `1px solid ${cor}20`, padding: '8px 8px 8px 12px' }}>
                                         {itens.length === 0 ? (
                                             <div style={{ padding: '16px 8px', textAlign: 'center' }}>
-                                                <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Pasta vazia — envie um arquivo acima ou adicione via "Novo Projeto"</p>
+                                                <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Pasta vazia — toque no ⬆️ para enviar arquivos (múltiplos permitidos)</p>
                                             </div>
                                         ) : (
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
