@@ -74,8 +74,6 @@ export default function NovoRdoPage() {
             data: formData.get('data'),
             clima: formData.get('clima') || null,
             equipe_presente: equipeValida.length,
-            equipe_membros: equipeValida,
-            empreiteiros_presente: formData.get('empreiteiros') ? Number(formData.get('empreiteiros')) : null,
             descricao_atividades: formData.get('descricao_atividades') || null,
             ocorrencias: formData.get('ocorrencias') || null,
             fotos_url: fotosUrls,
