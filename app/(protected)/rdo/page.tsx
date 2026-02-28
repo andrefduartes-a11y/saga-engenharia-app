@@ -12,7 +12,7 @@ interface Rdo {
     clima?: string
     equipe_presente?: number
     obra_id?: string
-    obras?: { nome: string }
+    obras?: { nome: string } | { nome: string }[]
 }
 
 const fmt = (d: string) =>
