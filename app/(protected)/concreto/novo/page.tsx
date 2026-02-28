@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useObra } from '@/lib/obra-context'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ChevronDown } from 'lucide-react'
 
 const ELEMENTOS = [
     'Sapata', 'Bloco', 'Pilar', 'Viga', 'Laje', 'Escada', 'Muro de Contenção',
@@ -18,8 +18,20 @@ const CORES = [
 
 export default function ConcretoNovoPage() {
     const router = useRouter()
-    const { obra } = useObra()
+    const { obra: obraCtx, role } = useObra()
+    const isDirector = role === 'diretor' || role === 'admin'
     const supabase = createClient()
+
+    const [allObras, setAllObras] = useState<{ id: string; nome: string }[]>([])
+    const [selectedObraId, setSelectedObraId] = useState('')
+    const obra = isDirector ? (allObras.find(o => o.id === selectedObraId) || null) : obraCtx
+
+    useEffect(() => {
+        if (!isDirector) return
+        supabase.from('obras').select('id, nome').eq('status', 'ativa').order('nome')
+            .then(({ data }) => setAllObras(data || []))
+    }, [isDirector])
+
     const [form, setForm] = useState({
         data_concretagem: new Date().toISOString().split('T')[0],
         fck: 25,
@@ -69,15 +81,38 @@ export default function ConcretoNovoPage() {
                     <ArrowLeft size={20} />
                 </button>
                 <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Nova Concretagem</h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginTop: 4, marginBottom: 0 }}>
+                    {obra && !isDirector && <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{obra.nome}</p>}
+                </div>
             </div>
 
-            {!obra && (
-                <div className="card text-center py-6">
-                    <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Selecione uma obra primeiro</p>
+            {/* Director obra selector */}
+            {isDirector && (
+                <div className="card" style={{ marginBottom: 8 }}>
+                    <label className="form-label">Obra *</label>
+                    <div style={{ position: 'relative' }}>
+                        <select
+                            className="input"
+                            value={selectedObraId}
+                            onChange={e => setSelectedObraId(e.target.value)}
+                            style={{ appearance: 'none', paddingRight: 40 }}
+                            required
+                        >
+                            <option value="">Selecione a obra...</option>
+                            {allObras.map(o => <option key={o.id} value={o.id}>{o.nome}</option>)}
+                        </select>
+                        <ChevronDown size={14} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                    </div>
                 </div>
             )}
 
-            {obra && (
+            {(!obra && !isDirector) && (
+                <div className="card text-center py-6">
+                    <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Nenhuma obra vinculada ao seu perfil.</p>
+                </div>
+            )}
+
+            {(obra || (isDirector && selectedObraId)) && (
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="card space-y-4">
                         <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>DADOS PRINCIPAIS</p>
