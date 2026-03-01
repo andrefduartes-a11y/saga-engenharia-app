@@ -42,6 +42,11 @@ export default function ConcretoNovoPage() {
         setSalvando(true)
         setError('')
 
+        // Buscar dados do usuário logado para audit trail
+        const { data: { user } } = await supabase.auth.getUser()
+        const { data: perfil } = await supabase.from('perfis').select('nome').eq('id', user?.id ?? '').single()
+        const criado_por_nome = perfil?.nome || user?.email?.split('@')[0] || 'Usuário'
+
         const { error: dbErr } = await supabase.from('concretagens_agendadas').insert({
             obra_id: obraId,
             data_agendada: form.data_agendada,
@@ -50,6 +55,8 @@ export default function ConcretoNovoPage() {
             fck_previsto: form.fck_previsto ? parseInt(form.fck_previsto) : null,
             observacoes: form.observacoes || null,
             status: 'agendada',
+            criado_por_id: user?.id ?? null,
+            criado_por_nome,
         })
 
         if (dbErr) { setError(`Erro: ${dbErr.message}`); setSalvando(false) }

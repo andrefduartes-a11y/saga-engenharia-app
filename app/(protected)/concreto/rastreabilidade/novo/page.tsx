@@ -81,6 +81,11 @@ export default function NovaRastreabilidadePage() {
         setSaving(true)
         setError('')
 
+        // Audit trail
+        const { data: { user } } = await supabase.auth.getUser()
+        const { data: perfil } = await supabase.from('perfis').select('nome').eq('id', user?.id ?? '').single()
+        const criado_por_nome = perfil?.nome || user?.email?.split('@')[0] || 'Usuário'
+
         let relatorio_url: string | null = null
         let relatorio_nome: string | null = null
         if (relatorioFile) {
@@ -121,6 +126,8 @@ export default function NovaRastreabilidadePage() {
             cor_hex: form.cor_hex,
             relatorio_url,
             relatorio_nome,
+            criado_por_id: user?.id ?? null,
+            criado_por_nome,
         })
 
         if (dbErr) { setError(`Erro: ${dbErr.message}`); setSaving(false); return }
