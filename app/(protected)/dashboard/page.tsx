@@ -82,9 +82,9 @@ function WeatherSection({ obras, agendamentos }: { obras: Obra[]; agendamentos: 
             <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>
                 🌤️ PREVISÃO DO TEMPO — PRÓXIMOS 5 DIAS
             </h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', gap: 10 }}>
                 {uniqueCidades.map(({ cidade, agendamentos: ags }) => (
-                    <div key={cidade} style={{ flex: '1 1 280px', maxWidth: 340 }}>
+                    <div key={cidade}>
                         <WeatherCard
                             cidade={cidade}
                             agendamentos={ags}
@@ -132,7 +132,17 @@ function ProximasConcretagens({ agendamentos, obrasMap }: { agendamentos: Agenda
             <h2 style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.8px', textTransform: 'uppercase', marginBottom: 12 }}>
                 📅 PRÓXIMAS CONCRETAGENS
             </h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {/* Scroll horizontal no mobile, wrap no desktop */}
+            <div style={{
+                display: 'flex',
+                gap: 8,
+                overflowX: 'auto',
+                scrollSnapType: 'x mandatory',
+                WebkitOverflowScrolling: 'touch',
+                paddingBottom: 4,
+                /* hide scrollbar */
+                scrollbarWidth: 'none',
+            }}>
                 {agendamentos.slice(0, 6).map(ag => {
                     const obra = obrasMap.get(ag.obra_id)
                     const dias = daysUntil(ag.data_agendada)
@@ -141,7 +151,8 @@ function ProximasConcretagens({ agendamentos, obrasMap }: { agendamentos: Agenda
                     const accentColor = urgente ? '#EF4444' : breve ? '#D4A843' : '#7FA653'
                     return (
                         <div key={ag.id} style={{
-                            flex: '1 1 220px', maxWidth: 280,
+                            flex: '0 0 min(240px, 85vw)',
+                            scrollSnapAlign: 'start',
                             padding: '14px 16px', borderRadius: 14,
                             background: urgente ? 'rgba(239,68,68,0.06)' : breve ? 'rgba(212,168,67,0.06)' : 'rgba(127,166,83,0.04)',
                             border: `1px solid ${urgente ? 'rgba(239,68,68,0.25)' : breve ? 'rgba(212,168,67,0.22)' : 'rgba(127,166,83,0.15)'}`,
