@@ -5,15 +5,20 @@ import { useObra } from '@/lib/obra-context'
 import { createClient } from '@/lib/supabase/client'
 import {
     Mic, MicOff, Copy, Check, ShoppingCart,
-    Trash2, Wand2, ChevronDown, Clock, Loader2
+    Trash2, Wand2, ChevronDown, Clock, Loader2, Building2
 } from 'lucide-react'
 
 // formato legível de hora
 const fmt = (d: string) => new Date(d).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
 
 export default function SuprimentosPage() {
-    const { obra } = useObra()
+    const { obra, role, setObra, clearObra } = useObra()
     const supabase = createClient()
+    const isDiretor = role === 'diretor' || role === 'admin'
+
+    // obras disponíveis para o seletor do Diretor
+    const [obrasDisponiveis, setObrasDisponiveis] = useState<{ id: string; nome: string }[]>([])
+    const [obrasSelecionando, setObrasSelecionando] = useState(false)
 
     // gravação
     const [gravando, setGravando] = useState(false)
@@ -39,6 +44,17 @@ export default function SuprimentosPage() {
             setNomeUsuario(email.split('@')[0])
         })
     }, [])
+
+    // carrega obras para seletor do Diretor
+    useEffect(() => {
+        if (!isDiretor || obra) return
+        setObrasSelecionando(true)
+        supabase.from('obras')
+            .select('id, nome')
+            .eq('status', 'ativa')
+            .order('nome')
+            .then(({ data }) => { setObrasDisponiveis(data || []); setObrasSelecionando(false) })
+    }, [isDiretor, obra?.id])
 
     // histórico
     useEffect(() => {
@@ -173,15 +189,60 @@ export default function SuprimentosPage() {
                 <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(230,126,34,0.15)', border: '1px solid rgba(230,126,34,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <ShoppingCart size={20} style={{ color: '#E67E22' }} />
                 </div>
-                <div>
+                <div style={{ flex: 1 }}>
                     <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)' }}>Suprimentos</h1>
                     {obra && <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>{obra.nome}</p>}
                 </div>
+                {isDiretor && obra && (
+                    <button
+                        onClick={() => clearObra()}
+                        style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', padding: '4px 10px', borderRadius: 6, border: '1px solid var(--border-subtle)', background: 'transparent', cursor: 'pointer' }}
+                    >
+                        Trocar obra
+                    </button>
+                )}
             </div>
 
             {!obra ? (
-                <div style={{ padding: '60px 20px', borderRadius: 16, border: '1px dashed rgba(230,126,34,0.2)', textAlign: 'center' }}>
-                    <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>Selecione uma obra para fazer um pedido</p>
+                <div style={{ borderRadius: 16, border: '1px solid rgba(230,126,34,0.2)', background: 'rgba(230,126,34,0.04)', padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, textAlign: 'center' }}>
+                    <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(230,126,34,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Building2 size={26} style={{ color: '#E67E22' }} />
+                    </div>
+                    <div>
+                        <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>Selecione a obra</p>
+                        <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Escolha a obra para vincular o pedido de suprimentos</p>
+                    </div>
+                    {obrasSelecionando ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-muted)', fontSize: 13 }}>
+                            <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> Carregando obras...
+                        </div>
+                    ) : (
+                        <div style={{ width: '100%', maxWidth: 380, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                            {obrasDisponiveis.length === 0 ? (
+                                <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Nenhuma obra ativa encontrada.</p>
+                            ) : (
+                                obrasDisponiveis.map(o => (
+                                    <button
+                                        key={o.id}
+                                        onClick={() => setObra(o as any)}
+                                        style={{
+                                            display: 'flex', alignItems: 'center', gap: 12,
+                                            padding: '12px 16px', borderRadius: 12, cursor: 'pointer',
+                                            background: 'rgba(255,255,255,0.04)',
+                                            border: '1px solid rgba(230,126,34,0.25)',
+                                            color: 'var(--text-primary)', fontSize: 14, fontWeight: 600,
+                                            textAlign: 'left', transition: 'all 0.15s',
+                                        }}
+                                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(230,126,34,0.1)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(230,126,34,0.5)' }}
+                                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(230,126,34,0.25)' }}
+                                    >
+                                        <Building2 size={16} style={{ color: '#E67E22', flexShrink: 0 }} />
+                                        {o.nome}
+                                    </button>
+                                ))
+                            )}
+                        </div>
+                    )}
                 </div>
             ) : (
                 <>
