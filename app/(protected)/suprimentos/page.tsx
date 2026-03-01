@@ -5,7 +5,7 @@ import { useObra } from '@/lib/obra-context'
 import { createClient } from '@/lib/supabase/client'
 import {
     Mic, MicOff, Copy, Check, ShoppingCart,
-    Trash2, Wand2, ChevronDown, Clock, Loader2, Building2
+    Trash2, Wand2, ChevronDown, Clock, Loader2, Building2, Send
 } from 'lucide-react'
 
 // formato legível de hora
@@ -267,7 +267,7 @@ export default function SuprimentosPage() {
                             {transcrevendo
                                 ? <Loader2 size={36} style={{ color: '#E67E22', animation: 'spin 1s linear infinite' }} />
                                 : gravando
-                                    ? <MicOff size={36} style={{ color: '#EF4444' }} />
+                                    ? <Send size={36} style={{ color: '#EF4444' }} />
                                     : <Mic size={36} style={{ color: '#E67E22' }} />
                             }
                         </button>
@@ -284,24 +284,26 @@ export default function SuprimentosPage() {
                         </p>
                     </div>
 
-                    {/* ── TEXTO TRANSCRITO ── */}
-                    {transcrito && (
-                        <div style={{ borderRadius: 14, border: '1px solid var(--border-subtle)', overflow: 'hidden' }}>
-                            <div style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>📝 Transcrição bruta</span>
+                    {/* ── CAIXA DE TEXTO (sempre visível) ── */}
+                    <div style={{ borderRadius: 14, border: '1px solid var(--border-subtle)', overflow: 'hidden' }}>
+                        <div style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+                                {transcrito ? '📝 Transcrição / Pedido' : '✏️ Digite ou grave seu pedido'}
+                            </span>
+                            {transcrito && (
                                 <button onClick={() => { setTranscrito(''); setPedidoFormatado('') }} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 4 }}>
                                     <Trash2 size={13} />
                                 </button>
-                            </div>
-                            <textarea
-                                value={transcrito}
-                                onChange={e => { setTranscrito(e.target.value); setPedidoFormatado('') }}
-                                rows={4}
-                                style={{ width: '100%', boxSizing: 'border-box', padding: '12px 14px', background: 'transparent', border: 'none', color: 'var(--text-primary)', fontSize: 13, lineHeight: 1.6, outline: 'none', resize: 'vertical' }}
-                                placeholder="Texto transcrito aparece aqui. Pode editar antes de formatar."
-                            />
+                            )}
                         </div>
-                    )}
+                        <textarea
+                            value={transcrito}
+                            onChange={e => { setTranscrito(e.target.value); setPedidoFormatado('') }}
+                            rows={4}
+                            style={{ width: '100%', boxSizing: 'border-box', padding: '12px 14px', background: 'transparent', border: 'none', color: 'var(--text-primary)', fontSize: 13, lineHeight: 1.6, outline: 'none', resize: 'vertical' }}
+                            placeholder="Descreva os materiais necessários... (ou grave um áudio acima)"
+                        />
+                    </div>
 
                     {/* ── BOTÃO FORMATAR ── */}
                     {transcrito && !pedidoFormatado && (
