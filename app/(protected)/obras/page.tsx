@@ -19,7 +19,7 @@ export default async function ObrasPage() {
         <div className="px-4 py-4 space-y-4 animate-fade-up">
             <div className="flex items-center justify-between">
                 <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Obras</h1>
-                <Link href="/obras/nova" className="btn-primary py-2 px-4 text-sm min-h-[40px] w-auto">
+                <Link href="/obras/nova" className="btn-primary py-2 px-4 text-sm min-h-[40px] w-auto" style={{ width: 'auto' }}>
                     <Plus size={16} />
                     Nova Obra
                 </Link>
