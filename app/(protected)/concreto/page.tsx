@@ -18,6 +18,7 @@ interface Agendamento {
     fck_previsto?: number
     observacoes?: string
     status?: string
+    criado_por_nome?: string
     obras?: { nome: string } | { nome: string }[]
 }
 
@@ -32,6 +33,7 @@ interface Rastreabilidade {
     rompimento_28b?: number
     fck_projeto?: number
     quantidade_m3?: number
+    criado_por_nome?: string
     obras?: { nome: string } | { nome: string }[]
 }
 
@@ -133,11 +135,11 @@ export default function ConcretoPage() {
         setLoading(true)
 
         let qA = supabase.from('concretagens_agendadas')
-            .select('id, obra_id, data_agendada, elemento, volume_estimado, fck_previsto, observacoes, status, obras(nome)')
+            .select('id, obra_id, data_agendada, elemento, volume_estimado, fck_previsto, observacoes, status, criado_por_nome, obras(nome)')
             .order('data_agendada', { ascending: false }).limit(80)
 
         let qR = supabase.from('rastreabilidade_concreto')
-            .select('id, data, identificacao_pecas, agendamento_id, cor_hex, conforme, rompimento_28a, rompimento_28b, fck_projeto, quantidade_m3, obras(nome)')
+            .select('id, data, identificacao_pecas, agendamento_id, cor_hex, conforme, rompimento_28a, rompimento_28b, fck_projeto, quantidade_m3, criado_por_nome, obras(nome)')
             .order('data', { ascending: false }).limit(80)
 
         if (!isDirector && obra) {
@@ -244,6 +246,7 @@ export default function ConcretoPage() {
                                             <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Calendar size={9} />{fmt(ag.data_agendada)}</span>
                                             {ag.fck_previsto && <span>FCK {ag.fck_previsto} MPa</span>}
                                             {ag.volume_estimado && <span>{ag.volume_estimado} m³ prev.</span>}
+                                            {ag.criado_por_nome && <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>por {ag.criado_por_nome}</span>}
                                         </div>
                                     </div>
 
@@ -317,6 +320,7 @@ export default function ConcretoPage() {
                                                 {r.fck_projeto && <span>FCK {r.fck_projeto} MPa</span>}
                                                 {r.quantidade_m3 && <span>{r.quantidade_m3} m³</span>}
                                                 {isDirector && obraName(r.obras) && <span style={{ color: '#D4A843', fontWeight: 600 }}>{obraName(r.obras)}</span>}
+                                                {r.criado_por_nome && <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>por {r.criado_por_nome}</span>}
                                             </div>
                                         </div>
                                         <div style={{ flexShrink: 0 }}>

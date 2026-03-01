@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useTheme } from '@/lib/theme-context';
+import { useObra } from '@/lib/obra-context';
 import {
     HardHat, Mountain, ClipboardList, CheckSquare, BookOpen,
     FolderOpen, FileText, ShoppingCart, Bot, GraduationCap,
@@ -47,7 +48,17 @@ const NAV_GROUPS = [
             { href: '/faq', icon: <HelpCircle size={15} />, label: 'FAQ / DRH' },
         ],
     },
+    {
+        label: 'Configurações',
+        icon: '🔒',
+        adminOnly: true,
+        items: [
+            { href: '/configuracoes/usuarios', icon: <Settings2 size={15} />, label: 'Usuários & Acesso' },
+        ],
+    },
 ];
+
+type NavGroup = typeof NAV_GROUPS[number]
 
 interface SidebarProps {
     mobileOpen: boolean;
@@ -59,8 +70,14 @@ interface SidebarProps {
 export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggleCollapse }: SidebarProps) {
     const pathname = usePathname();
     const { theme } = useTheme();
+    const { role } = useObra()
+    const isAdmin = role === 'admin'
+
+    // Filtrar grupos conforme role
+    const visibleGroups = NAV_GROUPS.filter(g => !('adminOnly' in g && g.adminOnly) || isAdmin)
+
     const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
-        'Engenharia': true, 'Controle & Qualidade': true, 'Documentação': true, 'Suporte': true,
+        'Engenharia': true, 'Controle & Qualidade': true, 'Documentação': true, 'Suporte': true, 'Configurações': true,
     });
 
     const toggle = (label: string) => setOpenGroups(p => ({ ...p, [label]: !p[label] }));
@@ -100,7 +117,7 @@ export default function Sidebar({ mobileOpen, onMobileClose, collapsed, onToggle
 
             {/* Nav groups */}
             <nav style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '8px 0' }}>
-                {NAV_GROUPS.map(group => {
+                {visibleGroups.map(group => {
                     const isOpen = openGroups[group.label] !== false;
                     return (
                         <div key={group.label} style={{ marginBottom: 2 }}>

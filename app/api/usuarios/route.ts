@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Todos os campos são obrigatórios.' }, { status: 400 })
     }
 
-    const validRoles = ['admin', 'engenheiro', 'visualizador']
+    const validRoles = ['admin', 'diretor', 'engenheiro', 'visualizador']
     if (!validRoles.includes(role)) {
         return NextResponse.json({ error: 'Perfil inválido.' }, { status: 400 })
     }
