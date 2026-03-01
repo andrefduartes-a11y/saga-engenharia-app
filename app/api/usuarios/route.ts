@@ -116,3 +116,26 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json(data)
 }
+
+// DELETE /api/usuarios — apaga usuário (só admin)
+export async function DELETE(req: NextRequest) {
+    const supabase = createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 })
+
+    const admin = getAdmin()
+    const { data: perfil } = await admin.from('perfis').select('role').eq('id', user.id).single()
+    if (perfil?.role !== 'admin') return NextResponse.json({ error: 'Acesso negado.' }, { status: 403 })
+
+    const { id } = await req.json()
+    if (!id) return NextResponse.json({ error: 'ID obrigatório.' }, { status: 400 })
+
+    // Apagar da tabela perfis primeiro
+    await admin.from('perfis').delete().eq('id', id)
+
+    // Apagar do Supabase Auth
+    const { error: deleteError } = await admin.auth.admin.deleteUser(id)
+    if (deleteError) return NextResponse.json({ error: deleteError.message }, { status: 500 })
+
+    return NextResponse.json({ ok: true })
+}

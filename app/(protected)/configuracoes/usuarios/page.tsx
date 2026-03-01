@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
     ArrowLeft, Plus, X, UserCheck, UserX,
-    ChevronDown, ChevronUp, Save, Shield,
+    ChevronDown, ChevronUp, Save, Shield, Trash2
 } from 'lucide-react'
 
 // ─── Permissões agrupadas por módulo ───────────────────────────────────────────
@@ -76,7 +76,8 @@ interface Perfil {
 }
 
 const ROLES = [
-    { value: 'diretor', label: 'Diretor', desc: 'Acesso total — vê todas as obras (múltiplos permitidos)' },
+    { value: 'admin', label: 'Admin', desc: 'Acesso total incluindo Configurações' },
+    { value: 'diretor', label: 'Diretor', desc: 'Acesso total — vê todas as obras, sem Configurações' },
     { value: 'engenheiro', label: 'Engenheiro', desc: 'Acesso operacional por obras vinculadas' },
 ]
 
@@ -97,6 +98,8 @@ export default function UsuariosPage() {
     const [expandedId, setExpandedId] = useState<string | null>(null)
     const [permEdits, setPermEdits] = useState<Record<string, Record<string, boolean>>>({})
     const [permSaving, setPermSaving] = useState<string | null>(null)
+    const [deletando, setDeletando] = useState<string | null>(null)
+    const [roleChanging, setRoleChanging] = useState<string | null>(null)
 
     const load = async () => {
         setLoading(true)
@@ -160,6 +163,41 @@ export default function UsuariosPage() {
         setPermSaving(null)
     }
 
+    const changeRole = async (userId: string, newRole: string) => {
+        setRoleChanging(userId)
+        const res = await fetch('/api/usuarios', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: userId, role: newRole }),
+        })
+        if (res.ok) {
+            showSuccess(`Role atualizado para ${ROLES.find(r => r.value === newRole)?.label}!`)
+            load()
+        } else {
+            const d = await res.json()
+            setError(d.error || 'Erro ao atualizar role.')
+        }
+        setRoleChanging(null)
+    }
+
+    const deleteUser = async (id: string, nome: string) => {
+        if (!confirm(`Apagar o usuário "${nome}" permanentemente? Esta ação não pode ser desfeita.`)) return
+        setDeletando(id)
+        const res = await fetch('/api/usuarios', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id }),
+        })
+        if (res.ok) {
+            showSuccess('Usuário apagado com sucesso.')
+            load()
+        } else {
+            const d = await res.json()
+            setError(d.error || 'Erro ao apagar usuário.')
+        }
+        setDeletando(null)
+    }
+
     const togglePerm = (userId: string, key: string) => {
         setPermEdits(prev => ({
             ...prev,
@@ -182,7 +220,7 @@ export default function UsuariosPage() {
 
     const roleColor: Record<string, string> = {
         diretor: '#7FA653',
-        admin: '#7FA653',
+        admin: '#D4A843',
         engenheiro: '#5B9BD5',
     }
 
@@ -339,13 +377,26 @@ export default function UsuariosPage() {
 
                                     {/* Ações */}
                                     <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
-                                        {/* Role badge */}
-                                        <span style={{
-                                            padding: '2px 8px', borderRadius: 999, fontSize: 11, fontWeight: 700,
-                                            background: `${color}18`, color, border: `1px solid ${color}30`,
-                                        }}>
-                                            {getRoleBadge(p.role)}
-                                        </span>
+
+                                        {/* Seletor de Role */}
+                                        <select
+                                            value={p.role}
+                                            disabled={roleChanging === p.id}
+                                            onChange={e => changeRole(p.id, e.target.value)}
+                                            style={{
+                                                padding: '3px 6px', borderRadius: 6, fontSize: 11, fontWeight: 700,
+                                                background: `${roleColor[p.role] || '#7FA653'}18`,
+                                                color: roleColor[p.role] || '#7FA653',
+                                                border: `1px solid ${roleColor[p.role] || '#7FA653'}33`,
+                                                cursor: 'pointer', appearance: 'none', paddingRight: 20,
+                                            }}
+                                        >
+                                            {ROLES.map(r => (
+                                                <option key={r.value} value={r.value} style={{ background: 'var(--bg-card)', color: 'var(--text-primary)' }}>
+                                                    {r.label}
+                                                </option>
+                                            ))}
+                                        </select>
 
                                         {/* Permission count */}
                                         <span style={{
@@ -364,6 +415,16 @@ export default function UsuariosPage() {
                                             style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: p.active ? '#10B981' : 'var(--text-muted)', padding: 4 }}
                                         >
                                             {p.active ? <UserCheck size={18} /> : <UserX size={18} />}
+                                        </button>
+
+                                        {/* Apagar */}
+                                        <button
+                                            onClick={() => deleteUser(p.id, p.nome || p.email)}
+                                            disabled={deletando === p.id}
+                                            title="Apagar usuário"
+                                            style={{ background: 'transparent', border: 'none', cursor: deletando === p.id ? 'wait' : 'pointer', color: '#EF4444', padding: 4, opacity: deletando === p.id ? 0.5 : 1 }}
+                                        >
+                                            <Trash2 size={15} />
                                         </button>
 
                                         {/* Expand */}
