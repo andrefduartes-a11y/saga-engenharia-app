@@ -23,7 +23,9 @@ export default function EditarRdoPage() {
 
     const [form, setForm] = useState({
         data: '',
-        clima: '',
+        clima_manha: '',
+        clima_tarde: '',
+        praticabilidade: 'praticavel' as 'praticavel' | 'impraticavel',
         descricao_atividades: '',
         ocorrencias: '',
         empreiteiros: '',
@@ -45,9 +47,23 @@ export default function EditarRdoPage() {
                 if (err || !data) { setError('RDO não encontrado'); setPageLoading(false); return }
                 setObraId(data.obra_id || '')
                 setObraNome((data.obras as any)?.nome || '')
+                let climaManha = '', climaTarde = '', praticabilidade: 'praticavel' | 'impraticavel' = 'praticavel'
+                if (data.clima) {
+                    try {
+                        const parsed = JSON.parse(data.clima)
+                        climaManha = parsed.manha || ''
+                        climaTarde = parsed.tarde || ''
+                        praticabilidade = parsed.praticabilidade || 'praticavel'
+                    } catch {
+                        // legacy: plain text clima value
+                        climaManha = data.clima || ''
+                    }
+                }
                 setForm({
                     data: data.data || '',
-                    clima: data.clima || '',
+                    clima_manha: climaManha,
+                    clima_tarde: climaTarde,
+                    praticabilidade,
                     descricao_atividades: data.descricao_atividades || '',
                     ocorrencias: data.ocorrencias || '',
                     empreiteiros: data.empreiteiros_quantidade != null ? String(data.empreiteiros_quantidade) : '',
@@ -88,9 +104,15 @@ export default function EditarRdoPage() {
         const equipeValida = equipe.filter(m => m.nome.trim())
         const fotosFinais = [...fotosExistentes, ...novasUrls]
 
+        const climaJson = JSON.stringify({
+            manha: form.clima_manha || null,
+            tarde: form.clima_tarde || null,
+            praticabilidade: form.praticabilidade,
+        })
+
         const { error: dbErr } = await supabase.from('rdos').update({
             data: form.data,
-            clima: form.clima || null,
+            clima: climaJson,
             descricao_atividades: form.descricao_atividades || null,
             ocorrencias: form.ocorrencias || null,
             equipe_json: equipeValida,
@@ -143,15 +165,18 @@ export default function EditarRdoPage() {
                 {/* Informações gerais */}
                 <div style={{ padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(82,168,123,0.2)' }}>
                     <p style={{ fontSize: 11, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12 }}>Informações Gerais</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                    {/* Data */}
+                    <div>
+                        <label className="form-label">Data *</label>
+                        <input className="input" type="date" required value={form.data} onChange={e => set('data', e.target.value)} />
+                    </div>
+
+                    {/* Clima manhã / tarde */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                         <div>
-                            <label className="form-label">Data *</label>
-                            <input className="input" type="date" required value={form.data} onChange={e => set('data', e.target.value)} />
-                        </div>
-                        <div>
-                            <label className="form-label">Clima</label>
+                            <label className="form-label">🌅 Clima — Manhã</label>
                             <div style={{ position: 'relative' }}>
-                                <select className="input" value={form.clima} onChange={e => set('clima', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
+                                <select className="input" value={form.clima_manha} onChange={e => set('clima_manha', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
                                     <option value="">Selecione</option>
                                     <option>Ensolarado</option>
                                     <option>Parcialmente nublado</option>
@@ -160,6 +185,45 @@ export default function EditarRdoPage() {
                                 </select>
                                 <ChevronDown size={13} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
                             </div>
+                        </div>
+                        <div>
+                            <label className="form-label">🌆 Clima — Tarde</label>
+                            <div style={{ position: 'relative' }}>
+                                <select className="input" value={form.clima_tarde} onChange={e => set('clima_tarde', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
+                                    <option value="">Selecione</option>
+                                    <option>Ensolarado</option>
+                                    <option>Parcialmente nublado</option>
+                                    <option>Nublado</option>
+                                    <option>Chuvoso</option>
+                                </select>
+                                <ChevronDown size={13} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Praticabilidade */}
+                    <div>
+                        <label className="form-label">Praticabilidade da Obra</label>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 4 }}>
+                            {[
+                                { value: 'praticavel', label: '✅ Praticável', desc: 'Obra em condições normais', color: '#10B981' },
+                                { value: 'impraticavel', label: '🚫 Impraticável', desc: 'Obra paralisada / impedida', color: '#EF4444' },
+                            ].map(opt => (
+                                <button
+                                    key={opt.value}
+                                    type="button"
+                                    onClick={() => setForm(p => ({ ...p, praticabilidade: opt.value as 'praticavel' | 'impraticavel' }))}
+                                    style={{
+                                        padding: '10px 12px', borderRadius: 10, cursor: 'pointer', textAlign: 'left',
+                                        background: form.praticabilidade === opt.value ? `${opt.color}15` : 'rgba(255,255,255,0.03)',
+                                        border: `2px solid ${form.praticabilidade === opt.value ? opt.color : 'var(--border-subtle)'}`,
+                                        transition: 'all 0.15s',
+                                    }}
+                                >
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: form.praticabilidade === opt.value ? opt.color : 'var(--text-primary)' }}>{opt.label}</div>
+                                    <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>{opt.desc}</div>
+                                </button>
+                            ))}
                         </div>
                     </div>
                 </div>
