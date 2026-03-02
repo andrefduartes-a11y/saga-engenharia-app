@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, ClipboardList, Loader2, Camera, X, Users, ChevronDown, Save, HardHat } from 'lucide-react'
+import { ArrowLeft, ClipboardList, Loader2, Camera, X, Users, ChevronDown, Save, HardHat, Plus, Settings } from 'lucide-react'
 import Link from 'next/link'
 
 const FUNCOES = ['Engenheiro', 'Supervisor', 'Encarregado', 'Pedreiro', 'Carpinteiro', 'Armador', 'Meio-Oficial', 'Ajudante']
 
 interface MembroEquipe { nome: string; funcao: string }
+interface EmpEntry { empresa: string; servico: string; quantidade: number }
 
 export default function EditarRdoPage() {
     const { id } = useParams<{ id: string }>()
@@ -25,15 +26,19 @@ export default function EditarRdoPage() {
         data: '',
         clima_manha: '',
         clima_tarde: '',
-        praticabilidade: 'praticavel' as 'praticavel' | 'impraticavel',
+        praticabilidade_manha: 'praticavel' as 'praticavel' | 'impraticavel',
+        praticabilidade_tarde: 'praticavel' as 'praticavel' | 'impraticavel',
         descricao_atividades: '',
         ocorrencias: '',
-        empreiteiros: '',
     })
     const [equipe, setEquipe] = useState<MembroEquipe[]>([])
     const [fotosExistentes, setFotosExistentes] = useState<string[]>([])
     const [fotosNovas, setFotosNovas] = useState<File[]>([])
     const [fotosRemovidas, setFotosRemovidas] = useState<string[]>([])
+    // Empreiteiros
+    const [empreiteirosPre, setEmpreiteirosPre] = useState<{ id: string; empresa: string; servico: string }[]>([])
+    const [empQtd, setEmpQtd] = useState<Record<string, number>>({})
+    const [empreiteirosExtra, setEmpreiteirosExtra] = useState<EmpEntry[]>([])
 
     // Carrega o RDO existente
     useEffect(() => {
@@ -47,15 +52,17 @@ export default function EditarRdoPage() {
                 if (err || !data) { setError('RDO não encontrado'); setPageLoading(false); return }
                 setObraId(data.obra_id || '')
                 setObraNome((data.obras as any)?.nome || '')
-                let climaManha = '', climaTarde = '', praticabilidade: 'praticavel' | 'impraticavel' = 'praticavel'
+                let climaManha = '', climaTarde = ''
+                let praticabilidadeManha: 'praticavel' | 'impraticavel' = 'praticavel'
+                let praticabilidadeTarde: 'praticavel' | 'impraticavel' = 'praticavel'
                 if (data.clima) {
                     try {
                         const parsed = JSON.parse(data.clima)
                         climaManha = parsed.manha || ''
                         climaTarde = parsed.tarde || ''
-                        praticabilidade = parsed.praticabilidade || 'praticavel'
+                        praticabilidadeManha = parsed.praticabilidade_manha || parsed.praticabilidade || 'praticavel'
+                        praticabilidadeTarde = parsed.praticabilidade_tarde || parsed.praticabilidade || 'praticavel'
                     } catch {
-                        // legacy: plain text clima value
                         climaManha = data.clima || ''
                     }
                 }
@@ -63,14 +70,21 @@ export default function EditarRdoPage() {
                     data: data.data || '',
                     clima_manha: climaManha,
                     clima_tarde: climaTarde,
-                    praticabilidade,
+                    praticabilidade_manha: praticabilidadeManha,
+                    praticabilidade_tarde: praticabilidadeTarde,
                     descricao_atividades: data.descricao_atividades || '',
                     ocorrencias: data.ocorrencias || '',
-                    empreiteiros: data.empreiteiros_quantidade != null ? String(data.empreiteiros_quantidade) : '',
                 })
                 setEquipe(data.equipe_json || [])
                 setFotosExistentes(data.fotos_url || [])
+                // Load existing empreiteiros_json as extras
+                if (data.empreiteiros_json && Array.isArray(data.empreiteiros_json)) {
+                    setEmpreiteirosExtra(data.empreiteiros_json)
+                }
                 setPageLoading(false)
+                // Load pre-registered empreiteiros for this obra
+                supabase.from('empreiteiros_obra').select('id, empresa, servico').eq('obra_id', data.obra_id).order('empresa')
+                    .then(({ data: preData }) => setEmpreiteirosPre(preData || []))
             })
     }, [id])
 
@@ -107,8 +121,18 @@ export default function EditarRdoPage() {
         const climaJson = JSON.stringify({
             manha: form.clima_manha || null,
             tarde: form.clima_tarde || null,
-            praticabilidade: form.praticabilidade,
+            praticabilidade_manha: form.praticabilidade_manha,
+            praticabilidade_tarde: form.praticabilidade_tarde,
         })
+
+        // Monta empreiteiros_json
+        const empreiteirosJson = [
+            ...empreiteirosPre
+                .filter(e => (empQtd[e.id] || 0) > 0)
+                .map(e => ({ empresa: e.empresa, servico: e.servico, quantidade: empQtd[e.id] })),
+            ...empreiteirosExtra.filter(e => e.empresa.trim() && e.quantidade > 0),
+        ]
+        const totalEmpreiteiros = empreiteirosJson.reduce((s, e) => s + e.quantidade, 0)
 
         const { error: dbErr } = await supabase.from('rdos').update({
             data: form.data,
@@ -117,7 +141,8 @@ export default function EditarRdoPage() {
             ocorrencias: form.ocorrencias || null,
             equipe_json: equipeValida,
             equipe_presente: equipeValida.length,
-            empreiteiros_quantidade: form.empreiteiros ? parseInt(form.empreiteiros) : null,
+            empreiteiros_quantidade: totalEmpreiteiros || null,
+            empreiteiros_json: empreiteirosJson.length > 0 ? empreiteirosJson : null,
             fotos_url: fotosFinais,
         }).eq('id', id)
 
@@ -165,66 +190,93 @@ export default function EditarRdoPage() {
                 {/* Informações gerais */}
                 <div style={{ padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(82,168,123,0.2)' }}>
                     <p style={{ fontSize: 11, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12 }}>Informações Gerais</p>
-                    {/* Data */}
-                    <div>
+                    {/* Data — linha própria, largura reduzida */}
+                    <div style={{ maxWidth: 200 }}>
                         <label className="form-label">Data *</label>
                         <input className="input" type="date" required value={form.data} onChange={e => set('data', e.target.value)} />
                     </div>
 
-                    {/* Clima manhã / tarde */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                        <div>
-                            <label className="form-label">🌅 Clima — Manhã</label>
-                            <div style={{ position: 'relative' }}>
-                                <select className="input" value={form.clima_manha} onChange={e => set('clima_manha', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
-                                    <option value="">Selecione</option>
-                                    <option>Ensolarado</option>
-                                    <option>Parcialmente nublado</option>
-                                    <option>Nublado</option>
-                                    <option>Chuvoso</option>
-                                </select>
-                                <ChevronDown size={13} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
-                            </div>
-                        </div>
-                        <div>
-                            <label className="form-label">🌆 Clima — Tarde</label>
-                            <div style={{ position: 'relative' }}>
-                                <select className="input" value={form.clima_tarde} onChange={e => set('clima_tarde', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
-                                    <option value="">Selecione</option>
-                                    <option>Ensolarado</option>
-                                    <option>Parcialmente nublado</option>
-                                    <option>Nublado</option>
-                                    <option>Chuvoso</option>
-                                </select>
-                                <ChevronDown size={13} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
-                            </div>
-                        </div>
-                    </div>
+                    {/* Manhã / Tarde — duas colunas, cada uma com clima + praticabilidade */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
 
-                    {/* Praticabilidade */}
-                    <div>
-                        <label className="form-label">Praticabilidade da Obra</label>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 4 }}>
-                            {[
-                                { value: 'praticavel', label: '✅ Praticável', desc: 'Obra em condições normais', color: '#10B981' },
-                                { value: 'impraticavel', label: '🚫 Impraticável', desc: 'Obra paralisada / impedida', color: '#EF4444' },
-                            ].map(opt => (
-                                <button
-                                    key={opt.value}
-                                    type="button"
-                                    onClick={() => setForm(p => ({ ...p, praticabilidade: opt.value as 'praticavel' | 'impraticavel' }))}
-                                    style={{
-                                        padding: '10px 12px', borderRadius: 10, cursor: 'pointer', textAlign: 'left',
-                                        background: form.praticabilidade === opt.value ? `${opt.color}15` : 'rgba(255,255,255,0.03)',
-                                        border: `2px solid ${form.praticabilidade === opt.value ? opt.color : 'var(--border-subtle)'}`,
-                                        transition: 'all 0.15s',
-                                    }}
-                                >
-                                    <div style={{ fontSize: 13, fontWeight: 700, color: form.praticabilidade === opt.value ? opt.color : 'var(--text-primary)' }}>{opt.label}</div>
-                                    <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>{opt.desc}</div>
-                                </button>
-                            ))}
+                        {/* ── MANHÃ ── */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '10px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)' }}>
+                            <p style={{ fontSize: 10, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 2 }}>🌅 Manhã</p>
+                            <div>
+                                <label className="form-label">Clima</label>
+                                <div style={{ position: 'relative' }}>
+                                    <select className="input" value={form.clima_manha} onChange={e => set('clima_manha', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
+                                        <option value="">Selecione</option>
+                                        <option>Ensolarado</option>
+                                        <option>Parcialmente nublado</option>
+                                        <option>Nublado</option>
+                                        <option>Chuvoso</option>
+                                    </select>
+                                    <ChevronDown size={13} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="form-label">Praticabilidade</label>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                    {[
+                                        { value: 'praticavel', label: '✅ Praticável', color: '#10B981' },
+                                        { value: 'impraticavel', label: '🚫 Impraticável', color: '#EF4444' },
+                                    ].map(opt => (
+                                        <button key={opt.value} type="button"
+                                            onClick={() => setForm(p => ({ ...p, praticabilidade_manha: opt.value as 'praticavel' | 'impraticavel' }))}
+                                            style={{
+                                                padding: '8px 10px', borderRadius: 8, cursor: 'pointer', textAlign: 'left',
+                                                background: form.praticabilidade_manha === opt.value ? `${opt.color}18` : 'rgba(255,255,255,0.03)',
+                                                border: `2px solid ${form.praticabilidade_manha === opt.value ? opt.color : 'var(--border-subtle)'}`,
+                                                transition: 'all 0.15s',
+                                            }}
+                                        >
+                                            <span style={{ fontSize: 12, fontWeight: 700, color: form.praticabilidade_manha === opt.value ? opt.color : 'var(--text-primary)' }}>{opt.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
+
+                        {/* ── TARDE ── */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '10px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)' }}>
+                            <p style={{ fontSize: 10, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 2 }}>🌆 Tarde</p>
+                            <div>
+                                <label className="form-label">Clima</label>
+                                <div style={{ position: 'relative' }}>
+                                    <select className="input" value={form.clima_tarde} onChange={e => set('clima_tarde', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
+                                        <option value="">Selecione</option>
+                                        <option>Ensolarado</option>
+                                        <option>Parcialmente nublado</option>
+                                        <option>Nublado</option>
+                                        <option>Chuvoso</option>
+                                    </select>
+                                    <ChevronDown size={13} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="form-label">Praticabilidade</label>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                    {[
+                                        { value: 'praticavel', label: '✅ Praticável', color: '#10B981' },
+                                        { value: 'impraticavel', label: '🚫 Impraticável', color: '#EF4444' },
+                                    ].map(opt => (
+                                        <button key={opt.value} type="button"
+                                            onClick={() => setForm(p => ({ ...p, praticabilidade_tarde: opt.value as 'praticavel' | 'impraticavel' }))}
+                                            style={{
+                                                padding: '8px 10px', borderRadius: 8, cursor: 'pointer', textAlign: 'left',
+                                                background: form.praticabilidade_tarde === opt.value ? `${opt.color}18` : 'rgba(255,255,255,0.03)',
+                                                border: `2px solid ${form.praticabilidade_tarde === opt.value ? opt.color : 'var(--border-subtle)'}`,
+                                                transition: 'all 0.15s',
+                                            }}
+                                        >
+                                            <span style={{ fontSize: 12, fontWeight: 700, color: form.praticabilidade_tarde === opt.value ? opt.color : 'var(--text-primary)' }}>{opt.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -264,12 +316,60 @@ export default function EditarRdoPage() {
 
                 {/* Empreiteiros */}
                 <div style={{ padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid var(--border-subtle)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-                        <HardHat size={14} style={{ color: 'var(--text-muted)' }} />
-                        <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Empreiteiros</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <HardHat size={15} style={{ color: '#52A87B' }} />
+                            <p style={{ fontSize: 11, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.6px' }}>Empreiteiros</p>
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                            <Link href="/rdo/empreiteiros" style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '4px 10px', borderRadius: 8, background: 'rgba(82,168,123,0.1)', border: '1px solid rgba(82,168,123,0.25)', textDecoration: 'none', color: '#52A87B', fontSize: 11, fontWeight: 600 }}>
+                                <Settings size={11} /> Gerenciar
+                            </Link>
+                            <button type="button" onClick={() => setEmpreiteirosExtra(p => [...p, { empresa: '', servico: 'Geral', quantidade: 1 }])}
+                                style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '4px 10px', borderRadius: 8, background: 'rgba(82,168,123,0.1)', border: '1px solid rgba(82,168,123,0.25)', color: '#52A87B', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
+                                <Plus size={11} /> Ad-hoc
+                            </button>
+                        </div>
                     </div>
-                    <label className="form-label">Quantidade de empreiteiros presentes</label>
-                    <input className="input" type="number" min="0" placeholder="0" value={form.empreiteiros} onChange={e => set('empreiteiros', e.target.value)} style={{ maxWidth: 160 }} />
+
+                    {empreiteirosPre.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '12px 0' }}>
+                            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 8 }}>Nenhum empreiteiro pré-cadastrado</p>
+                            <Link href="/rdo/empreiteiros" style={{ fontSize: 12, color: '#52A87B', textDecoration: 'none', fontWeight: 600 }}>→ Cadastrar empreiteiros</Link>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            {empreiteirosPre.map(e => (
+                                <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderRadius: 10, background: (empQtd[e.id] || 0) > 0 ? 'rgba(82,168,123,0.08)' : 'rgba(255,255,255,0.02)', border: `1px solid ${(empQtd[e.id] || 0) > 0 ? 'rgba(82,168,123,0.3)' : 'var(--border-subtle)'}`, transition: 'all 0.15s' }}>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{e.empresa}</span>
+                                        <span style={{ fontSize: 10, marginLeft: 8, padding: '1px 6px', borderRadius: 99, background: 'rgba(82,168,123,0.1)', color: '#52A87B', fontWeight: 600 }}>{e.servico}</span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                        <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Qtd:</span>
+                                        <input type="number" min="0" max="999" value={empQtd[e.id] ?? ''} placeholder="0"
+                                            onChange={ev => setEmpQtd(p => ({ ...p, [e.id]: parseInt(ev.target.value) || 0 }))}
+                                            style={{ width: 60, padding: '4px 8px', borderRadius: 8, border: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 13, textAlign: 'center' }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {empreiteirosExtra.length > 0 && (
+                        <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            <p style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>Adicionais</p>
+                            {empreiteirosExtra.map((e, i) => (
+                                <div key={i} style={{ display: 'flex', gap: 6 }}>
+                                    <input className="input" placeholder="Empresa" value={e.empresa} onChange={ev => setEmpreiteirosExtra(p => p.map((x, idx) => idx === i ? { ...x, empresa: ev.target.value } : x))} style={{ flex: 2 }} />
+                                    <input type="number" min="0" placeholder="Qtd" value={e.quantidade || ''} onChange={ev => setEmpreiteirosExtra(p => p.map((x, idx) => idx === i ? { ...x, quantidade: parseInt(ev.target.value) || 0 } : x))} style={{ width: 70, padding: '0 8px', borderRadius: 10, border: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.05)', color: 'var(--text-primary)', fontSize: 13 }} />
+                                    <button type="button" onClick={() => setEmpreiteirosExtra(p => p.filter((_, idx) => idx !== i))} style={{ width: 36, height: 36, borderRadius: 8, border: '1px solid rgba(239,68,68,0.2)', background: 'rgba(239,68,68,0.06)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444', flexShrink: 0 }}>
+                                        <X size={14} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Atividades */}

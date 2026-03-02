@@ -12,6 +12,8 @@ interface Rdo {
     clima?: string
     equipe_presente?: number
     equipe_json?: { nome: string; funcao: string }[]
+    empreiteiros_quantidade?: number
+    empreiteiros_json?: { empresa: string; servico: string; quantidade: number }[]
     descricao_atividades?: string
     ocorrencias?: string
     fotos_url?: string[]
@@ -21,6 +23,11 @@ interface Rdo {
 
 const CLIMA_EMOJI: Record<string, string> = {
     'Ensolarado': '☀️', 'Nublado': '☁️', 'Chuvoso': '🌧️', 'Parcialmente nublado': '⛅',
+}
+
+const PRATICAVEL_LABEL: Record<string, { emoji: string; label: string; color: string }> = {
+    praticavel: { emoji: '✅', label: 'Praticável', color: '#10B981' },
+    impraticavel: { emoji: '🚫', label: 'Impraticável', color: '#EF4444' },
 }
 
 export default function RdoDetailPage() {
@@ -121,6 +128,20 @@ export default function RdoDetailPage() {
     const fotos = rdo.fotos_url || []
     const equipe = rdo.equipe_json || []
 
+    // Parseia clima (JSON ou string legada)
+    let climaManha = '', climaTarde = '', praticManha = 'praticavel', praticTarde = 'praticavel'
+    if (rdo.clima) {
+        try {
+            const c = JSON.parse(rdo.clima)
+            climaManha = c.manha || ''
+            climaTarde = c.tarde || ''
+            praticManha = c.praticabilidade_manha || c.praticabilidade || 'praticavel'
+            praticTarde = c.praticabilidade_tarde || c.praticabilidade || 'praticavel'
+        } catch {
+            climaManha = rdo.clima
+        }
+    }
+
     return (
         <div style={{ padding: '20px', maxWidth: 780 }}>
             {/* ── Barra de ações (não imprime) ── */}
@@ -194,12 +215,68 @@ export default function RdoDetailPage() {
                     <QuickInfo label="Data" value={rdo.data ? fmt(rdo.data) : '—'} />
                     <QuickInfo label="Obra" value={obra?.nome || '—'} />
                     {obra?.cidade && <QuickInfo label="Local" value={`${obra.cidade}${obra.endereco ? ` — ${obra.endereco}` : ''}`} />}
-                    {rdo.clima && <QuickInfo label="Clima" value={`${CLIMA_EMOJI[rdo.clima] || ''} ${rdo.clima}`} />}
                     <QuickInfo label="Equipe" value={`${equipe.length || rdo.equipe_presente || 0} pessoas`} />
                 </div>
 
                 {/* ── Corpo ── */}
                 <div style={{ padding: '20px 28px', position: 'relative', zIndex: 1 }}>
+
+                    {/* Clima */}
+                    {(climaManha || climaTarde) && (
+                        <Section title="🌤️ Condições Climáticas">
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                                {[
+                                    { label: '🌅 Manhã', clima: climaManha, pratic: praticManha },
+                                    { label: '🌆 Tarde', clima: climaTarde, pratic: praticTarde },
+                                ].map(({ label, clima, pratic }) => {
+                                    const p = PRATICAVEL_LABEL[pratic] || PRATICAVEL_LABEL['praticavel']
+                                    return (
+                                        <div key={label} style={{ padding: '10px 14px', borderRadius: 8, background: '#f8fffe', border: '1px solid #d1e9da' }}>
+                                            <div style={{ fontSize: 10, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>{label}</div>
+                                            <div style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a', marginBottom: 6 }}>
+                                                {CLIMA_EMOJI[clima] || '🌡️'} {clima || 'Não informado'}
+                                            </div>
+                                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 99, background: `${p.color}15`, border: `1px solid ${p.color}55` }}>
+                                                <span style={{ fontSize: 11 }}>{p.emoji}</span>
+                                                <span style={{ fontSize: 11, fontWeight: 700, color: p.color }}>{p.label}</span>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </Section>
+                    )}
+
+                    {/* Empreiteiros */}
+                    {rdo.empreiteiros_json && rdo.empreiteiros_json.length > 0 && (
+                        <Section title="🏗️ Equipes de Empreiteiros">
+                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+                                <thead>
+                                    <tr style={{ background: '#f0faf5' }}>
+                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Empresa</th>
+                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Serviço</th>
+                                        <th style={{ padding: '7px 10px', textAlign: 'center', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Pessoas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {rdo.empreiteiros_json.map((e, i) => (
+                                        <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f8fffe' }}>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2', fontWeight: 600, color: '#1a1a1a' }}>{e.empresa}</td>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2' }}>
+                                                <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: '#e8f5ee', color: '#2d6a4f', fontWeight: 700 }}>{e.servico}</span>
+                                            </td>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2', textAlign: 'center', fontWeight: 700, color: '#2d6a4f' }}>{e.quantidade}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {rdo.empreiteiros_quantidade && rdo.empreiteiros_quantidade > 0 && (
+                                <p style={{ fontSize: 11, color: '#666', marginTop: 8, textAlign: 'right' }}>
+                                    Total: <strong>{rdo.empreiteiros_quantidade} empreiteiros</strong>
+                                </p>
+                            )}
+                        </Section>
+                    )}
 
                     {/* Equipe */}
                     {equipe.length > 0 && (
