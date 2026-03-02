@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useObra } from '@/lib/obra-context'
 import {
     FolderOpen, FolderPlus, ChevronRight, ChevronDown,
-    Upload, Loader2, FileText, Trash2, Download, Plus, X
+    Upload, Loader2, FileText, Trash2, Download, Plus, X, Building2
 } from 'lucide-react'
 
 // ── 14 disciplinas com numeração exata ──────────────────────────────────────
@@ -37,8 +37,22 @@ type Arquivo = {
 }
 
 export default function ProjetosPage() {
-    const { obra } = useObra()
+    const { obra: obraCtx, role } = useObra()
+    const isDirector = role === 'diretor' || role === 'admin'
     const supabase = createClient()
+
+    // Director picks obra in-page
+    const [allObras, setAllObras] = useState<{ id: string; nome: string }[]>([])
+    const [selectedObraId, setSelectedObraId] = useState('')
+    const obra = isDirector
+        ? (allObras.find(o => o.id === selectedObraId) || null)
+        : obraCtx
+
+    useEffect(() => {
+        if (!isDirector) return
+        supabase.from('obras').select('id, nome').order('nome')
+            .then(({ data }) => setAllObras(data || []))
+    }, [isDirector])
 
     const [arquivos, setArquivos] = useState<Arquivo[]>([])
     const [loading, setLoading] = useState(false)
@@ -209,6 +223,34 @@ export default function ProjetosPage() {
                     />
                     <button onClick={adicionarPasta} style={{ padding: '8px 14px', borderRadius: 10, background: '#9B59B6', border: 'none', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Criar</button>
                     <button onClick={() => { setShowNovaPasta(false); setNovaPastaNome('') }} style={{ padding: '8px 10px', borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-muted)', cursor: 'pointer' }}><X size={14} /></button>
+                </div>
+            )}
+
+            {/* ── Seletor de obra (diretor/admin) ── */}
+            {isDirector && (
+                <div style={{ marginBottom: 20 }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px', display: 'flex', alignItems: 'center', gap: 5, marginBottom: 8 }}>
+                        <Building2 size={11} /> Obra
+                    </label>
+                    <div style={{ position: 'relative' }}>
+                        <select
+                            value={selectedObraId}
+                            onChange={e => { setSelectedObraId(e.target.value); setArquivos([]) }}
+                            style={{
+                                width: '100%', boxSizing: 'border-box', appearance: 'none',
+                                padding: '11px 40px 11px 14px', borderRadius: 10,
+                                background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)',
+                                color: selectedObraId ? 'var(--text-primary)' : 'var(--text-muted)',
+                                fontSize: 13, outline: 'none', cursor: 'pointer',
+                            }}
+                        >
+                            <option value="">Selecione uma obra para visualizar...</option>
+                            {allObras.map(o => (
+                                <option key={o.id} value={o.id}>{o.nome}</option>
+                            ))}
+                        </select>
+                        <ChevronDown size={14} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+                    </div>
                 </div>
             )}
 
