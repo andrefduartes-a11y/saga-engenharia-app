@@ -109,7 +109,8 @@ export default function NovaFVS() {
         const { error: dbErr } = await supabase.from('fvs').insert({
             obra_id: obraId,
             data,
-            elemento: servicoInspecionado,
+            servico_inspecionado: servicoInspecionado,
+            local_trecho: localTrecho || null,
             verificacoes: finalChecks,
             status,
             responsavel: responsavel || null,
