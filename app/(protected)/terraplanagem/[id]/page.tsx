@@ -220,23 +220,16 @@ function AddControlModal({
                                 <optgroup label="Escavação">
                                     <option>Escavadeira Hidráulica</option>
                                     <option>Retroescavadeira</option>
-                                    <option>Draga</option>
                                 </optgroup>
                                 <optgroup label="Compactação">
                                     <option>Rolo Compactador Liso</option>
                                     <option>Rolo Compactador Pé-de-Carneiro</option>
-                                    <option>Placa Vibratória</option>
-                                    <option>Soquete Mecânico</option>
                                 </optgroup>
                                 <optgroup label="Movimentação">
-                                    <option>Trator de Esteiras (Bulldozer)</option>
-                                    <option>Motoniveladora (Patrol)</option>
                                     <option>Pá Carregadeira</option>
-                                    <option>Skid Steer (Bob-cat)</option>
+                                    <option>Bobcat</option>
                                 </optgroup>
                                 <optgroup label="Outros">
-                                    <option>Bomba de Rebaixamento</option>
-                                    <option>Compressor de Ar</option>
                                     <option value="__outro">Outro (especificar)</option>
                                 </optgroup>
                             </select>
