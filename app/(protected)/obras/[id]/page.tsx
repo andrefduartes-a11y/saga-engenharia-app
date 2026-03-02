@@ -264,12 +264,28 @@ export default function ObraDetailPage({ params }: { params: { id: string } }) {
                     )}
 
                     {/* Quick actions */}
-                    <div className="grid grid-cols-2 gap-3">
-                        <Link href={`/rdo/novo?obra=${obra.id}`} className="btn-primary flex-col py-4 gap-2 text-sm">
-                            <ClipboardList size={22} />Novo RDO
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                        <Link href={`/rdo/novo?obra=${obra.id}`} style={{
+                            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                            gap: 10, padding: '20px 12px', borderRadius: 16, textDecoration: 'none',
+                            background: 'linear-gradient(135deg, rgba(52,152,219,0.15), rgba(52,152,219,0.08))',
+                            border: '1px solid rgba(52,152,219,0.3)',
+                            color: '#3498DB', fontWeight: 700, fontSize: 14,
+                            transition: 'all 0.2s',
+                        }}>
+                            <ClipboardList size={26} />
+                            Novo RDO
                         </Link>
-                        <Link href={`/concreto/novo?obra=${obra.id}`} className="btn-secondary flex-col py-4 gap-2 text-sm min-h-[56px]">
-                            <HardHat size={22} />Nova Concretagem
+                        <Link href={`/concreto/novo?obra=${obra.id}`} style={{
+                            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                            gap: 10, padding: '20px 12px', borderRadius: 16, textDecoration: 'none',
+                            background: 'linear-gradient(135deg, rgba(127,166,83,0.15), rgba(127,166,83,0.08))',
+                            border: '1px solid rgba(127,166,83,0.3)',
+                            color: '#7FA653', fontWeight: 700, fontSize: 14,
+                            transition: 'all 0.2s',
+                        }}>
+                            <HardHat size={26} />
+                            Nova Concretagem
                         </Link>
                     </div>
                 </>
