@@ -40,6 +40,13 @@ const NAV_GROUPS = [
         ],
     },
     {
+        label: 'Assistência Técnica',
+        icon: '🔧',
+        items: [
+            { href: '/assistencia-tecnica', icon: <Wrench size={15} />, label: 'Assistência Técnica' },
+        ],
+    },
+    {
         label: 'Suporte',
         icon: '⚙️',
         items: [
