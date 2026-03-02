@@ -180,8 +180,10 @@ export default function RdoDetailPage() {
                     padding: '0',
                     position: 'relative',
                     overflow: 'hidden',
-                    border: '1px solid rgba(82,168,123,0.3)',
+                    border: '1px solid #d0d4d9',
                     borderRadius: 16,
+                    wordBreak: 'break-word',
+                    overflowWrap: 'break-word',
                 }}
             >
                 {/* ── Marca d'água ── */}
@@ -194,28 +196,47 @@ export default function RdoDetailPage() {
                     <img
                         src="/S-construtora-cinza-linhas.png"
                         alt=""
-                        style={{ width: '55%', opacity: 0.06, userSelect: 'none' }}
+                        style={{ width: '50%', opacity: 0.05, userSelect: 'none' }}
                     />
                 </div>
 
-                {/* ── Cabeçalho verde ── */}
-                <div style={{ background: 'linear-gradient(135deg, #2d6a4f, #52A87B)', padding: '20px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-                    {/* Logo */}
+                {/* ── Cabeçalho — paleta cinza SAGA ── */}
+                <div style={{
+                    background: 'linear-gradient(135deg, #3a3f46, #4D5359)',
+                    padding: '18px 28px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    position: 'relative',
+                    zIndex: 1,
+                }}>
+                    {/* Logo versão cinza-branco */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/logo-preferencial-branco.png" alt="SAGA" style={{ height: 38, width: 'auto' }} />
+                    <img src="/logo-preferencial-branco.png" alt="SAGA" style={{ height: 36, width: 'auto' }} />
                     {/* Título */}
                     <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.75)', letterSpacing: '2px', textTransform: 'uppercase' }}>Relatório Diário de Obra</div>
-                        <div style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', letterSpacing: '1px' }}>RDO</div>
+                        <div style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,0.65)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 2 }}>Relatório Diário de Obra</div>
+                        <div style={{ fontSize: 24, fontWeight: 900, color: '#ffffff', letterSpacing: '2px' }}>RDO</div>
                     </div>
                 </div>
 
                 {/* ── Faixa de info rápida ── */}
-                <div style={{ background: '#f8fffe', borderBottom: '2px solid #52A87B', padding: '12px 28px', display: 'flex', flexWrap: 'wrap', gap: 24, position: 'relative', zIndex: 1 }}>
+                <div style={{
+                    background: '#f5f6f7',
+                    borderBottom: '2px solid #4D5359',
+                    padding: '10px 28px',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 20,
+                    position: 'relative',
+                    zIndex: 1,
+                }}>
                     <QuickInfo label="Data" value={rdo.data ? fmt(rdo.data) : '—'} />
                     <QuickInfo label="Obra" value={obra?.nome || '—'} />
                     {obra?.cidade && <QuickInfo label="Local" value={`${obra.cidade}${obra.endereco ? ` — ${obra.endereco}` : ''}`} />}
-                    <QuickInfo label="Equipe" value={`${equipe.length || rdo.equipe_presente || 0} pessoas`} />
+                    <QuickInfo label="Equipe própria" value={`${equipe.length || rdo.equipe_presente || 0} pessoas`} />
+                    {rdo.empreiteiros_quantidade && rdo.empreiteiros_quantidade > 0 &&
+                        <QuickInfo label="Empreiteiros" value={`${rdo.empreiteiros_quantidade} pessoas`} />}
                 </div>
 
                 {/* ── Corpo ── */}
@@ -224,15 +245,15 @@ export default function RdoDetailPage() {
                     {/* Clima */}
                     {(climaManha || climaTarde) && (
                         <Section title="🌤️ Condições Climáticas">
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                                 {[
                                     { label: '🌅 Manhã', clima: climaManha, pratic: praticManha },
                                     { label: '🌆 Tarde', clima: climaTarde, pratic: praticTarde },
                                 ].map(({ label, clima, pratic }) => {
                                     const p = PRATICAVEL_LABEL[pratic] || PRATICAVEL_LABEL['praticavel']
                                     return (
-                                        <div key={label} style={{ padding: '10px 14px', borderRadius: 8, background: '#f8fffe', border: '1px solid #d1e9da' }}>
-                                            <div style={{ fontSize: 10, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>{label}</div>
+                                        <div key={label} style={{ padding: '10px 14px', borderRadius: 8, background: '#f9f9f9', border: '1px solid #e0e3e7' }}>
+                                            <div style={{ fontSize: 10, fontWeight: 700, color: '#4D5359', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>{label}</div>
                                             <div style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a', marginBottom: 6 }}>
                                                 {CLIMA_EMOJI[clima] || '🌡️'} {clima || 'Não informado'}
                                             </div>
@@ -252,29 +273,24 @@ export default function RdoDetailPage() {
                         <Section title="🏗️ Equipes de Empreiteiros">
                             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                                 <thead>
-                                    <tr style={{ background: '#f0faf5' }}>
-                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Empresa</th>
-                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Serviço</th>
-                                        <th style={{ padding: '7px 10px', textAlign: 'center', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Pessoas</th>
+                                    <tr style={{ background: '#f2f3f4' }}>
+                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d0d4d9', color: '#4D5359', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Empresa</th>
+                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d0d4d9', color: '#4D5359', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Serviço</th>
+                                        <th style={{ padding: '7px 10px', textAlign: 'center', borderBottom: '1px solid #d0d4d9', color: '#4D5359', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Pessoas</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {rdo.empreiteiros_json.map((e, i) => (
-                                        <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f8fffe' }}>
-                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2', fontWeight: 600, color: '#1a1a1a' }}>{e.empresa}</td>
-                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2' }}>
-                                                <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: '#e8f5ee', color: '#2d6a4f', fontWeight: 700 }}>{e.servico}</span>
+                                        <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f9f9f9' }}>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eee', fontWeight: 600, color: '#1a1a1a' }}>{e.empresa}</td>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eee' }}>
+                                                <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: '#eaebec', color: '#4D5359', fontWeight: 700 }}>{e.servico}</span>
                                             </td>
-                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2', textAlign: 'center', fontWeight: 700, color: '#2d6a4f' }}>{e.quantidade}</td>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eee', textAlign: 'center', fontWeight: 700, color: '#4D5359' }}>{e.quantidade}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
-                            {rdo.empreiteiros_quantidade && rdo.empreiteiros_quantidade > 0 && (
-                                <p style={{ fontSize: 11, color: '#666', marginTop: 8, textAlign: 'right' }}>
-                                    Total: <strong>{rdo.empreiteiros_quantidade} empreiteiros</strong>
-                                </p>
-                            )}
                         </Section>
                     )}
 
@@ -283,19 +299,19 @@ export default function RdoDetailPage() {
                         <Section title="👷 Equipe Presente">
                             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                                 <thead>
-                                    <tr style={{ background: '#f0faf5' }}>
-                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>#</th>
-                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Nome</th>
-                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d1e9da', color: '#2d6a4f', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Função</th>
+                                    <tr style={{ background: '#f2f3f4' }}>
+                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d0d4d9', color: '#4D5359', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>#</th>
+                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d0d4d9', color: '#4D5359', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Nome</th>
+                                        <th style={{ padding: '7px 10px', textAlign: 'left', borderBottom: '1px solid #d0d4d9', color: '#4D5359', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Função</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {equipe.map((m, i) => (
-                                        <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f8fffe' }}>
-                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2', color: '#888', fontSize: 11 }}>{i + 1}</td>
-                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2', fontWeight: 600, color: '#1a1a1a' }}>{m.nome}</td>
-                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eef7f2' }}>
-                                                <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: '#e8f5ee', color: '#2d6a4f', fontWeight: 700 }}>{m.funcao}</span>
+                                        <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#f9f9f9' }}>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eee', color: '#888', fontSize: 11 }}>{i + 1}</td>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eee', fontWeight: 600, color: '#1a1a1a' }}>{m.nome}</td>
+                                            <td style={{ padding: '7px 10px', borderBottom: '1px solid #eee' }}>
+                                                <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: '#eaebec', color: '#4D5359', fontWeight: 700 }}>{m.funcao}</span>
                                             </td>
                                         </tr>
                                     ))}
@@ -310,14 +326,14 @@ export default function RdoDetailPage() {
                     {/* Atividades */}
                     {rdo.descricao_atividades && (
                         <Section title="📋 Atividades Realizadas">
-                            <p style={{ fontSize: 13, color: '#333', lineHeight: 1.7, whiteSpace: 'pre-wrap', margin: 0 }}>{rdo.descricao_atividades}</p>
+                            <p style={{ fontSize: 13, color: '#333', lineHeight: 1.75, whiteSpace: 'pre-wrap', margin: 0, wordBreak: 'break-word' }}>{rdo.descricao_atividades}</p>
                         </Section>
                     )}
 
                     {/* Ocorrências */}
                     {rdo.ocorrencias && (
-                        <Section title="⚠️ Ocorrências / Observações" accent="#d9534f">
-                            <p style={{ fontSize: 13, color: '#333', lineHeight: 1.7, whiteSpace: 'pre-wrap', margin: 0 }}>{rdo.ocorrencias}</p>
+                        <Section title="⚠️ Ocorrências / Observações" accent="#c0392b">
+                            <p style={{ fontSize: 13, color: '#333', lineHeight: 1.75, whiteSpace: 'pre-wrap', margin: 0, wordBreak: 'break-word' }}>{rdo.ocorrencias}</p>
                         </Section>
                     )}
 
@@ -328,7 +344,7 @@ export default function RdoDetailPage() {
                                 {fotos.map((url, i) => (
                                     // eslint-disable-next-line @next/next/no-img-element
                                     <img key={i} src={url} alt={`Foto ${i + 1}`}
-                                        style={{ width: 130, height: 100, borderRadius: 8, objectFit: 'cover', border: '1px solid #d1e9da' }}
+                                        style={{ width: 130, height: 100, borderRadius: 8, objectFit: 'cover', border: '1px solid #d0d4d9' }}
                                         crossOrigin="anonymous"
                                     />
                                 ))}
@@ -337,11 +353,11 @@ export default function RdoDetailPage() {
                     )}
 
                     {/* Assinaturas */}
-                    <div style={{ marginTop: 32, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                    <div style={{ marginTop: 32, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }}>
                         {['Engenheiro Responsável', 'Encarregado / Supervisor'].map(label => (
                             <div key={label}>
-                                <div style={{ borderTop: '1.5px solid #52A87B', paddingTop: 8, textAlign: 'center' }}>
-                                    <div style={{ fontSize: 10, color: '#666', letterSpacing: '0.5px', textTransform: 'uppercase' }}>{label}</div>
+                                <div style={{ borderTop: '1.5px solid #4D5359', paddingTop: 8, textAlign: 'center' }}>
+                                    <div style={{ fontSize: 10, color: '#6b7280', letterSpacing: '0.5px', textTransform: 'uppercase' }}>{label}</div>
                                 </div>
                             </div>
                         ))}
@@ -349,9 +365,9 @@ export default function RdoDetailPage() {
                 </div>
 
                 {/* ── Rodapé ── */}
-                <div style={{ background: '#f0faf5', borderTop: '1px solid #d1e9da', padding: '8px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-                    <span style={{ fontSize: 9, color: '#888', textTransform: 'uppercase', letterSpacing: '0.5px' }}>SAGA Engenharia — Relatório Diário de Obra</span>
-                    <span style={{ fontSize: 9, color: '#888' }}>
+                <div style={{ background: '#f2f3f4', borderTop: '1px solid #d0d4d9', padding: '8px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
+                    <span style={{ fontSize: 9, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>SAGA Construtora — Relatório Diário de Obra</span>
+                    <span style={{ fontSize: 9, color: '#6b7280' }}>
                         Gerado em {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })} às {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                     </span>
                 </div>
@@ -359,7 +375,7 @@ export default function RdoDetailPage() {
 
             {/* Preview info */}
             <p style={{ fontSize: 11, color: 'var(--text-muted)', textAlign: 'center', marginTop: 12 }}>
-                👆 Pré-visualização do PDF · Clique em "Gerar e Compartilhar" para exportar
+                👆 Pré-visualização do PDF · Clique em &quot;Gerar e Compartilhar&quot; para exportar
             </p>
         </div>
     )
@@ -368,23 +384,24 @@ export default function RdoDetailPage() {
 // ── Componentes auxiliares ──────────────────────────────────────────────────
 function QuickInfo({ label, value }: { label: string; value: string }) {
     return (
-        <div>
-            <div style={{ fontSize: 9, color: '#52A87B', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: 2 }}>{label}</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#1a1a1a' }}>{value}</div>
+        <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 9, color: '#4D5359', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: 2 }}>{label}</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#1a1a1a', wordBreak: 'break-word', overflowWrap: 'break-word' }}>{value}</div>
         </div>
     )
 }
 
-function Section({ title, accent = '#52A87B', children }: { title: string; accent?: string; children: React.ReactNode }) {
+function Section({ title, accent = '#4D5359', children }: { title: string; accent?: string; children: React.ReactNode }) {
     return (
-        <div style={{ marginBottom: 20 }}>
+        <div style={{ marginBottom: 18 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                 <div style={{ width: 3, height: 14, borderRadius: 2, background: accent, flexShrink: 0 }} />
                 <div style={{ fontSize: 11, fontWeight: 800, color: accent, textTransform: 'uppercase', letterSpacing: '0.8px' }}>{title}</div>
             </div>
-            <div style={{ padding: '12px 16px', borderRadius: 10, background: '#ffffff', border: `1px solid ${accent}22` }}>
+            <div style={{ padding: '12px 16px', borderRadius: 10, background: '#ffffff', border: `1px solid ${accent === '#4D5359' ? '#d0d4d9' : accent + '33'}`, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                 {children}
             </div>
         </div>
     )
 }
+
