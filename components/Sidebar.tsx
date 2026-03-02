@@ -19,7 +19,7 @@ const NAV_GROUPS = [
         items: [
             { href: '/concreto', icon: <HardHat size={15} />, label: 'Concretagem' },
             { href: '/terraplanagem', icon: <Mountain size={15} />, label: 'Terraplanagem' },
-            { href: '/ferramentas', icon: <Wrench size={15} />, label: 'Ferramentas' },
+            { href: '/ferramentas', icon: <Wrench size={15} />, label: 'Equipamentos e Ferramentas' },
         ],
     },
     {

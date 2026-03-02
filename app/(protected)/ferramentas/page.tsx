@@ -444,7 +444,7 @@ export default function FerramentasPage() {
                             <Wrench size={20} style={{ color: '#7FA653' }} />
                         </div>
                         <div>
-                            <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Raleway', sans-serif" }}>Equipamentos Internos</h1>
+                            <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Raleway', sans-serif" }}>Equipamentos e Ferramentas</h1>
                             <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 1 }}>Controle de ferramentas e locação</p>
                         </div>
                     </div>

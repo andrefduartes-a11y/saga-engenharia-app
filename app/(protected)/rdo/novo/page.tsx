@@ -27,7 +27,9 @@ export default function NovoRdoPage() {
 
     const [form, setForm] = useState({
         data: new Date().toISOString().split('T')[0],
-        clima: '',
+        clima_manha: '',
+        clima_tarde: '',
+        praticabilidade: 'praticavel' as 'praticavel' | 'impraticavel',
         descricao_atividades: '',
         ocorrencias: '',
         empreiteiros: '',
@@ -95,10 +97,16 @@ export default function NovoRdoPage() {
 
         const { data: { user } } = await supabase.auth.getUser()
 
+        const climaJson = JSON.stringify({
+            manha: form.clima_manha || null,
+            tarde: form.clima_tarde || null,
+            praticabilidade: form.praticabilidade,
+        })
+
         const { error: dbErr } = await supabase.from('rdos').insert({
             obra_id: obraId,
             data: form.data,
-            clima: form.clima || null,
+            clima: climaJson,
             equipe_presente: equipeFinal.length,
             equipe_json: equipeFinal,
             empreiteiros_quantidade: form.empreiteiros ? parseInt(form.empreiteiros) : null,
@@ -157,15 +165,18 @@ export default function NovoRdoPage() {
                 {/* Informações gerais */}
                 <div style={{ padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(82,168,123,0.2)' }}>
                     <p style={{ fontSize: 11, fontWeight: 700, color: '#52A87B', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12 }}>Informações Gerais</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                    {/* Data */}
+                    <div>
+                        <label className="form-label">Data *</label>
+                        <input className="input" type="date" required value={form.data} onChange={e => set('data', e.target.value)} />
+                    </div>
+
+                    {/* Clima manhã / tarde */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                         <div>
-                            <label className="form-label">Data *</label>
-                            <input className="input" type="date" required value={form.data} onChange={e => set('data', e.target.value)} />
-                        </div>
-                        <div>
-                            <label className="form-label">Clima</label>
+                            <label className="form-label">🌅 Clima — Manhã</label>
                             <div style={{ position: 'relative' }}>
-                                <select className="input" value={form.clima} onChange={e => set('clima', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
+                                <select className="input" value={form.clima_manha} onChange={e => set('clima_manha', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
                                     <option value="">Selecione</option>
                                     <option>Ensolarado</option>
                                     <option>Parcialmente nublado</option>
@@ -174,6 +185,45 @@ export default function NovoRdoPage() {
                                 </select>
                                 <ChevronDown size={13} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
                             </div>
+                        </div>
+                        <div>
+                            <label className="form-label">🌆 Clima — Tarde</label>
+                            <div style={{ position: 'relative' }}>
+                                <select className="input" value={form.clima_tarde} onChange={e => set('clima_tarde', e.target.value)} style={{ appearance: 'none', paddingRight: 36 }}>
+                                    <option value="">Selecione</option>
+                                    <option>Ensolarado</option>
+                                    <option>Parcialmente nublado</option>
+                                    <option>Nublado</option>
+                                    <option>Chuvoso</option>
+                                </select>
+                                <ChevronDown size={13} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Praticabilidade */}
+                    <div>
+                        <label className="form-label">Praticabilidade da Obra</label>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 4 }}>
+                            {[
+                                { value: 'praticavel', label: '✅ Praticável', desc: 'Obra em condições normais', color: '#10B981' },
+                                { value: 'impraticavel', label: '🚫 Impraticável', desc: 'Obra paralisada / impedida', color: '#EF4444' },
+                            ].map(opt => (
+                                <button
+                                    key={opt.value}
+                                    type="button"
+                                    onClick={() => setForm(p => ({ ...p, praticabilidade: opt.value as 'praticavel' | 'impraticavel' }))}
+                                    style={{
+                                        padding: '10px 12px', borderRadius: 10, cursor: 'pointer', textAlign: 'left',
+                                        background: form.praticabilidade === opt.value ? `${opt.color}15` : 'rgba(255,255,255,0.03)',
+                                        border: `2px solid ${form.praticabilidade === opt.value ? opt.color : 'var(--border-subtle)'}`,
+                                        transition: 'all 0.15s',
+                                    }}
+                                >
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: form.praticabilidade === opt.value ? opt.color : 'var(--text-primary)' }}>{opt.label}</div>
+                                    <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>{opt.desc}</div>
+                                </button>
+                            ))}
                         </div>
                     </div>
                 </div>

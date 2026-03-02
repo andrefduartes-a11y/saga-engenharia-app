@@ -3,16 +3,18 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowLeft, Loader2, Wrench } from 'lucide-react'
+import { ArrowLeft, Loader2, Wrench, Plus, X } from 'lucide-react'
 import Link from 'next/link'
 
-const TIPOS_FERRAMENTA = [
+const TIPOS_FERRAMENTA_BASE = [
     'Furadeira',
     'Serra Circular',
     'Lixadeira',
     'Makita / Parafusadeira',
     'Martelete',
     'Esmerilhadeira',
+    'Tablet',
+    'Notebook',
     'Outros',
 ]
 
@@ -22,6 +24,10 @@ export default function NovaFerramentaPage() {
     const [obras, setObras] = useState<{ id: string; nome: string }[]>([])
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState('')
+    const [tiposCustom, setTiposCustom] = useState<string[]>([])
+    const [novoTipoInput, setNovoTipoInput] = useState('')
+    const [showAddTipo, setShowAddTipo] = useState(false)
+
     const [form, setForm] = useState({
         nome: '',
         numero_id: '',
@@ -32,9 +38,26 @@ export default function NovaFerramentaPage() {
         observacoes: '',
     })
 
+    const tiposTodos = [...TIPOS_FERRAMENTA_BASE, ...tiposCustom]
+
     useEffect(() => {
         supabase.from('obras').select('id, nome').order('nome').then(({ data }) => setObras(data || []))
     }, [])
+
+    function handleAddTipo() {
+        const trimmed = novoTipoInput.trim()
+        if (!trimmed) return
+        if (tiposTodos.includes(trimmed)) {
+            setForm(p => ({ ...p, tipo: trimmed }))
+            setNovoTipoInput('')
+            setShowAddTipo(false)
+            return
+        }
+        setTiposCustom(p => [...p, trimmed])
+        setForm(p => ({ ...p, tipo: trimmed }))
+        setNovoTipoInput('')
+        setShowAddTipo(false)
+    }
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -67,8 +90,8 @@ export default function NovaFerramentaPage() {
                         <Wrench size={18} style={{ color: '#7FA653' }} />
                     </div>
                     <div>
-                        <h1 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Raleway', sans-serif" }}>Nova Ferramenta</h1>
-                        <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>Cadastrar equipamento interno</p>
+                        <h1 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', fontFamily: "'Raleway', sans-serif" }}>Novo Equipamento</h1>
+                        <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>Cadastrar equipamento ou ferramenta</p>
                     </div>
                 </div>
             </div>
@@ -95,11 +118,59 @@ export default function NovaFerramentaPage() {
 
                 {/* Tipo */}
                 <div>
-                    <label className="label">Tipo / Categoria</label>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                        <label className="label" style={{ marginBottom: 0 }}>Tipo / Categoria</label>
+                        <button
+                            type="button"
+                            onClick={() => setShowAddTipo(p => !p)}
+                            style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 8, background: 'rgba(127,166,83,0.1)', border: '1px solid rgba(127,166,83,0.25)', color: '#7FA653', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
+                            <Plus size={11} /> Novo tipo
+                        </button>
+                    </div>
+
+                    {showAddTipo && (
+                        <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
+                            <input
+                                className="input"
+                                placeholder="Nome do novo tipo..."
+                                value={novoTipoInput}
+                                onChange={e => setNovoTipoInput(e.target.value)}
+                                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddTipo() } }}
+                                autoFocus
+                                style={{ flex: 1 }}
+                            />
+                            <button
+                                type="button"
+                                onClick={handleAddTipo}
+                                style={{ padding: '0 14px', borderRadius: 8, background: 'linear-gradient(135deg, #7FA653, #6a8f44)', border: 'none', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                                Adicionar
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => { setShowAddTipo(false); setNovoTipoInput('') }}
+                                style={{ width: 36, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <X size={14} />
+                            </button>
+                        </div>
+                    )}
+
                     <select className="input" value={form.tipo} onChange={e => setForm(p => ({ ...p, tipo: e.target.value }))}>
                         <option value="">Selecione...</option>
-                        {TIPOS_FERRAMENTA.map(t => <option key={t} value={t}>{t}</option>)}
+                        {tiposTodos.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
+
+                    {tiposCustom.length > 0 && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                            {tiposCustom.map(t => (
+                                <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '2px 8px 2px 10px', borderRadius: 99, background: 'rgba(127,166,83,0.1)', border: '1px solid rgba(127,166,83,0.25)', fontSize: 11, color: '#7FA653', fontWeight: 600 }}>
+                                    {t}
+                                    <button type="button" onClick={() => { setTiposCustom(p => p.filter(x => x !== t)); if (form.tipo === t) setForm(p => ({ ...p, tipo: '' })) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#7FA653', display: 'flex', alignItems: 'center', padding: 0 }}>
+                                        <X size={10} />
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Status */}
@@ -152,7 +223,7 @@ export default function NovaFerramentaPage() {
                         Cancelar
                     </Link>
                     <button type="submit" disabled={saving} style={{ flex: 2, padding: '10px', borderRadius: 10, background: saving ? 'rgba(127,166,83,0.4)' : 'linear-gradient(135deg, #7FA653, #6a8f44)', border: 'none', color: '#fff', fontSize: 13, fontWeight: 700, cursor: saving ? 'wait' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                        {saving ? <><Loader2 size={14} className="animate-spin" /> Salvando...</> : '✓ Cadastrar Ferramenta'}
+                        {saving ? <><Loader2 size={14} className="animate-spin" /> Salvando...</> : '✓ Cadastrar Equipamento'}
                     </button>
                 </div>
             </form>
