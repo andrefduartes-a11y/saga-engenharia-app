@@ -83,9 +83,10 @@ export default function RelatorioRastreabilidadePage({ params }: { params: { id:
             const fileName = `Rastreabilidade_${obraName.replace(/\s+/g, '_')}_${ag.data_agendada}`
 
             // Step 1: Gera PDF do relatório do sistema
-            const mainPdfBytes: ArrayBuffer = await new Promise((resolve, reject) => {
+            const element = printRef.current as HTMLDivElement
+            const mainPdfBytes: ArrayBuffer = await new Promise<ArrayBuffer>((resolve, reject) => {
                 html2pdf()
-                    .from(printRef.current)
+                    .from(element)
                     .set({
                         margin: [8, 8, 8, 8],
                         filename: fileName + '.pdf',
@@ -94,7 +95,7 @@ export default function RelatorioRastreabilidadePage({ params }: { params: { id:
                         jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
                     })
                     .outputPdf('arraybuffer')
-                    .then(resolve)
+                    .then((buf: unknown) => resolve(buf as ArrayBuffer))
                     .catch(reject)
             })
 
@@ -155,7 +156,7 @@ export default function RelatorioRastreabilidadePage({ params }: { params: { id:
 
             // Download
             const finalBytes = await mergedDoc.save()
-            const blob = new Blob([finalBytes], { type: 'application/pdf' })
+            const blob = new Blob([finalBytes.buffer as ArrayBuffer], { type: 'application/pdf' })
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
             a.href = url; a.download = fileName + '_completo.pdf'
@@ -310,7 +311,7 @@ export default function RelatorioRastreabilidadePage({ params }: { params: { id:
                     {rastrs.some(r => r.responsavel) && (
                         <Section title="👤 Responsáveis" accent={SAGA_GRAY}>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                                {[...new Set(rastrs.filter(r => r.responsavel).map(r => r.responsavel!))].map(nome => (
+                                {Array.from(new Set(rastrs.filter(r => r.responsavel).map(r => r.responsavel!))).map(nome => (
                                     <span key={nome} style={{ fontSize: 12, padding: '3px 10px', borderRadius: 99, background: SAGA_LIGHT, border: `1px solid ${SAGA_BORDER}`, color: '#333', fontWeight: 600 }}>
                                         {nome}
                                     </span>
