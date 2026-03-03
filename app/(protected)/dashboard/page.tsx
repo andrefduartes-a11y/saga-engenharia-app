@@ -14,6 +14,9 @@ import DraggableModuleGrid from '@/components/DraggableModuleGrid'
 // WeatherCard is client-only (calls browser fetch to open-meteo)
 const WeatherCard = dynamic(() => import('@/components/WeatherCard'), { ssr: false })
 
+// GoogleCalendarCard is client-only (uses GIS OAuth + localStorage)
+const GoogleCalendarCard = dynamic(() => import('@/components/GoogleCalendarCard'), { ssr: false })
+
 // ─── Módulos por seção ────────────────────────────────────────────────────────
 const SECTIONS = [
     {
@@ -240,6 +243,9 @@ function DiretorDashboard() {
                 </div>
             ) : (
                 <>
+                    {/* ── Google Calendar ── */}
+                    <GoogleCalendarCard />
+
                     {/* ── Weather ── */}
                     <WeatherSection obras={obras} agendamentos={agendamentos} />
 
@@ -525,6 +531,9 @@ function EngenheiroDashboard() {
                             </Link>
                         </div>
                     )}
+
+                    {/* ── Google Calendar ── */}
+                    <GoogleCalendarCard />
 
                     {/* ── Weather for this obra ── */}
                     <div style={{ marginBottom: 20 }}>
